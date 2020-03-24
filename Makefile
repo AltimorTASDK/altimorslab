@@ -18,11 +18,8 @@ SECTIONFILES := $(wildcard $(SECTIONDIR)/*.S)
 SECTIONOBJFILES := $(patsubst $(SECTIONDIR)/%.S, $(OBJDIR)/%.o, $(SECTIONFILES))
 OBJFILES := $(SRCCOBJFILES) $(SRCSOBJFILES) $(SECTIONOBJFILES)
 
-PPCLIBS := $(DEVKITPPC)/powerpc-eabi/lib
-LIBOGC := $(DEVKITPRO)/libogc
 LINKSCRIPT := -Tmelee.ld
-LIBPATHS := -L$(PPCLIBS) -L$(LIBOGC)/lib/cube
-LIBS := -lc -lg -nostdlib
+LIBS := -nostdlib
 
 CFLAGS = -DGEKKO -mogc -mcpu=750 -meabi -mhard-float
 LDFLAGS =
