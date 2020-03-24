@@ -67,7 +67,6 @@ def patch_heap(data):
 
     patch_load_imm32(data, 0x80343094, 3, 0x804F0C00 + delta)
     patch_load_imm32(data, 0x803430CC, 3, 0x804EEC00 + delta)
-    patch_load_imm32(data, 0x803430F0, 3, 0x81700000 + delta)
 
     patch_load_imm32(data, 0x8034AC78, 0, 0x804EEC00 + delta)
     patch_load_imm32_split(data, 0x8034AC80, 0x8034AC88, 0, 0x804DEC00 + delta)
