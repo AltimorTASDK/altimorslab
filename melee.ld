@@ -39,7 +39,6 @@ SECTIONS
     */
     .header load_base : AT(0)
     {
-        file_start = .;
         /*    0000-001B  Text[0..6] sections File Positions */
         LONG(text0_offset);
         LONG(text1_offset);
