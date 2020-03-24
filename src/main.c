@@ -13,8 +13,8 @@ void hook_ActionStateChange(
 	Player *player = gobj->data;
 
 	char from_name[256], to_name[256];
-	get_action_state_name(player->action_state, from_name);
-	get_action_state_name(new_state, to_name);
+	GetActionStateName(player->action_state, from_name);
+	GetActionStateName(new_state, to_name);
 
 	LogDisplay_Printf(
 		"%03.f %-24s -> %-24s\n",

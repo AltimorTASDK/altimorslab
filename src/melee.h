@@ -18,7 +18,7 @@ typedef enum ActionState_ {
 
 extern const char *action_state_names[AS_NAMED_MAX];
 
-static inline void get_action_state_name(u32 state, char *buf)
+static inline void GetActionStateName(u32 state, char *buf)
 {
 	if (state < AS_NAMED_MAX)
 		sprintf(buf, "%s", action_state_names[state]);
