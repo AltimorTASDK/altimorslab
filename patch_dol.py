@@ -96,14 +96,33 @@ def apply_hooks(data):
         patch_branch(data, original, hook)
         print(f"Hook {original:08X} -> {hook:08X}")
 
+def apply_extra_patches(data):
+    with open("patches") as f:
+        while True:
+            line = f.readline()
+            if not line:
+                return
+
+            if line.find("#") != -1:
+                line = line[:line.find("#")]
+
+            if len(line.split()) == 0:
+                continue
+
+            address, word = [int(x, 16) for x in line.split()]
+            offset = address_to_offset(data, address)
+            data[offset:offset+4] = word_to_bytes(word)
+            print(f"Patch {address:08X} -> {word:08X}")
+
 def main():
-    with open("bin/altimorslab.dol", "rb") as f:
+    with open("bin/sys/main.dol", "rb") as f:
         data = bytearray(f.read())
 
     patch_heap(data)
     apply_hooks(data)
+    apply_extra_patches(data)
 
-    with open("bin/altimorslab.dol", "wb") as f:
+    with open("bin/sys/main.dol", "wb") as f:
         f.write(data)
 
 if __name__ == "__main__":

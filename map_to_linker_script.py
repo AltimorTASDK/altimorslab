@@ -11,7 +11,7 @@ def main():
             if line.startswith("."):
                 continue
 
-            address, _, _, _, name = line.split()
+            address, _, _, _, name, *_ = line.split()
             if name.startswith("zz_"):
                 continue
 

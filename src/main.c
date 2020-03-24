@@ -1,17 +1,32 @@
 #include "os.h"
 #include "hsd.h"
-#include "int_types.h"
+#include "melee.h"
+#include "log_display.h"
 
-void orig_Interrupt_AS_CliffWait(struct HSD_GObj *gobj);
-
-void hook_Interrupt_AS_CliffWait(struct HSD_GObj *gobj)
+void orig_ActionStateChange(
+	HSD_GObj *gobj, int new_state, int param_3, int param_4,
+	float param_5, float param_6, float param_7);
+void hook_ActionStateChange(
+	HSD_GObj *gobj, u32 new_state, int param_3, int param_4,
+	float param_5, float param_6, float param_7)
 {
-	OSReport("Yo what the fuck up from Interrupt_AS_CliffWait\n");
-	orig_Interrupt_AS_CliffWait(gobj);
+	Player *player = gobj->data;
+
+	char from_name[256], to_name[256];
+	get_action_state_name(player->action_state, from_name);
+	get_action_state_name(new_state, to_name);
+
+	LogDisplay_Printf(
+		"%03.f %-24s -> %-24s\n",
+		player->frame_timer,
+		from_name,
+		to_name);
+
+	orig_ActionStateChange(
+		gobj, new_state, param_3, param_4, param_5, param_6, param_7);
 }
 
 void _start(void)
 {
-	void(*original_entry_point)(void) = (void*)0x8000522C;
-	original_entry_point();
+	start();
 }

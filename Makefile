@@ -27,10 +27,9 @@ LIBS := -lc -lg -nostdlib
 CFLAGS = -DGEKKO -mogc -mcpu=750 -meabi -mhard-float
 LDFLAGS =
 
-bin/altimorslab.dol: $(OBJFILES)
+bin/sys/main.dol: $(OBJFILES)
 	$(CC) $(LDFLAGS) $(LIBPATHS) $(LIBS) $(LINKSCRIPT) $^ -o $@
 	python patch_dol.py
-	cp bin/altimorslab.dol D:\Games\Melee\extracted\sys\main.dol
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) -MMD -MP -MF $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $@) $(CFLAGS) -c $< -o $@
