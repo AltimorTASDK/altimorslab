@@ -6,11 +6,11 @@
 #include "overlays.h"
 
 void orig_ActionStateChange(
-	HSD_GObj *gobj, int new_state, int param_3, int param_4,
-	float param_5, float param_6, float param_7);
+	HSD_GObj *gobj, u32 new_state, u32 flags, HSD_GObj *gobj2,
+	float start_frame, float frame_rate, float param_7);
 void hook_ActionStateChange(
-	HSD_GObj *gobj, u32 new_state, int param_3, int param_4,
-	float param_5, float param_6, float param_7)
+	HSD_GObj *gobj, u32 new_state, u32 flags, HSD_GObj *gobj2,
+	float start_frame, float frame_rate, float param_7)
 {
 	Player *player = gobj->data;
 
@@ -25,7 +25,7 @@ void hook_ActionStateChange(
 		to_name);
 
 	orig_ActionStateChange(
-		gobj, new_state, param_3, param_4, param_5, param_6, param_7);
+		gobj, new_state, flags, gobj2, start_frame, frame_rate, param_7);
 
 	Overlays_ASChange(player, new_state);
 }
