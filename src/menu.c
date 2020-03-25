@@ -107,21 +107,25 @@ static void Menu_UpdateSelection(Direction direction)
 	if (direction != Dir_Down && direction != Dir_Up)
 		return;
 
-	// Skip the list head and text only items
 	Menu *menu = current_menu;
+	ListLink *selected = menu->selected;
 
 	while (1) {
 		if (direction == Dir_Down)
-			menu->selected = menu->selected->next;
+			selected = selected->next;
 		else
-			menu->selected = menu->selected->prev;
+			selected = selected->prev;
 
-		if (menu->selected == &menu->items)
-			continue;
+		// Reached the end
+		if (selected == &menu->items)
+			return;
 
-		MenuItem *item = (MenuItem*)menu->selected;
-		if (item->type != MenuItem_Text)
-			break;
+		// Skip text items
+		MenuItem *item = (MenuItem*)selected;
+		if (item->type != MenuItem_Text) {
+			menu->selected = selected;
+			return;
+		}
 	}
 }
 

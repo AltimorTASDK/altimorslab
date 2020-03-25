@@ -91,7 +91,7 @@ static void InitOverlay(int index)
 		.u = {
 			.adjust_enum = {
 				&overlay->action_state,
-				1, 0, AS_NAMED_MAX - 1, TRUE,
+				1, 0, AS_NAMED_MAX - 1, FALSE,
 				action_state_names
 			}
 		}
@@ -100,25 +100,25 @@ static void InitOverlay(int index)
 	overlay->menu_r = (MenuItem) {
 		.text = "Red",
 		.type = MenuItem_AdjustInt,
-		.u = { .adjust_int = { &overlay->r, 1, 0, 255, FALSE } }
+		.u = { .adjust_int = { &overlay->r, 5, 0, 255, FALSE } }
 	};
 
 	overlay->menu_g = (MenuItem) {
 		.text = "Green",
 		.type = MenuItem_AdjustInt,
-		.u = { .adjust_int = { &overlay->g, 1, 0, 255, FALSE } }
+		.u = { .adjust_int = { &overlay->g, 5, 0, 255, FALSE } }
 	};
 
 	overlay->menu_b = (MenuItem) {
 		.text = "Blue",
 		.type = MenuItem_AdjustInt,
-		.u = { .adjust_int = { &overlay->b, 1, 0, 255, FALSE } }
+		.u = { .adjust_int = { &overlay->b, 5, 0, 255, FALSE } }
 	};
 
 	overlay->menu_a = (MenuItem) {
 		.text = "Alpha",
 		.type = MenuItem_AdjustInt,
-		.u = { .adjust_int = { &overlay->a, 1, 0, 255, FALSE } }
+		.u = { .adjust_int = { &overlay->a, 5, 0, 255, FALSE } }
 	};
 }
 
