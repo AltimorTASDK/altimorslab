@@ -6,7 +6,7 @@
 
 #define TEXT_ID 70
 #define TEXT_X 0
-#define TEXT_Y 210
+#define TEXT_Y 250
 #define TEXT_WIDTH 49
 #define TEXT_HEIGHT 20
 #define TEXT_SCALE_X 9.F

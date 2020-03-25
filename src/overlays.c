@@ -135,6 +135,10 @@ void Overlays_ASChange(Player *player, int new_state)
 		player->overlay_g = (float)overlay->g;
 		player->overlay_b = (float)overlay->b;
 		player->overlay_a = (float)overlay->a;
+		player->overlay_flash_rate_r = 0.F;
+		player->overlay_flash_rate_g = 0.F;
+		player->overlay_flash_rate_b = 0.F;
+		player->overlay_flash_rate_a = 0.F;
 		return;
 	}
 }
