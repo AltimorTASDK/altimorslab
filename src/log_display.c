@@ -19,7 +19,7 @@ static DevText *log_text;
 static char text_buf[TEXT_WIDTH * TEXT_HEIGHT * 2];
 static u32 log_hide_time = 0;
 
-static void LogDisplay_Init(void)
+void LogDisplay_CreateText(void)
 {
 	log_text = DevelopText_Initialize(
 		TEXT_ID, TEXT_X, TEXT_Y, TEXT_WIDTH, TEXT_HEIGHT, text_buf);
@@ -42,19 +42,8 @@ static void LogDisplay_Init(void)
 	DevelopText_HideBackground(log_text);
 }
 
-void LogDisplay_Print(const char *message)
+void LogDisplay_Update(void)
 {
-	DevelopText_ColorPrint(log_text, message);
-	DevelopText_ShowText(log_text);
-	DevelopText_ShowBackground(log_text);
-	log_hide_time = MatchInfo_LoadFrameCount() + TEXT_DISPLAY_TIME;
-}
-
-void orig_DevelopMode_IngameTogglesMost(void);
-void hook_DevelopMode_IngameTogglesMost(void)
-{
-	orig_DevelopMode_IngameTogglesMost();
-
 	if (MatchInfo_LoadFrameCount() == log_hide_time) {
 		DevelopText_Erase(log_text);
 		DevelopText_ResetCursorXY(log_text, 0, 0);
@@ -63,9 +52,10 @@ void hook_DevelopMode_IngameTogglesMost(void)
 	}
 }
 
-void orig_StartMelee(void *param_1);
-void hook_StartMelee(void *param_1)
+void LogDisplay_Print(const char *message)
 {
-	orig_StartMelee(param_1);
-	LogDisplay_Init();
+	DevelopText_ColorPrint(log_text, message);
+	DevelopText_ShowText(log_text);
+	DevelopText_ShowBackground(log_text);
+	log_hide_time = MatchInfo_LoadFrameCount() + TEXT_DISPLAY_TIME;
 }

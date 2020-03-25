@@ -6,26 +6,17 @@
  */
 .section .hooks
 
-.global orig_ActionStateChange
-orig_ActionStateChange:
-.int ActionStateChange
-.int hook_ActionStateChange
+.macro add_hook name
+	.global orig_\name
+	orig_\name:
+	.int \name
+	.int hook_\name
+.endm
 
-.int Stage_CheckStageUnlockStatus
-.int hook_Stage_CheckStageUnlockStatus
-
-.int Characters_CheckCharUnlockStatus
-.int hook_Characters_CheckCharUnlockStatus
-
-.int SinglePlayerModeCheck
-.int hook_SinglePlayerModeCheck
-
-.global orig_StartMelee
-orig_StartMelee:
-.int StartMelee
-.int hook_StartMelee
-
-.global orig_DevelopMode_IngameTogglesMost
-orig_DevelopMode_IngameTogglesMost:
-.int DevelopMode_IngameTogglesMost
-.int hook_DevelopMode_IngameTogglesMost
+add_hook ActionStateChange
+add_hook Stage_CheckStageUnlockStatus
+add_hook Characters_CheckCharUnlockStatus
+add_hook SinglePlayerModeCheck
+add_hook StartMelee
+add_hook DevelopMode_IngameTogglesMost
+add_hook wP_RunObjectFrameFunctions

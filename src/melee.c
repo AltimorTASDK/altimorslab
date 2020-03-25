@@ -260,7 +260,7 @@ const char *action_state_names[AS_NAMED_MAX] = {
 	"CliffClimbSlow",
 	"CliffClimbQuick",
 	"CliffAttackSlow",
-	"liffAttackQuick",
+	"CliffAttackQuick",
 	"CliffEscapeSlow",
 	"CliffEscapeQuick",
 	"CliffJumpSlow1",

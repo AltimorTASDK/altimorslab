@@ -1,5 +1,9 @@
+#pragma once
+
 #include "int_types.h"
 #include <stdio.h>
+
+#define DEADZONE .2875F
 
 #define DevelopText_ColorPrintf(format, ...) \
 	{ \
@@ -9,6 +13,7 @@
 	}
 
 typedef enum ActionState_ {
+	AS_Wait = 0xE,
 	AS_NAMED_MAX = 0x155
 } ActionState;
 
@@ -25,6 +30,10 @@ typedef enum Button_ {
 	Button_Start = 0x1000,
 	Button_AnalogLR = 0x80000000
 } Button;
+
+typedef enum OverlayFlag_ {
+	OverlayFlag_UseColor = 0x80
+} OverlayFlag;
 
 typedef struct _DevText {
 	char pad[0x2C];
@@ -61,7 +70,18 @@ typedef struct _HSD_PadStatus {
 typedef struct _Player {
 	char pad0000[0x10];
 	u32 action_state;
-	char pad0014[0x894 - 0x14];
+	char pad0014[0x4B8 - 0x14];
+	float overlay_r;
+	float overlay_g;
+	float overlay_b;
+	float overlay_a;
+	float overlay_flash_rate_r;
+	float overlay_flash_rate_g;
+	float overlay_flash_rate_b;
+	float overlay_flash_rate_a;
+	char pad04D8[0x504 - 0x4D8];
+	u8 overlay_flags;
+	char pad0505[0x894 - 0x505];
 	float frame_timer;
 } Player;
 
