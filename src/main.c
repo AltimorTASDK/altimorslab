@@ -17,7 +17,7 @@ void hook_ActionStateChange(
 	GetActionStateName(new_state, to_name);
 
 	LogDisplay_Printf(
-		"%03.f %-24s -> %-24s\n",
+		"\x02%03.f \x01%-24s \x04-> \x01%-24s\n",
 		player->frame_timer,
 		from_name,
 		to_name);

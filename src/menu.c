@@ -13,12 +13,6 @@
 #define TEXT_COLOR3 0xFFFFFFFF
 #define TEXT_BGCOLOR 0x00000040
 
-#define TEXT_DISPLAY_TIME (5*60)
-
-static DevText *log_text;
-static char text_buf[TEXT_WIDTH * TEXT_HEIGHT * 2];
-static u32 log_hide_time = 0;
-
 static void LogDisplay_Init(void)
 {
 	log_text = DevelopText_Initialize(
@@ -40,32 +34,4 @@ static void LogDisplay_Init(void)
 
 	DevelopText_HideText(log_text);
 	DevelopText_HideBackground(log_text);
-}
-
-void LogDisplay_Print(const char *message)
-{
-	DevelopText_ColorPrint(log_text, message);
-	DevelopText_ShowText(log_text);
-	DevelopText_ShowBackground(log_text);
-	log_hide_time = MatchInfo_LoadFrameCount() + TEXT_DISPLAY_TIME;
-}
-
-void orig_DevelopMode_IngameTogglesMost(void);
-void hook_DevelopMode_IngameTogglesMost(void)
-{
-	orig_DevelopMode_IngameTogglesMost();
-
-	if (MatchInfo_LoadFrameCount() == log_hide_time) {
-		DevelopText_Erase(log_text);
-		DevelopText_ResetCursorXY(log_text, 0, 0);
-		DevelopText_HideText(log_text);
-		DevelopText_HideBackground(log_text);
-	}
-}
-
-void orig_StartMelee(void *param_1);
-void hook_StartMelee(void *param_1)
-{
-	orig_StartMelee(param_1);
-	LogDisplay_Init();
 }

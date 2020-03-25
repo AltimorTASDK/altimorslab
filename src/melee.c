@@ -1,4 +1,6 @@
+#include "hsd.h"
 #include "melee.h"
+#include <string.h>
 
 const char *action_state_names[AS_NAMED_MAX] = {
 	"DeadDown",
@@ -343,3 +345,32 @@ const char *action_state_names[AS_NAMED_MAX] = {
 	"ThrownCrazyhand",
 	"BarrelCannonWait"
 };
+
+/*
+ * Print a dev text message using \x01 through \x04 as color codes
+ */
+void DevelopText_ColorPrint(DevText *text, const char *message)
+{
+	const char *start = message;
+	while (*message != 0) {
+		if (*message < 1 || *message > 4) {
+			message++;
+			continue;
+		}
+
+		// Print message up until color code
+		size_t length = (size_t)(message - start);
+		if (length > 0) {
+			char *buf = HSD_MemAlloc(length + 1);
+			memcpy(buf, start, length);
+			buf[length] = '\0';
+			DevelopText_Print(text, buf);
+		}
+
+		DevelopText_StoreColorIndex(text, *message - 1);
+		start = ++message;
+	}
+
+	DevelopText_Print(text, start);
+	DevelopText_StoreColorIndex(text, 0);
+}
