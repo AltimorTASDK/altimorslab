@@ -346,6 +346,14 @@ const char *action_state_names[AS_NAMED_MAX] = {
 	"BarrelCannonWait"
 };
 
+const char *debug_level_names[5] = {
+	"MASTER",
+	"NO-DEBUG-ROM",
+	"DEBUG-DEVELOP",
+	"DEBUG-ROM",
+	"DEVELOP"
+};
+
 /*
  * Print a dev text message using \x01 through \x04 as color codes
  */

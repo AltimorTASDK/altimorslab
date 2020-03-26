@@ -17,6 +17,14 @@ typedef enum ActionState_ {
 	AS_NAMED_MAX = 0x155
 } ActionState;
 
+typedef enum DebugLevel_ {
+	DbLevel_Master,
+	DbLevel_NoDebugRom,
+	DbLevel_DebugDevelop,
+	DbLevel_DebugRom,
+	DbLevel_Develop
+} DebugLevel;
+
 typedef enum Button_ {
 	Button_DPadLeft = 1,
 	Button_DPadRight = 2,
@@ -86,8 +94,10 @@ typedef struct _Player {
 } Player;
 
 extern HSD_PadStatus HSD_PadMasterStatus[4];
+extern u32 DbLevel;
 
 extern const char *action_state_names[AS_NAMED_MAX];
+extern const char *debug_level_names[5];
 
 static inline void GetActionStateName(u32 state, char *buf)
 {

@@ -4186,3 +4186,4 @@ glSetRasterStateDefaults                                     = 0x803ac2d4;
 FEAudioResetRandomVoiceToggleSFX                             = 0x803ac334;
 Ab_Unknown_OnExtResultsScreen                                = 0x803b31cc;
 HSD_PadMasterStatus                                          = 0x804c1fac;
+DbLevel                                                      = 0x804d4a08;

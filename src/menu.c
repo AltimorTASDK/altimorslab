@@ -66,29 +66,36 @@ static Direction UpdateInputDirection(HSD_PadStatus *pad)
 	}
 
 	int repeat_frames = ++direction_hold_frames - REPEAT_DELAY;
-	if (repeat_frames < 0 || repeat_frames % REPEAT_INTERVAL != 0) {
+	if (repeat_frames < 0 || repeat_frames % REPEAT_INTERVAL != 0)
 		return Dir_None;
-	} else {
+	else
 		return direction;
-	}
 }
 
 static void Menu_OpenClose(void)
 {
 	if (menu_open) {
 		HSD_PadStatus *pad = &HSD_PadMasterStatus[menu_port];
-		if (pad->instant_buttons & Button_DPadDown) {
-			DevelopText_HideText(menu_text);
-			DevelopText_HideBackground(menu_text);
-			menu_open = FALSE;
-		}
+		if (pad->buttons != Button_DPadDown)
+			return;
+
+		if (pad->instant_buttons != Button_DPadDown)
+			return;
+
+		DevelopText_HideText(menu_text);
+		DevelopText_HideBackground(menu_text);
+		menu_open = FALSE;
 		return;
 	}
 
 	for (int i = 0; i < 4; i++) {
 		Button buttons = HSD_PadMasterStatus[i].instant_buttons;
-		if (!(buttons & Button_DPadDown))
-			continue;
+		HSD_PadStatus *pad = &HSD_PadMasterStatus[i];
+		if (pad->buttons != Button_DPadDown)
+			return;
+
+		if (pad->instant_buttons != Button_DPadDown)
+			return;
 
 		// The main menu will have a NULL selection on first use
 		if (current_menu->selected == NULL)
@@ -98,7 +105,6 @@ static void Menu_OpenClose(void)
 		DevelopText_ShowBackground(menu_text);
 		menu_open = TRUE;
 		menu_port = i;
-		return;
 	}
 }
 
@@ -327,5 +333,18 @@ void hook_wP_RunObjectFrameFunctions(void)
 
 void MainMenu_Init(void)
 {
+	static MenuItem menu_dblevel = {
+		.text = "Debug Level",
+		.type = MenuItem_AdjustEnum,
+		.u = {
+			.adjust_enum = {
+				&DbLevel,
+				1, 0, DbLevel_Develop, FALSE,
+				debug_level_names
+			}
+		}
+	};
+
 	Menu_Init(&main_menu, "Lab Tools");
+	Menu_AddItem(&main_menu, &menu_dblevel);
 }
