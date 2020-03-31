@@ -17,15 +17,13 @@ void hook_ActionStateChange(
 {
 	orig_ActionStateChange(
 		gobj, new_state, flags, gobj2, start_frame, frame_rate, param_7);
-
-	Overlays_ASChange(gobj->data, new_state);
 }
 
 HSD_GObj *orig_AllocateAndInitPlayer(void *player_block);
 HSD_GObj *hook_AllocateAndInitPlayer(void *player_block)
 {
 	HSD_GObj *gobj = orig_AllocateAndInitPlayer(player_block);
-	//GObj_CreateProcWithCallback(gobj, HitboxStats_UpdatePlayer, 0x17);
+	//GObj_CreateProcWithCallback(gobj, Overlays_Update, 0x17);
 	return gobj;
 }
 

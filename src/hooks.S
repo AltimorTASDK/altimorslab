@@ -21,3 +21,4 @@ add_hook StartMelee
 add_hook DevelopMode_IngameTogglesMost
 add_hook wP_RunObjectFrameFunctions
 add_hook AllocateAndInitPlayer
+add_hook ColorData_HandleStuff

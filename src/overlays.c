@@ -122,25 +122,45 @@ static void InitOverlay(int index)
 	};
 }
 
-void Overlays_ASChange(Player *player, int new_state)
+void orig_ColorData_HandleStuff(Player *player, u32 param_2, u32 param_3);
+void hook_ColorData_HandleStuff(Player *player, u32 param_2, u32 param_3)
 {
 	for (int i = 0; i < as_overlay_count; i++)
 	{
 		Overlay *overlay = &as_overlays[i];
-		if (overlay->action_state != new_state)
+		if (overlay->action_state != player->action_state)
 			continue;
 
-		player->overlay_flags |= OverlayFlag_UseColor;
-		player->overlay_r = (float)overlay->r;
-		player->overlay_g = (float)overlay->g;
-		player->overlay_b = (float)overlay->b;
-		player->overlay_a = (float)overlay->a;
-		player->overlay_flash_rate_r = 0.F;
-		player->overlay_flash_rate_g = 0.F;
-		player->overlay_flash_rate_b = 0.F;
-		player->overlay_flash_rate_a = 0.F;
+		u8 old_render_flags = player->render_flags;
+		u8 old_override_color_r = player->override_color_r;
+		u8 old_override_color_g = player->override_color_g;
+		u8 old_override_color_b = player->override_color_b;
+		u8 old_override_color_a = player->override_color_a;
+
+		player->render_flags |= RenderFlag_OverrideColor;
+		player->override_color_r = overlay->r;
+		player->override_color_g = overlay->g;
+		player->override_color_b = overlay->b;
+		player->override_color_a = overlay->a;
+
+		orig_ColorData_HandleStuff(player, param_2, param_3);
+
+		player->render_flags = old_render_flags;
+		player->override_color_r = old_override_color_r;
+		player->override_color_g = old_override_color_g;
+		player->override_color_b = old_override_color_b;
+		player->override_color_a = old_override_color_a;
+
 		return;
 	}
+
+	orig_ColorData_HandleStuff(player, param_2, param_3);
+}
+
+void Overlays_Update(HSD_GObj *gobj)
+{
+	Player *player = gobj->data;
+
 }
 
 void Overlays_Init(void)

@@ -58,6 +58,10 @@ typedef enum _OverlayFlag {
 	OverlayFlag_UseColor = 0x80
 } OverlayFlag;
 
+typedef enum _RenderFlag {
+	RenderFlag_OverrideColor = 0x20
+} RenderFlag;
+
 typedef enum _BodyState {
 	BodyState_Normal = 0,
 	BodyState_Invincible = 1,
@@ -188,7 +192,12 @@ typedef struct _Player {
 	float overlay_flash_rate_a;
 	char pad04D8[0x504 - 0x4D8];
 	u8 overlay_flags;
-	char pad0505[0x894 - 0x505];
+	char pad0505[0x614 - 0x505];
+	u8 override_color_r;
+	u8 override_color_g;
+	u8 override_color_b;
+	u8 override_color_a;
+	char pad0618[0x894 - 0x618];
 	float frame_timer;
 	char pad0898[0x914 - 0x898];
 	Hitbox hitboxes[MAX_HITBOXES];
@@ -196,6 +205,8 @@ typedef struct _Player {
 	u8 hurtbox_count;
 	char pad119F[0x11A0 - 0x119F];
 	Hurtbox hurtboxes[MAX_HURTBOXES];
+	char pad1614[0x2223 - 0x1614];
+	u8 render_flags;
 } Player;
 
 extern HSD_PadStatus HSD_PadMasterStatus[4];
