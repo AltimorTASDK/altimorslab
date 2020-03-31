@@ -27,6 +27,14 @@
 
 const char *on_off_text[] = { "Off", "On" };
 
+const char *develop_toggle_text[] = {
+	"Off",
+	NULL,
+	NULL,
+	NULL,
+	"On"
+};
+
 static DevText *menu_text;
 static char text_buf[TEXT_WIDTH * TEXT_HEIGHT * 2];
 
@@ -337,13 +345,13 @@ BOOL IsMenuOpen(void)
 void MainMenu_Init(void)
 {
 	static MenuItem menu_dblevel = {
-		.text = "Debug Level",
+		.text = "Develop Mode",
 		.type = MenuItem_AdjustEnum,
 		.u = {
 			.adjust_enum = {
 				&DbLevel,
-				1, 0, DbLevel_Develop, FALSE,
-				debug_level_names
+				DbLevel_Develop, 0, DbLevel_Develop, TRUE,
+				develop_toggle_text
 			}
 		}
 	};
