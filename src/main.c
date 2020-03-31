@@ -33,10 +33,9 @@ void orig_wP_RunObjectFrameFunctions(void);
 void hook_wP_RunObjectFrameFunctions(void)
 {
 	// Pause game when menu is open
-	if (IsMenuOpen())
-		return;
+	if (!IsMenuOpen())
+		orig_wP_RunObjectFrameFunctions();
 
-	orig_wP_RunObjectFrameFunctions();
 	HitboxStats_Update();
 }
 
@@ -46,8 +45,12 @@ void hook_DevelopMode_IngameTogglesMost(void)
 {
 	orig_DevelopMode_IngameTogglesMost();
 
-	if (!initialized)
-		return;
+	if (!initialized) {
+		LogDisplay_CreateText();
+		Menu_CreateText();
+		HitboxStats_SceneInit();
+		initialized = TRUE;
+	}
 
 	LogDisplay_Update();
 	Menu_Update();
@@ -57,14 +60,7 @@ void orig_StartMelee(void *param_1);
 void hook_StartMelee(void *param_1)
 {
 	initialized = FALSE;
-
 	orig_StartMelee(param_1);
-
-	LogDisplay_CreateText();
-	Menu_CreateText();
-	HitboxStats_SceneInit();
-
-	initialized = TRUE;
 }
 
 void _start(void)
