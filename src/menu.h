@@ -55,6 +55,7 @@ struct _MenuItem {
 	} u;
 };
 
+extern const char *on_off_text[];
 extern Menu main_menu;
 
 void Menu_CreateText(void);
@@ -62,4 +63,5 @@ void Menu_Update(void);
 void Menu_Init(Menu *menu, const char *name);
 void Menu_AddItem(Menu *menu, MenuItem *item);
 void Menu_RemoveItem(MenuItem *item);
+BOOL IsMenuOpen(void);
 void MainMenu_Init(void);

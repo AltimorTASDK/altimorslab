@@ -25,6 +25,8 @@
 #define COLOR_TEXT 2
 #define COLOR_HEADER 3
 
+const char *on_off_text[] = { "Off", "On" };
+
 static DevText *menu_text;
 static char text_buf[TEXT_WIDTH * TEXT_HEIGHT * 2];
 
@@ -140,22 +142,24 @@ static void Menu_InputForSelectedItem(Direction direction)
 	HSD_PadStatus *pad = &HSD_PadMasterStatus[menu_port];
 	Menu *menu = current_menu;
 	MenuItem *item = (MenuItem*)menu->selected;
+	BOOL pressed_a = (pad->instant_buttons & Button_A) != 0;
 
 	switch (item->type) {
 	case MenuItem_Callback:
-		if (pad->instant_buttons & Button_A)
+		if (pressed_a)
 			item->u.callback(item, menu_port);
 
 		break;
 
 	case MenuItem_SubMenu:
-		if (!(pad->instant_buttons & Button_A))
+		if (!pressed_a)
 			break;
 
 		item->u.submenu->previous_menu = menu;
 		current_menu = item->u.submenu;
 		// Select first item
-		current_menu->selected = current_menu->items.next;
+		current_menu->selected = &current_menu->items;
+		Menu_UpdateSelection(Dir_Down);
 		break;
 
 	case MenuItem_AdjustInt:
@@ -166,7 +170,7 @@ static void Menu_InputForSelectedItem(Direction direction)
 		int max = item->u.adjust_int.max;
 		BOOL wrap = item->u.adjust_int.wrap;
 
-		if (direction == Dir_Right) {
+		if (direction == Dir_Right || pressed_a) {
 			*value += increment;
 			if (*value > max)
 				*value = wrap ? min : max;
@@ -185,7 +189,7 @@ static void Menu_InputForSelectedItem(Direction direction)
 		float max = item->u.adjust_float.max;
 		BOOL wrap = item->u.adjust_float.wrap;
 
-		if (direction == Dir_Right) {
+		if (direction == Dir_Right || pressed_a) {
 			*value += increment;
 			if (*value > max)
 				*value = wrap ? min : max;
@@ -206,7 +210,9 @@ static void DrawItem(MenuItem *item, BOOL selected)
 
 	if (item->type == MenuItem_Text) {
 		DevelopText_StoreColorIndex(menu_text, COLOR_TEXT);
-		DevelopText_Printf(menu_text, "%s\n", text);
+		// Don't use printf, it may overflow with multiline text
+		DevelopText_Print(menu_text, text);
+		DevelopText_Print(menu_text, "\n");
 		return;
 	}
 
@@ -323,12 +329,9 @@ void Menu_CreateText(void)
 	DevelopText_HideBackground(menu_text);
 }
 
-// Pause game when menu is open
-void orig_wP_RunObjectFrameFunctions(void);
-void hook_wP_RunObjectFrameFunctions(void)
+BOOL IsMenuOpen(void)
 {
-	if (!menu_open)
-		orig_wP_RunObjectFrameFunctions();
+	return menu_open;
 }
 
 void MainMenu_Init(void)
