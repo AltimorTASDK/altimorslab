@@ -20,6 +20,10 @@ typedef struct _Vector {
 	float x, y, z;
 } Vector;
 
+typedef struct _Quaternion {
+	float x, y, z, w;
+} Quaternion;
+
 typedef struct _Matrix3x4 {
 	float m[12];
 } Matrix3x4;
@@ -29,6 +33,39 @@ typedef struct _Matrix4x4 {
 } Matrix4x4;
 
 // Taken from FRAY, thanks to psiLupan
+typedef struct _HSD_Class {
+	struct _HSD_ClassInfo *class_info;
+} HSD_Class;
+
+typedef struct _HSD_Obj {
+	HSD_Class parent;
+	s16 ref_count;
+	s16 ref_count_individual;
+} HSD_Obj;
+
+typedef struct _HSD_JObj {
+	HSD_Obj base;
+	HSD_JObj *next; // Next bone with the same parent
+	HSD_JObj *parent;
+	HSD_JObj *child; // First child
+	u32 flags;
+	union {
+		struct _HSD_SList *ptcl;
+		struct _HSD_DObj *dobj;
+		struct _HSD_Spline *spline;
+	} u;
+	Quaternion rotation;
+	char pad0028[0x2C - 0x28];
+	Vector scale;
+	Vector position;
+	Matrix3x4 mtx;
+	Vector *pvec;
+	Matrix3x4 *vmtx;
+	struct _HSD_AObj *aobj;
+	struct _HSD_RObj *robj;
+	struct _HSD_JObjDesc *desc;
+} HSD_JObj;
+
 typedef struct _HSD_GObjProc {
 	struct _HSD_GObjProc *child;
 	struct _HSD_GObjProc *next;

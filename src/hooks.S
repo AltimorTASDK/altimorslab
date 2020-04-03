@@ -22,3 +22,5 @@ add_hook DevelopMode_IngameTogglesMost
 add_hook wP_RunObjectFrameFunctions
 add_hook AllocateAndInitPlayer
 add_hook ColorData_HandleStuff
+add_hook HSD_JObjAnim
+add_hook Player_MeleeDamage

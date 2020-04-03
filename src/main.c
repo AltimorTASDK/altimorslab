@@ -5,6 +5,7 @@
 #include "menu.h"
 #include "overlays.h"
 #include "hitbox_stats.h"
+#include "extras_dair.h"
 
 static BOOL initialized = FALSE;
 
@@ -15,6 +16,8 @@ void hook_ActionStateChange(
 	HSD_GObj *gobj, u32 new_state, u32 flags, HSD_GObj *gobj2,
 	float start_frame, float frame_rate, float param_7)
 {
+	ExtrasDair_ASChange(gobj->data, &new_state);
+
 	orig_ActionStateChange(
 		gobj, new_state, flags, gobj2, start_frame, frame_rate, param_7);
 }

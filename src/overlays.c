@@ -157,12 +157,6 @@ void hook_ColorData_HandleStuff(Player *player, u32 param_2, u32 param_3)
 	orig_ColorData_HandleStuff(player, param_2, param_3);
 }
 
-void Overlays_Update(HSD_GObj *gobj)
-{
-	Player *player = gobj->data;
-
-}
-
 void Overlays_Init(void)
 {
 	Overlays_AddMenu();

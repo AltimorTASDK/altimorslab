@@ -1,12 +1,16 @@
 #pragma once
 
 #include "hsd.h"
+#include <math.h>
 
 // Useful for calculating log base 10 with logf
 #define LOG10 2.30258509299f
 
 #define max(a, b) (a > b ? a : b)
 #define min(a, b) (a < b ? a : b)
+
+#define deg2rad(x) (x * M_PI / 180.f)
+#define rad2deg(x) (x * 180.f / M_PI)
 
 typedef enum _Direction {
 	Dir_None,
@@ -34,6 +38,29 @@ void List_Append(ListLink *head, ListLink *elem);
 void List_Prepend(ListLink *head, ListLink *elem);
 void List_Remove(ListLink *elem);
 
+// Math
+void EulerToQuaternion(float pitch, float yaw, float roll, Quaternion *out);
+
+static inline float Lerp(float a, float b, float c)
+{
+	if (c <= 0.f)
+		return a;
+	if (c >= 1.f)
+		return b;
+
+	return a + (b - a) * c;
+}
+
+static inline float InvLerp(float value, float a, float b)
+{
+	if (value <= a)
+		return 0.f;
+	if (value >= b)
+		return 1.f;
+
+	return (value - a) / (b - a);
+}
+
 static inline void VectorMin(Vector *a, Vector *b, Vector *out)
 {
 	out->x = min(a->x, b->x);
@@ -52,4 +79,11 @@ static inline void VectorAverage(Vector *a, Vector *b, Vector *out)
 {
 	PSVECAdd(a, b, out);
 	PSVECScale(out, .5f, out);
+}
+
+static inline float VectorDistance(Vector *a, Vector *b)
+{
+	Vector difference;
+	PSVECSubtract(a, b, &difference);
+	return PSVECMag(&difference);
 }

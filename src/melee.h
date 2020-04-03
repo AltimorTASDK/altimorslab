@@ -28,6 +28,11 @@ typedef struct _Text Text;
 
 typedef enum _ActionState {
 	AS_Wait = 0xE,
+	AS_AttackAirN = 0x41,
+	AS_AttackAirF = 0x42,
+	AS_AttackAirB = 0x43,
+	AS_AttackAirHi = 0x44,
+	AS_AttackAirLw = 0x45,
 	AS_CliffCatch = 0xFC,
 	AS_NAMED_MAX = 0x155
 } ActionState;
@@ -53,6 +58,10 @@ typedef enum _Button {
 	Button_Start = 0x1000,
 	Button_AnalogLR = 0x80000000
 } Button;
+
+typedef enum _CID {
+	CID_Falco = 0x16
+} CID;
 
 typedef enum _OverlayFlag {
 	OverlayFlag_UseColor = 0x80
@@ -171,12 +180,24 @@ typedef struct _Hurtbox {
 	u32 grabbable;
 } Hurtbox;
 
+typedef struct _Physics {
+	char pad0000[0x108];
+	HSD_JObj *root_bone;
+	HSD_JObj *ecb_bones[6];
+	char pad0124[0x1A0 - 0x124];
+} Physics;
+
 typedef struct _Player {
-	char pad0000[0xC];
+	HSD_GObj *gobj;
+	u32 character_id;
+	u32 spawn_count;
 	u8 slot;
-	char pad000D[0x10 - 0xD];
+	char align000D[0x10 - 0xD];
 	u32 action_state;
-	char pad0014[0x38 - 0x14];
+	char pad0014[0x2C - 0x14];
+	float direction;
+	float last_direction;
+	float initial_scale;
 	float scale;
 	char pad003C[0xB0 - 0x3C];
 	Vector position;
@@ -197,7 +218,9 @@ typedef struct _Player {
 	u8 override_color_g;
 	u8 override_color_b;
 	u8 override_color_a;
-	char pad0618[0x894 - 0x618];
+	char pad06F0[0x6F0 - 0x618];
+	Physics phys;
+	void *camera_data;
 	float frame_timer;
 	char pad0898[0x914 - 0x898];
 	Hitbox hitboxes[MAX_HITBOXES];

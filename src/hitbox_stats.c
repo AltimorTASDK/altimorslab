@@ -368,7 +368,7 @@ static void InitializeSlot(u8 slot)
 
 void HitboxStats_UpdatePlayer(Player *player)
 {
-	u8 slot = player->slot;
+	u8 slot = player->slot - 1;
 
 	// Create subtext for this player if it doesn't exist
 	if (!initialized[slot]) {
@@ -456,10 +456,8 @@ void HitboxStats_Update(void)
 	}
 
 	HSD_GObj *gobj = plinkhigh_gobjs[GOBJ_LINK_PLAYER];
-	while (gobj != NULL) {
+	for (; gobj != NULL; gobj = gobj->next)
 		HitboxStats_UpdatePlayer(gobj->data);
-		gobj = gobj->next;
-	}
 }
 
 void HitboxStats_SceneInit(void)
