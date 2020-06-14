@@ -6,11 +6,16 @@
 // Useful for calculating log base 10 with logf
 #define LOG10 2.30258509299f
 
-#define max(a, b) (a > b ? a : b)
-#define min(a, b) (a < b ? a : b)
+#define max(a, b) ((a) > (b) ? (a) : (b))
+#define min(a, b) ((a) < (b) ? (a) : (b))
 
-#define deg2rad(x) (x * M_PI / 180.f)
-#define rad2deg(x) (x * 180.f / M_PI)
+#define deg2rad(x) ((x) * M_PI / 180.f)
+#define rad2deg(x) ((x) * 180.f / M_PI)
+
+#define get_color_r(color) (((color) >> 24) & 0xFF)
+#define get_color_g(color) (((color) >> 16) & 0xFF)
+#define get_color_b(color) (((color) >> 8) & 0xFF)
+#define get_color_a(color) ((color) & 0xFF)
 
 typedef enum _Direction {
 	Dir_None,
@@ -86,4 +91,18 @@ static inline float VectorDistance(Vector *a, Vector *b)
 	Vector difference;
 	PSVECSubtract(a, b, &difference);
 	return PSVECMag(&difference);
+}
+
+// Drawing
+void WriteVertex2D(float x, float y, u32 color);
+void FillRectangle2D(float x, float y, float w, float h, u32 color);
+void FillCircle2D(float x, float y, float radius, int segments, u32 color);
+void StrokeCircle2D(float x, float y, float radius, int segments, u32 color);
+
+static inline BOOL IsCorrectPass(u32 color, RenderPass pass)
+{
+	if (get_color_a(color) == 0xFF)
+		return pass == RenderPass_Opaque;
+	else
+		return pass == RenderPass_Translucent;
 }

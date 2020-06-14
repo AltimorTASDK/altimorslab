@@ -3,11 +3,36 @@
 #include "int_types.h"
 #include <stddef.h>
 
+#define GOBJ_CLASS_PLAYER 4
+
 #define GOBJ_LINK_PLAYER 8
+
+typedef enum _RenderPass {
+	RenderPass_Opaque = 0,
+	RenderPass_Translucent = 2
+} RenderPass;
+
+typedef enum _Button {
+	Button_DPadLeft = 1,
+	Button_DPadRight = 2,
+	Button_DPadDown = 4,
+	Button_DPadUp = 8,
+	Button_Z = 0x10,
+	Button_R = 0x20,
+	Button_L = 0x40,
+	Button_A = 0x100,
+	Button_B = 0x200,
+	Button_X = 0x400,
+	Button_Y = 0x800,
+	Button_Start = 0x1000,
+	Button_AnalogLR = 0x80000000
+} Button;
 
 struct _HSD_GObj;
 struct _HSD_JObj;
 struct _HSD_CObj;
+
+typedef void(GObjRenderCallback)(struct _HSD_GObj *gobj, RenderPass pass);
 
 typedef struct _HSD_JObj HSD_JObj;
 typedef struct _HSD_CObj HSD_CObj;
@@ -90,13 +115,43 @@ typedef struct _HSD_GObj {
 	struct _HSD_GObj *next_gx;
 	struct _HSD_GObj *prev_gx;
 	HSD_GObjProc *proc;
-	void (*render_cb)(struct _HSD_GObj *gobj, int code);
+	GObjRenderCallback *render_cb;
 	u64 gxlink_prios;
 	void *hsd_gobj;
 	void *data;
 	void (*user_data_remove_func)(void *data);
 	void *pad0034;
 } HSD_GObj;
+
+typedef struct _HSD_PadStatus {
+	u32 buttons;
+	u32 last_buttons;
+	u32 instant_buttons;
+	u32 repeated_buttons;
+	u32 released_buttons;
+	s32 repeat_count;
+	s8 raw_stick_x;
+	s8 raw_stick_y;
+	s8 raw_cstick_x;
+	s8 raw_cstick_y;
+	u8 raw_analog_l;
+	u8 raw_analog_r;
+	u8 raw_analog_a;
+	u8 raw_analog_b;
+	float stick_x;
+	float stick_y;
+	float cstick_x;
+	float cstick_y;
+	float analog_l;
+	float analog_r;
+	float analog_a;
+	float analog_b;
+	u8 cross_dir;
+	u8 supports_rumble;
+	s8 err;
+} HSD_PadStatus;
+
+extern HSD_PadStatus HSD_PadMasterStatus[4];
 
 extern HSD_GObj **plinkhigh_gobjs;
 
@@ -110,10 +165,14 @@ float PSVECMag(Vector *vec);
 void PSVECScale(Vector *in, float scale, Vector *out);
 void PSVECNormalize(Vector *in, Vector *out);
 
+// Drawing
+void HSD_StateInitDirect(u32 vertex_format, u32 render_mode);
+
 // GObj
+void GObj_SetupGXLink(HSD_GObj *gobj, void *render_cb, u8 gx_link, u8 priority);
 HSD_GObjProc *GObj_CreateProcWithCallback(
 	HSD_GObj *gobj,
-	void (*cb)(),
+	GObjRenderCallback *cb,
 	u8 s_prio);
 
 // CObj

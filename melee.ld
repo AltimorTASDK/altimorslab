@@ -4,8 +4,8 @@
 
 OUTPUT_FORMAT(binary);
 OUTPUT_ARCH(powerpc:common);
-EXTERN(_start);
-ENTRY(_start);
+EXTERN(start);
+ENTRY(start);
 
 INCLUDE GALE01.ld
 
@@ -111,7 +111,7 @@ SECTIONS
         LONG(SIZEOF(.bss));
 
         /*    00E0  Entry Point */
-        LONG(ABSOLUTE(_start));
+        LONG(ABSOLUTE(start));
     }
 
     /* original sections */

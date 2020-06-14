@@ -2,7 +2,7 @@
 #include "melee.h"
 #include "util.h"
 
-#define MAX_OVERLAYS 64
+#define MAX_OVERLAYS (SpecialOverlay_Max + 64)
 
 typedef struct _Overlay {
 	int action_state;
@@ -15,6 +15,12 @@ typedef struct _Overlay {
 	MenuItem menu_b;
 	MenuItem menu_a;
 } Overlay;
+
+typedef enum _SpecialOverlay {
+	SpecialOverlay_FaceUp,
+	SpecialOverlay_FaceDown,
+	SpecialOverlay_Max
+} SpecialOverlay;
 
 static Menu overlay_menu;
 static Overlay as_overlays[MAX_OVERLAYS];
@@ -38,6 +44,9 @@ static void AddASOverlay(MenuItem *item, int port)
 
 static void RemoveASOverlay(MenuItem *item, int port)
 {
+	if (as_overlay_count == 0)
+		return;
+
 	Overlay *overlay = &as_overlays[--as_overlay_count];
 	Menu_RemoveItem(&overlay->menu_overlay_name);
 	Menu_RemoveItem(&overlay->menu_action_state);

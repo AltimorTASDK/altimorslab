@@ -5,7 +5,9 @@
 #include "menu.h"
 #include "overlays.h"
 #include "hitbox_stats.h"
+#include "cpu_control.h"
 #include "extras_dair.h"
+#include "input_display.h"
 
 static BOOL initialized = FALSE;
 
@@ -22,12 +24,27 @@ void hook_ActionStateChange(
 		gobj, new_state, flags, gobj2, start_frame, frame_rate, param_7);
 }
 
-HSD_GObj *orig_AllocateAndInitPlayer(void *player_block);
-HSD_GObj *hook_AllocateAndInitPlayer(void *player_block)
+void orig_Player_UpdateActionInputTimers(HSD_GObj *gobj);
+void hook_Player_UpdateActionInputTimers(HSD_GObj *gobj)
 {
-	HSD_GObj *gobj = orig_AllocateAndInitPlayer(player_block);
-	//GObj_CreateProcWithCallback(gobj, Overlays_Update, 0x17);
-	return gobj;
+	// Hooking here allows running code after inputs are updated, but before
+	// the AS interrupt runs
+	orig_Player_UpdateActionInputTimers(gobj);
+	CPUControl_UpdateInput(gobj->data);
+}
+
+void orig_Physics_Move(void *collision_callback, Physics *phys, int flags);
+void hook_Physics_Move(void *collision_callback, Physics *phys, int flags)
+{
+	CPUControl_PhysicsMove(phys);
+	orig_Physics_Move(collision_callback, phys, flags);
+}
+
+void orig_DevelopText_DrawAll(HSD_GObj *gobj, RenderPass pass);
+void hook_DevelopText_DrawAll(HSD_GObj *gobj, RenderPass pass)
+{
+	orig_DevelopText_DrawAll(gobj, pass);
+	InputDisplay_Draw(pass);
 }
 
 void orig_wP_RunObjectFrameFunctions(void);
@@ -64,11 +81,13 @@ void hook_StartMelee(void *param_1)
 	orig_StartMelee(param_1);
 }
 
-void _start(void)
+void orig_main(void *param_1, void *param_2);
+void hook_main(void *param_1, void *param_2)
 {
 	MainMenu_Init();
 	Overlays_Init();
 	HitboxStats_Init();
+	CPUControl_Init();
 
-	start();
+	orig_main(param_1, param_2);
 }

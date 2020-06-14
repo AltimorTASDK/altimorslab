@@ -45,20 +45,6 @@ typedef enum _DebugLevel {
 	DbLevel_Develop
 } DebugLevel;
 
-typedef enum _Button {
-	Button_DPadLeft = 1,
-	Button_DPadRight = 2,
-	Button_DPadDown = 4,
-	Button_DPadUp = 8,
-	Button_Z = 0x10,
-	Button_A = 0x100,
-	Button_B = 0x200,
-	Button_X = 0x400,
-	Button_Y = 0x800,
-	Button_Start = 0x1000,
-	Button_AnalogLR = 0x80000000
-} Button;
-
 typedef enum _CID {
 	CID_Falco = 0x16
 } CID;
@@ -106,34 +92,6 @@ typedef struct _DevText {
 	struct _DevText *next;
 } DevText;
 
-typedef struct _HSD_PadStatus {
-	Button buttons;
-	Button last_buttons;
-	Button instant_buttons;
-	Button repeated_buttons;
-	Button released_buttons;
-	s32 repeat_count;
-	s8 raw_stick_x;
-	s8 raw_stick_y;
-	s8 raw_cstick_x;
-	s8 raw_cstick_y;
-	u8 raw_analog_l;
-	u8 raw_analog_r;
-	u8 raw_analog_a;
-	u8 raw_analog_b;
-	float stick_x;
-	float stick_y;
-	float cstick_x;
-	float cstick_y;
-	float analog_l;
-	float analog_r;
-	float analog_a;
-	float analog_b;
-	u8 cross_dir;
-	u8 supports_rumble;
-	s8 err;
-} HSD_PadStatus;
-
 typedef struct _Hitbox {
 	u32 state;
 	u32 active;
@@ -180,12 +138,81 @@ typedef struct _Hurtbox {
 	u32 grabbable;
 } Hurtbox;
 
+typedef struct _ECB {
+	Vector2D top;
+	Vector2D bottom;
+	Vector2D right;
+	Vector2D left;
+} ECB;
+
 typedef struct _Physics {
-	char pad0000[0x108];
+	HSD_GObj *gobj;
+	Vector position;
+	Vector trace_start_position;
+	Vector start_position;
+	Vector last_position;
+	char pad0034[0x84 - 0x34];
+	ECB desired_ecb;
+	ECB ecb;
+	ECB trace_start_ecb;
+	ECB last_ecb;
+	int use_ecb_bones;
 	HSD_JObj *root_bone;
 	HSD_JObj *ecb_bones[6];
-	char pad0124[0x1A0 - 0x124];
+	char pad0124[0x19C - 0x124];
+	int ecb_timer;
 } Physics;
+
+typedef struct _PlayerInput {
+    float stick_x;
+    float stick_y;
+    float last_stick_x;
+    float last_stick_y;
+    float frozen_stick_x;
+    float frozen_stick_y;
+    float cstick_x;
+    float cstick_y;
+    float last_cstick_x;
+    float last_cstick_y;
+    float frozen_cstick_x;
+    float frozen_cstick_y;
+    float analog_lr;
+    float last_analog_lr;
+    float frozen_analog_lr;
+    u32 held_buttons;
+    u32 last_held_buttons;
+    u32 frozen_buttons;
+    u32 instant_buttons;
+    u32 released_buttons;
+    u8 stick_x_hold_time;
+    u8 stick_y_hold_time;
+    u8 analog_lr_hold_time;
+    u8 stick_x_hold_time_2;
+    u8 stick_y_hold_time_2;
+    u8 analog_lr_hold_time_2;
+    u8 stick_x_neutral_time;
+    u8 stick_y_neutral_time;
+    u8 analog_lr_neutral_time;
+    u8 stick_x_direction_hold_time;
+    u8 stick_y_direction_hold_time;
+    u8 analog_lr_direction_hold_time;
+    u8 last_a_press;
+    u8 last_b_press;
+    u8 last_xy_press;
+    u8 last_analog_lr_press;
+    u8 last_digital_lr_press;
+    u8 last_dpad_down_press;
+    u8 last_dpad_up_press;
+    u8 a_press_interval;
+    u8 digital_lr_press_interval;
+    u8 last_jump_input;
+    u8 last_up_b_input;
+    u8 last_down_b_input;
+    u8 last_side_b_input;
+    u8 last_neutral_b_input;
+    u8 jump_input_interval;
+    u8 up_b_input_interval;
+} PlayerInput;
 
 typedef struct _Player {
 	HSD_GObj *gobj;
@@ -218,7 +245,9 @@ typedef struct _Player {
 	u8 override_color_g;
 	u8 override_color_b;
 	u8 override_color_a;
-	char pad06F0[0x6F0 - 0x618];
+	char pad0618[0x620 - 0x618];
+	PlayerInput input;
+	char pad068C[0x6F0 - 0x68C];
 	Physics phys;
 	void *camera_data;
 	float frame_timer;
@@ -228,11 +257,18 @@ typedef struct _Player {
 	u8 hurtbox_count;
 	char pad119F[0x11A0 - 0x119F];
 	Hurtbox hurtboxes[MAX_HURTBOXES];
-	char pad1614[0x2223 - 0x1614];
+	char pad1614[0x1988 - 0x1614];
+	u32 body_state_subaction;
+	u32 body_state_timed;
+	s32 intangible_frames;
+	s32 invincible_frames;
+	float shield_size;
+	float lightshield_amount;
+	s32 hit_shield_damage;
+	char pad19A4[0x2223 - 0x19A4];
 	u8 render_flags;
 } Player;
 
-extern HSD_PadStatus HSD_PadMasterStatus[4];
 extern u32 DbLevel;
 extern Text *NameTagText;
 
@@ -265,6 +301,7 @@ void Text_UpdateSubtextSize(Text *text, u32 subtext, float x, float y);
 void Text_ChangeSubtextColor(Text *text, u32 subtext, u32 *color);
 
 // Player
+int Player_IsCPU(Player *player);
 void Hurtbox_Update(Hurtbox *hurtbox);
 
 // Developer text

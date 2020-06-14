@@ -72,7 +72,7 @@ static float CalculateNairRotation(float frame)
 static float CalculateRotation(Player *player)
 {
 	float frame = player->frame_timer;
-	u32 aerial = aerial_state[player->slot - 1];
+	u32 aerial = aerial_state[player->slot];
 
 	if (aerial == AS_AttackAirN)
 		return CalculateNairRotation(frame);
@@ -99,13 +99,18 @@ void hook_HSD_JObjAnim(HSD_JObj *jobj)
 	HSD_GObj *gobj = plinkhigh_gobjs[GOBJ_LINK_PLAYER];
 	for (; gobj != NULL; gobj = gobj->next) {
 		Player *player = gobj->data;
+		u8 slot = player->slot;
+
+		if (slot < 0 || slot >= MAX_PLAYERS)
+			continue;
+
 		if (player->character_id != CID_Falco)
 			continue;
 
 		if (player->action_state != AS_AttackAirLw)
 			continue;
 
-		if (aerial_state[player->slot - 1] == AS_AttackAirLw)
+		if (aerial_state[slot] == AS_AttackAirLw)
 			continue;
 
 		HSD_JObj *TopN = player->phys.root_bone;
@@ -137,7 +142,11 @@ int hook_Player_MeleeDamage(
 	if (player->action_state != AS_AttackAirLw)
 		return orig_Player_MeleeDamage(player, hitbox, victim, hurtbox);
 
-	u32 aerial = aerial_state[player->slot - 1];
+	u8 slot = player->slot;
+	if (slot < 0 || slot >= MAX_PLAYERS)
+		return orig_Player_MeleeDamage(player, hitbox, victim, hurtbox);
+
+	u32 aerial = aerial_state[slot];
 	if (aerial == AS_AttackAirN)
 		hitbox->angle = NAIR_KB_ANGLE;
 	else if (aerial == AS_AttackAirF)
@@ -158,6 +167,10 @@ void ExtrasDair_ASChange(Player *player, u32 *new_state)
 	if (*new_state < AS_AttackAirN || *new_state > AS_AttackAirLw)
 		return;
 
-	aerial_state[player->slot - 1] = *new_state;
+	u8 slot = player->slot;
+	if (slot < 0 || slot >= MAX_PLAYERS)
+		return;
+
+	aerial_state[slot] = *new_state;
 	*new_state = AS_AttackAirLw;
 }

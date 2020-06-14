@@ -61,7 +61,7 @@ def patch_branch(data, address, target):
     offset = address_to_offset(data, address)
     data[offset:offset+4] = word_to_bytes(0x48000000 | (delta & 0x3FFFFFC))
 
-def patch_heap(data):
+def patch_stack_and_heap(data):
     delta = get_dol_end(data) - ORIGINAL_DOL_END
     print(f"DOL virtual size delta: 0x{delta:X} bytes")
 
@@ -74,6 +74,9 @@ def patch_heap(data):
     patch_load_imm32_split(data, 0x802256D0, 0x802256D8, 3, 0x804DEC00 + delta)
     patch_load_imm32_split(data, 0x8022570C, 0x80225714, 4, 0x804EEC00 + delta)
     patch_load_imm32_split(data, 0x80225718, 0x80225720, 5, 0x804DEC00 + delta)
+
+    # Stack
+    patch_load_imm32(data, 0x80005340, 1, 0x804EEC00 + delta)
 
 def apply_hooks(data):
     hooks_offset = word(data, SECTION_OFFSET_START + PATCH_SECTION * 4)
@@ -117,7 +120,7 @@ def main():
     with open("bin/sys/main.dol", "rb") as f:
         data = bytearray(f.read())
 
-    patch_heap(data)
+    patch_stack_and_heap(data)
     apply_hooks(data)
     apply_extra_patches(data)
 

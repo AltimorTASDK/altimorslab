@@ -29,9 +29,9 @@ const char *on_off_text[] = { "Off", "On" };
 
 const char *develop_toggle_text[] = {
 	"Off",
-	NULL,
-	NULL,
-	NULL,
+	"1",
+	"2",
+	"3",
 	"On"
 };
 
@@ -350,7 +350,7 @@ void MainMenu_Init(void)
 		.u = {
 			.adjust_enum = {
 				&DbLevel,
-				DbLevel_Develop, 0, DbLevel_Develop, TRUE,
+				1, 0, DbLevel_Develop, TRUE,
 				develop_toggle_text
 			}
 		}

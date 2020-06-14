@@ -22,7 +22,7 @@ LINKSCRIPT := -Tmelee.ld
 LIBS := -nostdlib
 
 CFLAGS = -DGEKKO -mogc -mcpu=750 -meabi -mhard-float
-LDFLAGS =
+LDFLAGS = -Wl,-Map=output.map
 
 bin/sys/main.dol: $(OBJFILES)
 	$(CC) $(LDFLAGS) $(LIBPATHS) $(LIBS) $(LINKSCRIPT) $^ -o $@

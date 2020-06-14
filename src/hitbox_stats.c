@@ -368,7 +368,9 @@ static void InitializeSlot(u8 slot)
 
 void HitboxStats_UpdatePlayer(Player *player)
 {
-	u8 slot = player->slot - 1;
+	u8 slot = player->slot;
+	if (slot < 0 || slot >= MAX_PLAYERS)
+		return;
 
 	// Create subtext for this player if it doesn't exist
 	if (!initialized[slot]) {
