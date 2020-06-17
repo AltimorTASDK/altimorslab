@@ -7,6 +7,9 @@
 
 #define GOBJ_LINK_PLAYER 8
 
+// JObj flags
+#define MTX_DIRTY 0x40
+
 typedef enum _RenderPass {
 	RenderPass_Opaque = 0,
 	RenderPass_Translucent = 2
@@ -70,9 +73,9 @@ typedef struct _HSD_Obj {
 
 typedef struct _HSD_JObj {
 	HSD_Obj base;
-	HSD_JObj *next; // Next bone with the same parent
+	HSD_JObj *next_sibling; // Next bone with the same parent
 	HSD_JObj *parent;
-	HSD_JObj *child; // First child
+	HSD_JObj *first_child;
 	u32 flags;
 	union {
 		struct _HSD_SList *ptcl;
@@ -117,7 +120,7 @@ typedef struct _HSD_GObj {
 	HSD_GObjProc *proc;
 	GObjRenderCallback *render_cb;
 	u64 gxlink_prios;
-	void *hsd_gobj;
+	void *hsd_obj;
 	void *data;
 	void (*user_data_remove_func)(void *data);
 	void *pad0034;

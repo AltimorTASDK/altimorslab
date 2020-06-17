@@ -17,23 +17,24 @@ typedef struct _Overlay {
 } Overlay;
 
 typedef enum _SpecialOverlay {
+	SpecialOverlay_Airborne,
 	SpecialOverlay_FaceUp,
 	SpecialOverlay_FaceDown,
 	SpecialOverlay_Max
 } SpecialOverlay;
 
 static Menu overlay_menu;
-static Overlay as_overlays[MAX_OVERLAYS];
-static int as_overlay_count = 0;
+static Overlay overlays[MAX_OVERLAYS];
+static int overlay_count = SpecialOverlay_Max;
 
-static void AddASOverlay(MenuItem *item, int port)
+static const char *special_overlay_names[] = {
+	"Airborne",
+	"Face Up",
+	"Face Down"
+};
+
+static void AddOverlayToMenu(Overlay *overlay)
 {
-	Overlay *overlay = &as_overlays[as_overlay_count++];
-
-	// Defaults
-	overlay->action_state = AS_Wait;
-	overlay->r = overlay->g = overlay->b = overlay->a = 0;
-
 	Menu_AddItem(&overlay_menu, &overlay->menu_overlay_name);
 	Menu_AddItem(&overlay_menu, &overlay->menu_action_state);
 	Menu_AddItem(&overlay_menu, &overlay->menu_r);
@@ -42,12 +43,21 @@ static void AddASOverlay(MenuItem *item, int port)
 	Menu_AddItem(&overlay_menu, &overlay->menu_a);
 }
 
+static void AddASOverlay(MenuItem *item, int port)
+{
+	Overlay *overlay = &overlays[overlay_count++];
+
+	// Defaults
+	overlay->action_state = AS_Wait;
+	overlay->r = overlay->g = overlay->b = overlay->a = 0;
+}
+
 static void RemoveASOverlay(MenuItem *item, int port)
 {
-	if (as_overlay_count == 0)
+	if (overlay_count == SpecialOverlay_Max)
 		return;
 
-	Overlay *overlay = &as_overlays[--as_overlay_count];
+	Overlay *overlay = &overlays[--overlay_count];
 	Menu_RemoveItem(&overlay->menu_overlay_name);
 	Menu_RemoveItem(&overlay->menu_action_state);
 	Menu_RemoveItem(&overlay->menu_r);
@@ -56,39 +66,16 @@ static void RemoveASOverlay(MenuItem *item, int port)
 	Menu_RemoveItem(&overlay->menu_a);
 }
 
-static void Overlays_AddMenu(void)
-{
-	static MenuItem menu_add_overlay = {
-		.text = "Add Action State Overlay",
-		.type = MenuItem_Callback,
-		.u = { .callback = AddASOverlay }
-	};
-
-	static MenuItem menu_remove_overlay = {
-		.text = "Remove Action State Overlay",
-		.type = MenuItem_Callback,
-		.u = { .callback = RemoveASOverlay }
-	};
-
-	Menu_Init(&overlay_menu, "Overlays");
-	Menu_AddItem(&overlay_menu, &menu_add_overlay);
-	Menu_AddItem(&overlay_menu, &menu_remove_overlay);
-
-	// Add to main menu
-	static MenuItem menu_overlays = {
-		.text = "Overlays",
-		.type = MenuItem_SubMenu,
-		.u = { .submenu = &overlay_menu }
-	};
-
-	Menu_AddItem(&main_menu, &menu_overlays);
-}
-
 static void InitOverlay(int index)
 {
-	Overlay *overlay = &as_overlays[index];
+	Overlay *overlay = &overlays[index];
+	int as_overlay_index = index - SpecialOverlay_Max;
 
-	sprintf(overlay->name, "\nAction State Overlay %d", index);
+	if (as_overlay_index < 0)
+		sprintf(overlay->name, "\n%s Overlay", special_overlay_names[index]);
+	else
+		sprintf(overlay->name, "\nAction State Overlay %d", as_overlay_index);
+
 	overlay->menu_overlay_name = (MenuItem) {
 		.text = overlay->name,
 		.type = MenuItem_Text
@@ -129,15 +116,50 @@ static void InitOverlay(int index)
 		.type = MenuItem_AdjustInt,
 		.u = { .adjust_int = { &overlay->a, 5, 0, 255, FALSE } }
 	};
+
+	if (as_overlay_index < 0)
+		AddOverlayToMenu(overlay);
+}
+
+/*
+ * Checks which way a player will face when they land from tumble
+ */
+static BOOL CheckKnockdownFacingOverlay(Player *player, BOOL face_up)
+{
+	// Check tumble
+	u32 as = player->action_state;
+	if (as != AS_DamageFall && (as < AS_DamageFlyHi || as > AS_DamageFlyRoll))
+		return FALSE;
+
+	return Player_IsKnockdownFaceUp(player->gobj) == face_up;
+}
+
+static BOOL ShouldApplyOverlay(Player *player, int index)
+{
+	Overlay *overlay = &overlays[index];
+
+	switch (index) {
+	case SpecialOverlay_Airborne:
+		return player->airborne;
+	case SpecialOverlay_FaceUp:
+		return CheckKnockdownFacingOverlay(player, TRUE);
+	case SpecialOverlay_FaceDown:
+		return CheckKnockdownFacingOverlay(player, FALSE);
+	default:
+		return player->action_state == overlay->action_state;
+	}
 }
 
 void orig_ColorData_HandleStuff(Player *player, u32 param_2, u32 param_3);
 void hook_ColorData_HandleStuff(Player *player, u32 param_2, u32 param_3)
 {
-	for (int i = 0; i < as_overlay_count; i++)
+	float r = 0.f, g = 0.f, b = 0.f, a = 0.f;
+
+	for (int i = 0; i < overlay_count; i++)
 	{
-		Overlay *overlay = &as_overlays[i];
-		if (overlay->action_state != player->action_state)
+		Overlay *overlay = &overlays[i];
+
+		if (overlay->a == 0 || !ShouldApplyOverlay(player, i))
 			continue;
 
 		u8 old_render_flags = player->render_flags;
@@ -168,8 +190,33 @@ void hook_ColorData_HandleStuff(Player *player, u32 param_2, u32 param_3)
 
 void Overlays_Init(void)
 {
-	Overlays_AddMenu();
+	static MenuItem menu_add_overlay = {
+		.text = "Add Action State Overlay",
+		.type = MenuItem_Callback,
+		.u = { .callback = AddASOverlay }
+	};
 
+	static MenuItem menu_remove_overlay = {
+		.text = "Remove Action State Overlay",
+		.type = MenuItem_Callback,
+		.u = { .callback = RemoveASOverlay }
+	};
+
+	Menu_Init(&overlay_menu, "Overlays");
+
+	// Also adds special overlays to menu
 	for (int i = 0; i < MAX_OVERLAYS; i++)
 		InitOverlay(i);
+
+	Menu_AddItem(&overlay_menu, &menu_add_overlay);
+	Menu_AddItem(&overlay_menu, &menu_remove_overlay);
+
+	// Add to main menu
+	static MenuItem menu_overlays = {
+		.text = "Overlays",
+		.type = MenuItem_SubMenu,
+		.u = { .submenu = &overlay_menu }
+	};
+
+	Menu_AddItem(&main_menu, &menu_overlays);
 }

@@ -16,12 +16,15 @@ void orig_ActionStateChange(
 	float start_frame, float frame_rate, float param_7);
 void hook_ActionStateChange(
 	HSD_GObj *gobj, u32 new_state, u32 flags, HSD_GObj *gobj2,
-	float start_frame, float frame_rate, float param_7)
+	float start_frame, float frame_rate, float lerp_override)
 {
+	if (!CPUControl_ASChange(gobj->data))
+		return;
+
 	ExtrasDair_ASChange(gobj->data, &new_state);
 
 	orig_ActionStateChange(
-		gobj, new_state, flags, gobj2, start_frame, frame_rate, param_7);
+		gobj, new_state, flags, gobj2, start_frame, frame_rate, lerp_override);
 }
 
 void orig_Player_UpdateActionInputTimers(HSD_GObj *gobj);
@@ -33,8 +36,8 @@ void hook_Player_UpdateActionInputTimers(HSD_GObj *gobj)
 	CPUControl_UpdateInput(gobj->data);
 }
 
-void orig_Physics_Move(void *collision_callback, Physics *phys, int flags);
-void hook_Physics_Move(void *collision_callback, Physics *phys, int flags)
+void orig_Physics_Move(void *collision_callback, Physics *phys, u32 flags);
+void hook_Physics_Move(void *collision_callback, Physics *phys, u32 flags)
 {
 	CPUControl_PhysicsMove(phys);
 	orig_Physics_Move(collision_callback, phys, flags);

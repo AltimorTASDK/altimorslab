@@ -26,6 +26,11 @@ void CPUControl_PhysicsMove(Physics *phys)
 	}
 }
 
+BOOL CPUControl_ASChange(Player *player)
+{
+	return !freeze_position || !Player_IsCPU(player);
+}
+
 void CPUControl_Init(void)
 {
 	static MenuItem menu_force_shield = {

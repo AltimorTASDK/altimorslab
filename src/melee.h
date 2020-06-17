@@ -28,6 +28,12 @@ typedef struct _Text Text;
 
 typedef enum _ActionState {
 	AS_Wait = 0xE,
+	AS_DamageFall = 0x26,
+	AS_DamageFlyHi = 0x57,
+	AS_DamageFlyN = 0x58,
+	AS_DamageFlyLw = 0x59,
+	AS_DamageFlyTop = 0x5A,
+	AS_DamageFlyRoll = 0x5B,
 	AS_AttackAirN = 0x41,
 	AS_AttackAirF = 0x42,
 	AS_AttackAirB = 0x43,
@@ -75,6 +81,17 @@ typedef enum _HitboxFlag4 {
 typedef enum _HurtboxFlag {
 	HurtboxFlag_PositionUpdated = 0x80
 } HurtboxFlag;
+
+typedef enum _ASChangeFlag {
+	ASChangeFlag_KeepFastFallState = 0x1,
+	ASChangeFlag_KeepBodyState = 0x4,
+	ASChangeFlag_KeepHitboxes = 0x8,
+	ASChangeFlag_KeepDObjFlags = 0x10,
+	ASChangeFlag_NoAnimationVelocity = 0x20,
+	ASChangeFlag_NoAnimationReset = 0x80,
+	ASChangeFlag_SkipSubactionEvents = 0x4000,
+	ASChangeFlag_NoSubaction = 0x20000000
+} ASChangeFlag;
 
 typedef struct _DevText {
 	u16 x, y;
@@ -159,7 +176,11 @@ typedef struct _Physics {
 	int use_ecb_bones;
 	HSD_JObj *root_bone;
 	HSD_JObj *ecb_bones[6];
-	char pad0124[0x19C - 0x124];
+	char pad0124[0x130 - 0x124];
+	u32 ecb_update_flags;
+	u32 surface_type;
+	u32 last_surface_type;
+	char pad013C[0x19C - 0x13C];
 	int ecb_timer;
 } Physics;
 
@@ -214,12 +235,25 @@ typedef struct _PlayerInput {
     u8 up_b_input_interval;
 } PlayerInput;
 
+typedef struct _SkeletonInfo {
+	char pad0000[0x04];
+	u8 *common_bone_mapping;
+	u32 bone_count;
+} SkeletonInfo;
+
+typedef struct _PlayerBone {
+	HSD_JObj *jobj;
+	HSD_JObj *lerp_target_jobj;
+	u8 flags;
+	char pad0009[0x10 - 0x09];
+} PlayerBone;
+
 typedef struct _Player {
 	HSD_GObj *gobj;
 	u32 character_id;
 	u32 spawn_count;
 	u8 slot;
-	char align000D[0x10 - 0xD];
+	char align000D[0x10 - 0x0D];
 	u32 action_state;
 	char pad0014[0x2C - 0x14];
 	float direction;
@@ -229,7 +263,9 @@ typedef struct _Player {
 	char pad003C[0xB0 - 0x3C];
 	Vector position;
 	Vector last_position;
-	char pad00C8[0x4B8 - 0xC8];
+	char pad00C8[0xE0 - 0xC8];
+	u32 airborne;
+	char pad00E4[0x4B8 - 0xE4];
 	float overlay_r;
 	float overlay_g;
 	float overlay_b;
@@ -302,6 +338,7 @@ void Text_ChangeSubtextColor(Text *text, u32 subtext, u32 *color);
 
 // Player
 int Player_IsCPU(Player *player);
+int Player_IsKnockdownFaceUp(HSD_GObj *gobj);
 void Hurtbox_Update(Hurtbox *hurtbox);
 
 // Developer text

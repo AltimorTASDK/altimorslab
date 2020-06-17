@@ -49,9 +49,9 @@
 #define B0XX_A_X (B0XX_SCALE * 265)
 #define B0XX_A_Y (B0XX_SCALE * 132)
 
-#define B0XX_DISPLAY_HEIGHT (B0XX_SCALE * 500)
+#define B0XX_DISPLAY_HEIGHT (B0XX_SCALE * 200)
 
-#define HISTORY_SIZE 30
+#define HISTORY_SIZE 10
 
 // displayed_history isn't updated until a button is pressed
 static HSD_PadStatus displayed_history[HISTORY_SIZE] = { 0 };
@@ -127,7 +127,7 @@ static BOOL IsPadNonZero(HSD_PadStatus *pad)
 
 static HSD_PadStatus *GetHistory(u32 frame)
 {
-	return &history[0];
+	return &history[frame % HISTORY_SIZE];
 }
 
 static HSD_PadStatus *GetDisplayedHistory(u32 frame)

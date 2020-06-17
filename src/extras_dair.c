@@ -117,11 +117,11 @@ void hook_HSD_JObjAnim(HSD_JObj *jobj)
 		if (TopN == NULL)
 			continue;
 
-		HSD_JObj *TransN = TopN->child;
+		HSD_JObj *TransN = TopN->first_child;
 		if (TransN == NULL)
 			continue;
 
-		HSD_JObj *HipN = TransN->child;
+		HSD_JObj *HipN = TransN->first_child;
 		if (jobj == HipN) {
 			jobj->rotation.x = CalculateRotation(player);
 			break;
