@@ -4195,5 +4195,7 @@ FEAudioResetRandomVoiceToggleSFX                             = 0x803ac334;
 Ab_Unknown_OnExtResultsScreen                                = 0x803b31cc;
 HSD_PadMasterStatus                                          = 0x804c1fac;
 DbLevel                                                      = 0x804d4a08;
+RandomSeed                                                   = 0x804d5f90;
+StageAnimationFrame                                          = 0x804d64ac;
 NameTagText                                                  = 0x804d6d78;
 plinkhigh_gobjs                                              = 0x804d782c;

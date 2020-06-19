@@ -8,12 +8,13 @@
 #include "cpu_control.h"
 #include "extras_dair.h"
 #include "input_display.h"
+#include "savestates.h"
 
 static BOOL initialized = FALSE;
 
 void orig_ActionStateChange(
 	HSD_GObj *gobj, u32 new_state, u32 flags, HSD_GObj *gobj2,
-	float start_frame, float frame_rate, float param_7);
+	float start_frame, float frame_rate, float lerp_override);
 void hook_ActionStateChange(
 	HSD_GObj *gobj, u32 new_state, u32 flags, HSD_GObj *gobj2,
 	float start_frame, float frame_rate, float lerp_override)
@@ -54,8 +55,10 @@ void orig_wP_RunObjectFrameFunctions(void);
 void hook_wP_RunObjectFrameFunctions(void)
 {
 	// Pause game when menu is open
-	if (!IsMenuOpen())
+	if (!IsMenuOpen()) {
 		orig_wP_RunObjectFrameFunctions();
+		SaveStates_Update();
+	}
 
 	HitboxStats_Update();
 }

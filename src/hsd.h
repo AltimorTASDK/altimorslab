@@ -6,6 +6,7 @@
 #define GOBJ_CLASS_PLAYER 4
 
 #define GOBJ_LINK_PLAYER 8
+#define GOBJ_LINK_PROJECTILE 9
 
 // JObj flags
 #define MTX_DIRTY 0x40

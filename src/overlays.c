@@ -162,30 +162,40 @@ void hook_ColorData_HandleStuff(Player *player, u32 param_2, u32 param_3)
 		if (overlay->a == 0 || !ShouldApplyOverlay(player, i))
 			continue;
 
-		u8 old_render_flags = player->render_flags;
-		u8 old_override_color_r = player->override_color_r;
-		u8 old_override_color_g = player->override_color_g;
-		u8 old_override_color_b = player->override_color_b;
-		u8 old_override_color_a = player->override_color_a;
+		// Blend overlay colors together
+		float src_alpha = (float)overlay->a / 255.f;
+		float inv_src_alpha = 1.f - src_alpha;
+		r = (float)overlay->r / 255.f * src_alpha + r * inv_src_alpha;
+		g = (float)overlay->g / 255.f * src_alpha + g * inv_src_alpha;
+		b = (float)overlay->b / 255.f * src_alpha + b * inv_src_alpha;
+		a = (float)overlay->a / 255.f + a * inv_src_alpha;
+	}
 
-		player->render_flags |= RenderFlag_OverrideColor;
-		player->override_color_r = overlay->r;
-		player->override_color_g = overlay->g;
-		player->override_color_b = overlay->b;
-		player->override_color_a = overlay->a;
-
+	if (a == 0.f) {
+		// No visible overlays
 		orig_ColorData_HandleStuff(player, param_2, param_3);
-
-		player->render_flags = old_render_flags;
-		player->override_color_r = old_override_color_r;
-		player->override_color_g = old_override_color_g;
-		player->override_color_b = old_override_color_b;
-		player->override_color_a = old_override_color_a;
-
 		return;
 	}
 
+	u8 old_flags12 = player->flags12;
+	u8 old_override_color_r = player->override_color_r;
+	u8 old_override_color_g = player->override_color_g;
+	u8 old_override_color_b = player->override_color_b;
+	u8 old_override_color_a = player->override_color_a;
+
+	player->flags12 |= PlayerFlag12_OverrideColor;
+	player->override_color_r = (u8)(r * 255.f);
+	player->override_color_g = (u8)(g * 255.f);
+	player->override_color_b = (u8)(b * 255.f);
+	player->override_color_a = (u8)(a * 255.f);
+
 	orig_ColorData_HandleStuff(player, param_2, param_3);
+
+	player->flags12 = old_flags12;
+	player->override_color_r = old_override_color_r;
+	player->override_color_g = old_override_color_g;
+	player->override_color_b = old_override_color_b;
+	player->override_color_a = old_override_color_a;
 }
 
 void Overlays_Init(void)

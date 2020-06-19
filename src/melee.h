@@ -59,9 +59,9 @@ typedef enum _OverlayFlag {
 	OverlayFlag_UseColor = 0x80
 } OverlayFlag;
 
-typedef enum _RenderFlag {
-	RenderFlag_OverrideColor = 0x20
-} RenderFlag;
+typedef enum _PlayerFlag12 {
+	PlayerFlag12_OverrideColor = 0x20
+} PlayerFlag12;
 
 typedef enum _BodyState {
 	BodyState_Normal = 0,
@@ -248,6 +248,16 @@ typedef struct _PlayerBone {
 	char pad0009[0x10 - 0x09];
 } PlayerBone;
 
+typedef struct _SubactionState {
+	float timer;
+	float frame_count;
+	char *script_pointer;
+	u32 loop_count;
+	void *event_return;
+	u32 loop_count_2;
+	char pad0018[0x1C - 0x18];
+} SubactionState;
+
 typedef struct _Player {
 	HSD_GObj *gobj;
 	u32 character_id;
@@ -255,17 +265,33 @@ typedef struct _Player {
 	u8 slot;
 	char align000D[0x10 - 0x0D];
 	u32 action_state;
-	char pad0014[0x2C - 0x14];
+	u32 subaction;
+	char pad0014[0x2C - 0x18];
 	float direction;
-	float last_direction;
+	float model_direction;
 	float initial_scale;
 	float scale;
-	char pad003C[0xB0 - 0x3C];
+	char pad003C[0x74 - 0x3C];
+	Vector move_vel_delta;
+	Vector move_vel;
+	Vector knockback_vel;
+	Vector pushback_vel;
+	Vector move_vel_lerp;
 	Vector position;
 	Vector last_position;
-	char pad00C8[0xE0 - 0xC8];
+	Vector delta_vel;
+	char pad00C8[0xE0 - 0xD4];
 	u32 airborne;
-	char pad00E4[0x4B8 - 0xE4];
+	float ground_vel_delta;
+	float ground_accel;
+	float ground_vel;
+	float ground_knockback_vel;
+	float ground_pushback_vel;
+	float jostle_delta_x;
+	float jostle_delta_z;
+	char pad0100[0x3E4 - 0x100];
+	SubactionState subaction_state;
+	char pad0400[0x4B8 - 0x400];
 	float overlay_r;
 	float overlay_g;
 	float overlay_b;
@@ -286,14 +312,32 @@ typedef struct _Player {
 	char pad068C[0x6F0 - 0x68C];
 	Physics phys;
 	void *camera_data;
-	float frame_timer;
-	char pad0898[0x914 - 0x898];
+	float animation_frame;
+	float subaction_speed;
+	float animation_speed;
+	char pad08A0[0x8A4 - 0x8A0];
+	float anim_lerp_duration;
+	float anim_lerp_progress;
+	HSD_JObj *lerp_target_jobj;
+	char pad08B0[0x914 - 0x8B0];
 	Hitbox hitboxes[MAX_HITBOXES];
 	char pad0DF4[0x119E - 0xDF4];
 	u8 hurtbox_count;
 	char pad119F[0x11A0 - 0x119F];
 	Hurtbox hurtboxes[MAX_HURTBOXES];
-	char pad1614[0x1988 - 0x1614];
+	char pad1614[0x18A8 - 0x1614];
+	float last_received_knockback;
+	s32 frames_since_last_hit;
+	float kb_resistance_innate;
+	float kb_resistance_subaction;
+	char pad18B0[0x18F8 - 0x18B8];
+	u8 hit_airborne;
+	char align18FA[0x18FA - 0x18F9];
+	s32 damage_shake_frames;
+	char pad18FC[0x1900 - 0x18FC];
+	float hit_ground_normal_x;
+	float hit_ground_normal_y;
+	char pad1908[0x1988 - 0x1908];
 	u32 body_state_subaction;
 	u32 body_state_timed;
 	s32 intangible_frames;
@@ -301,11 +345,31 @@ typedef struct _Player {
 	float shield_size;
 	float lightshield_amount;
 	s32 hit_shield_damage;
-	char pad19A4[0x2223 - 0x19A4];
-	u8 render_flags;
+	char pad19A4[0x2218 - 0x19A4];
+	u8 flags1;
+	u8 flags2;
+	u8 flags3;
+	u8 flags4;
+	u8 flags5;
+	u8 flags6;
+	u8 flags7;
+	u8 flags8;
+	u8 flags9;
+	u8 flags10;
+	u8 flags11;
+	u8 flags12;
+	u8 flags13;
+	u8 flags14;
+	char pad2226[0x222C - 0x2226];
+	char char_specific_data[0xD0];
+	char pad22FC[0x2340 - 0x22FC];
+	char as_specific_data[0xAC];
 } Player;
 
+// Globals
 extern u32 DbLevel;
+extern u32 RandomSeed;
+extern u32 StageAnimationFrame;
 extern Text *NameTagText;
 
 extern const char *action_state_names[AS_NAMED_MAX];
@@ -340,6 +404,10 @@ void Text_ChangeSubtextColor(Text *text, u32 subtext, u32 *color);
 int Player_IsCPU(Player *player);
 int Player_IsKnockdownFaceUp(HSD_GObj *gobj);
 void Hurtbox_Update(Hurtbox *hurtbox);
+
+void ActionStateChange(
+	HSD_GObj *gobj, u32 new_state, u32 flags, HSD_GObj *gobj2,
+	float start_frame, float frame_rate, float lerp_override);
 
 // Developer text
 DevText *DevelopText_Initialize(

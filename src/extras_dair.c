@@ -71,7 +71,7 @@ static float CalculateNairRotation(float frame)
 
 static float CalculateRotation(Player *player)
 {
-	float frame = player->frame_timer;
+	float frame = player->animation_frame;
 	u32 aerial = aerial_state[player->slot];
 
 	if (aerial == AS_AttackAirN)

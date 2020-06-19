@@ -141,7 +141,7 @@ SECTIONS
 
     bss_base = data8_base + SIZEOF(.data8);
     bss_offset = data8_base + SIZEOF(.data8);
-    .bss bss_base : AT(bss_offset) { *(.bss* COMMON) }
+    .bss bss_base : AT(bss_offset) { *(.bss* .sbss* COMMON) }
 
     /DISCARD/ : { *(*) }
 }

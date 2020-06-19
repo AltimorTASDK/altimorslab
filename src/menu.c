@@ -99,7 +99,6 @@ static void Menu_OpenClose(void)
 	}
 
 	for (int i = 0; i < 4; i++) {
-		Button buttons = HSD_PadMasterStatus[i].instant_buttons;
 		HSD_PadStatus *pad = &HSD_PadMasterStatus[i];
 		if (pad->buttons != Button_DPadDown)
 			return;

@@ -260,7 +260,7 @@ static void MinMaxPositionsToScreen(
 	MinMaxPositions *out)
 {
 	HSD_GObj *camera = Camera_LoadCameraEntity();
-	HSD_CObj *cobj = (HSD_CObj*)camera->hsd_gobj;
+	HSD_CObj *cobj = (HSD_CObj*)camera->hsd_obj;
 
 	for (int i = 0; i < count; i++) {
 		// 3D to 2D
