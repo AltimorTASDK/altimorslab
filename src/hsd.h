@@ -151,8 +151,8 @@ typedef struct _HSD_PadStatus {
 	float analog_a;
 	float analog_b;
 	u8 cross_dir;
-	u8 supports_rumble;
 	s8 err;
+	char align0042[0x44 - 0x42];
 } HSD_PadStatus;
 
 extern HSD_PadStatus HSD_PadMasterStatus[4];

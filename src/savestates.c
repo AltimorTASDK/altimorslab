@@ -13,10 +13,12 @@ typedef struct _State_JObj {
     Quaternion rotation;
     Vector scale;
     Vector position;
+    u32 flags;
 } State_JObj;
 
 typedef struct _State_Player {
     struct _State_JObj *jobj;
+    struct _State_JObj *lerp_target_jobj;
 
     // Action state, subaction, and animation
     u32 action_state;
@@ -28,8 +30,11 @@ typedef struct _State_Player {
     float anim_lerp_duration;
     float anim_lerp_progress;
 
-    // Position, velocity, and scale
+    // Position, velocity, direction, and scale
+    float direction;
+    float model_direction;
 	float scale;
+    float z_scale;
 	Vector move_vel_delta;
 	Vector move_vel;
 	Vector knockback_vel;
@@ -38,6 +43,7 @@ typedef struct _State_Player {
 	Vector position;
 	Vector last_position;
 	Vector delta_vel;
+    Vector kb_vel_accumulator;
 	u32 airborne;
 	float ground_vel_delta;
 	float ground_accel;
@@ -91,6 +97,7 @@ static void SaveState_JObj(HSD_JObj *jobj, State_JObj **out_state)
         state->rotation = jobj->rotation;
         state->scale = jobj->scale;
         state->position = jobj->position;
+        state->flags = jobj->flags;
 
         SaveState_JObj(jobj->first_child, &state->first_child);
 
@@ -108,7 +115,7 @@ static void LoadState_JObj(HSD_JObj *jobj, State_JObj *state)
         jobj->rotation = state->rotation;
         jobj->scale = state->scale;
         jobj->position = state->position;
-        jobj->flags |= MTX_DIRTY;
+        jobj->flags = state->flags | MTX_DIRTY;
 
         LoadState_JObj(jobj->first_child, state->first_child);
 
@@ -124,6 +131,7 @@ static void SaveState_Player(Player *player, State_Player **out_state)
 
     // Save skeleton for lerping
     SaveState_JObj(player->gobj->hsd_obj, &state->jobj);
+    SaveState_JObj(player->lerp_target_jobj, &state->lerp_target_jobj);
 
     state->action_state = player->action_state;
     state->subaction = player->subaction;
@@ -134,7 +142,10 @@ static void SaveState_Player(Player *player, State_Player **out_state)
     state->anim_lerp_duration = player->anim_lerp_duration;
     state->anim_lerp_progress = player->anim_lerp_progress;
 
+    state->direction = player->direction;
+    state->model_direction = player->model_direction;
     state->scale = player->scale;
+    state->z_scale = player->z_scale;
     state->move_vel_delta = player->move_vel_delta;
     state->move_vel = player->move_vel;
     state->knockback_vel = player->knockback_vel;
@@ -143,6 +154,7 @@ static void SaveState_Player(Player *player, State_Player **out_state)
     state->position = player->position;
     state->last_position = player->last_position;
     state->delta_vel = player->delta_vel;
+    state->kb_vel_accumulator = player->kb_vel_accumulator;
 	state->airborne = player->airborne;
 	state->ground_vel_delta = player->ground_vel_delta;
 	state->ground_accel = player->ground_accel;
@@ -161,10 +173,6 @@ static void SaveState_Player(Player *player, State_Player **out_state)
 static void LoadState_Player(Player *player, State_Player *state)
 {
     // Set the AS first because this overwrites flags and jobj data
-    float lerp_left = state->anim_lerp_duration - state->anim_lerp_progress;
-    if (lerp_left <= 0.f)
-        lerp_left = -1.f;
-
     ActionStateChange(
         player->gobj,
         state->action_state,
@@ -172,17 +180,20 @@ static void LoadState_Player(Player *player, State_Player *state)
         NULL,
         state->animation_frame,
         state->animation_speed,
-        lerp_left);
+        state->anim_lerp_duration);
 
     LoadState_JObj(player->gobj->hsd_obj, state->jobj);
+    LoadState_JObj(player->lerp_target_jobj, state->lerp_target_jobj);
 
     player->subaction = state->subaction;
     player->subaction_state = state->subaction_state;
     player->subaction_speed = state->subaction_speed;
-    player->anim_lerp_duration = state->anim_lerp_duration;
     player->anim_lerp_progress = state->anim_lerp_progress;
 
+    player->direction = state->direction;
+    player->model_direction = state->model_direction;
     player->scale = state->scale;
+    player->z_scale = state->scale;
     player->move_vel_delta = state->move_vel_delta;
     player->move_vel = state->move_vel;
     player->knockback_vel = state->knockback_vel;
@@ -191,6 +202,7 @@ static void LoadState_Player(Player *player, State_Player *state)
     player->position = state->position;
     player->last_position = state->last_position;
     player->delta_vel = state->delta_vel;
+    player->kb_vel_accumulator = state->kb_vel_accumulator;
 	player->airborne = state->airborne;
 	player->ground_vel_delta = state->ground_vel_delta;
 	player->ground_accel = state->ground_accel;

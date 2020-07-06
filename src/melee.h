@@ -266,12 +266,13 @@ typedef struct _Player {
 	char align000D[0x10 - 0x0D];
 	u32 action_state;
 	u32 subaction;
-	char pad0014[0x2C - 0x18];
+	char pad0018[0x2C - 0x18];
 	float direction;
 	float model_direction;
 	float initial_scale;
 	float scale;
-	char pad003C[0x74 - 0x3C];
+	float z_scale;
+	char pad0040[0x74 - 0x40];
 	Vector move_vel_delta;
 	Vector move_vel;
 	Vector knockback_vel;
@@ -280,7 +281,7 @@ typedef struct _Player {
 	Vector position;
 	Vector last_position;
 	Vector delta_vel;
-	char pad00C8[0xE0 - 0xD4];
+	Vector kb_vel_accumulator;
 	u32 airborne;
 	float ground_vel_delta;
 	float ground_accel;
