@@ -24,9 +24,12 @@ LIBS := -nostdlib
 CFLAGS = -DGEKKO -mogc -mcpu=750 -meabi -mhard-float
 LDFLAGS = -Wl,-Map=output.map
 
-bin/sys/main.dol: $(OBJFILES)
-	$(CC) $(LDFLAGS) $(LIBPATHS) $(LIBS) $(LINKSCRIPT) $^ -o $@
+bin/sys/main.dol: $(OBJFILES) GALE01.ld melee.ld patch_dol.py
+	$(CC) $(LDFLAGS) $(LIBPATHS) $(LIBS) $(LINKSCRIPT) $(OBJFILES) -o $@
 	python patch_dol.py
+
+GALE01.ld: GALE01.map map_to_linker_script.py
+	python map_to_linker_script.py
 
 $(OBJDIR)/%.o: %.c
 	@[ -d $(dir $@) ] || mkdir -p $(dir $@)

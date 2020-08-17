@@ -4285,6 +4285,8 @@ LOAD obj/sections/text1.o
                 0x00000000804d4a08                DbLevel = 0x804d4a08
                 0x00000000804d5f90                RandomSeed = 0x804d5f90
                 0x00000000804d64ac                StageAnimationFrame = 0x804d64ac
+                0x00000000804d64b4                groundCollParams = 0x804d64b4
+                0x00000000804d64bc                groundCollLine = 0x804d64bc
                 0x00000000804d6d78                NameTagText = 0x804d6d78
                 0x00000000804d782c                plinkhigh_gobjs = 0x804d782c
                 0x0000000080003000                load_base = 0x80003000

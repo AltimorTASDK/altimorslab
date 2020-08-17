@@ -4197,5 +4197,7 @@ HSD_PadMasterStatus                                          = 0x804c1fac;
 DbLevel                                                      = 0x804d4a08;
 RandomSeed                                                   = 0x804d5f90;
 StageAnimationFrame                                          = 0x804d64ac;
+groundCollParams                                             = 0x804d64b4;
+groundCollLine                                               = 0x804d64bc;
 NameTagText                                                  = 0x804d6d78;
 plinkhigh_gobjs                                              = 0x804d782c;

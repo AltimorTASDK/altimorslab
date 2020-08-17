@@ -3,7 +3,9 @@
         {
             "name": "Default",
             "includePath": [
-                "${DEVKITPRO}/devkitPPC/lib/gcc/powerpc-eabi/8.3.0/include"
+                "${DEVKITPRO}/devkitPPC/lib/gcc/powerpc-eabi/8.3.0/include",
+                "src",
+                "src/melee"
             ],
             "intelliSenseMode": "gcc-x64"
         }
