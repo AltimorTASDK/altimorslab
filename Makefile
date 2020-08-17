@@ -9,9 +9,10 @@ SOURCES := src src/melee sections
 OBJDIR := obj
 DEPDIR := dep
 
+CFILES := $(foreach dir, $(SOURCES), $(wildcard $(dir)/*.c))
+SFILES := $(foreach dir, $(SOURCES), $(wildcard $(dir)/*.S))
 
-CFILES := $(foreach dir,$(SOURCES),$(wildcard $(dir)/*.c))
-SFILES := $(foreach dir,$(SOURCES),$(wildcard $(dir)/*.S))
+INCLUDES := $(foreach dir, $(SOURCES), -I$(dir))
 
 OBJFILES := \
 	$(patsubst %.c, $(OBJDIR)/%.o, $(CFILES)) \
@@ -30,7 +31,7 @@ bin/sys/main.dol: $(OBJFILES)
 $(OBJDIR)/%.o: %.c
 	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
 	@[ -d $(subst $(OBJDIR), $(DEPDIR), $(dir $@)) ] || mkdir -p $(subst $(OBJDIR), $(DEPDIR), $(dir $@))
-	$(CC) -MMD -MP -MF $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $@) $(CFLAGS) -c $< -o $@
+	$(CC) -MMD -MP -MF $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $@) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 $(OBJDIR)/%.o: %.S
 	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
