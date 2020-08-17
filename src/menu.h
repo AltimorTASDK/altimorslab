@@ -5,6 +5,10 @@
 typedef struct _Menu {
 	const char *name;
 	ListLink items;
+	int item_count;
+	int scroll_index;
+	int visible_items;
+	ListLink *scroll_item;
 	ListLink *selected;
 	struct _Menu *previous_menu;
 } Menu;
@@ -26,7 +30,9 @@ typedef enum _MenuItemType {
 
 struct _MenuItem {
 	ListLink link;
+	int index;
 	const char *text;
+	int line_count;
 	MenuItemType type;
 	MenuCallback callback;
 	union {
@@ -64,6 +70,7 @@ void Menu_CreateText(void);
 void Menu_Update(void);
 void Menu_Init(Menu *menu, const char *name);
 void Menu_AddItem(Menu *menu, MenuItem *item);
-void Menu_RemoveItem(MenuItem *item);
+void Menu_RemoveItem(Menu *menu, MenuItem *item);
+void Menu_RemoveAllItems(Menu *menu);
 BOOL IsMenuOpen(void);
 void MainMenu_Init(void);

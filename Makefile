@@ -16,6 +16,8 @@ OBJFILES := \
 	$(patsubst %.c, $(OBJDIR)/%.o, $(CFILES)) \
 	$(patsubst %.S, $(OBJDIR)/%.o, $(SFILES))
 
+DEPFILES := $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $(OBJFILES))
+
 LINKSCRIPT := -Tmelee.ld
 LIBS := -nostdlib
 
@@ -38,4 +40,4 @@ $(OBJDIR)/%.o: %.S
 	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
 	$(AS) -mregnames -mgekko $^ -o $@
 
--include $(DEPDIR)/*.d
+-include $(DEPFILES)

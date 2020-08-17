@@ -46,7 +46,7 @@ void LogDisplay_Update(void)
 {
 	if (MatchInfo_LoadFrameCount() == log_hide_time) {
 		DevelopText_Erase(log_text);
-		DevelopText_ResetCursorXY(log_text, 0, 0);
+		DevelopText_SetCursorXY(log_text, 0, 0);
 		DevelopText_HideText(log_text);
 		DevelopText_HideBackground(log_text);
 	}

@@ -49,7 +49,7 @@ void orig_DevelopText_DrawAll(HSD_GObj *gobj, RenderPass pass);
 void hook_DevelopText_DrawAll(HSD_GObj *gobj, RenderPass pass)
 {
 	orig_DevelopText_DrawAll(gobj, pass);
-	InputDisplay_Draw(pass);
+	//InputDisplay_Draw(pass);
 }
 
 void orig_wP_RunObjectFrameFunctions(void);

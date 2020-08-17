@@ -58,12 +58,12 @@ static void RemoveASOverlay(MenuItem *item, int port)
 		return;
 
 	Overlay *overlay = &overlays[--overlay_count];
-	Menu_RemoveItem(&overlay->menu_overlay_name);
-	Menu_RemoveItem(&overlay->menu_action_state);
-	Menu_RemoveItem(&overlay->menu_r);
-	Menu_RemoveItem(&overlay->menu_g);
-	Menu_RemoveItem(&overlay->menu_b);
-	Menu_RemoveItem(&overlay->menu_a);
+	Menu_RemoveItem(&overlay_menu, &overlay->menu_overlay_name);
+	Menu_RemoveItem(&overlay_menu, &overlay->menu_action_state);
+	Menu_RemoveItem(&overlay_menu, &overlay->menu_r);
+	Menu_RemoveItem(&overlay_menu, &overlay->menu_g);
+	Menu_RemoveItem(&overlay_menu, &overlay->menu_b);
+	Menu_RemoveItem(&overlay_menu, &overlay->menu_a);
 }
 
 static void InitOverlay(int index)

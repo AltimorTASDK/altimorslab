@@ -20,6 +20,8 @@
 #define REPEAT_DELAY 20
 #define REPEAT_INTERVAL 5
 
+#define PAGE_SIZE 16
+
 #define COLOR_UNSELECTED 0
 #define COLOR_SELECTED 1
 #define COLOR_TEXT 2
@@ -107,13 +109,33 @@ static void Menu_OpenClose(void)
 			return;
 
 		// The main menu will have a NULL selection on first use
-		if (CurrentMenu->selected == NULL)
+		if (CurrentMenu->selected == NULL) {
 			CurrentMenu->selected = CurrentMenu->items.next;
+			CurrentMenu->scroll_item = CurrentMenu->items.next;
+			CurrentMenu->scroll_index = 0;
+		}
 
 		DevelopText_ShowText(menu_text);
 		DevelopText_ShowBackground(menu_text);
 		menu_open = TRUE;
 		menu_port = i;
+	}
+}
+
+static void Menu_UpdateVisibleItems(Menu *menu)
+{
+	int lines = 0;
+	ListLink *elem = menu->scroll_item;
+
+	menu->visible_items = 0;
+
+	while (elem != &menu->items && lines < PAGE_SIZE) {
+		MenuItem *item = (MenuItem*)elem;
+		lines += item->line_count;
+		if (lines <= PAGE_SIZE)
+			menu->visible_items++;
+
+		elem = elem->next;
 	}
 }
 
@@ -135,12 +157,29 @@ static void Menu_UpdateSelection(Direction direction)
 		if (selected == &menu->items)
 			return;
 
-		// Skip text items
 		MenuItem *item = (MenuItem*)selected;
-		if (item->type != MenuItem_Text) {
-			menu->selected = selected;
-			return;
+
+		// Scroll
+		if (item->index < menu->scroll_index) {
+			for (int i = 0; i < item->line_count; i++) {
+				menu->scroll_item = menu->scroll_item->prev;
+				menu->scroll_index--;
+			}
+			Menu_UpdateVisibleItems(menu);
+		} else if (item->index >= menu->scroll_index + menu->visible_items) {
+			for (int i = 0; i < item->line_count; i++) {
+				menu->scroll_item = menu->scroll_item->next;
+				menu->scroll_index++;
+			}
+			Menu_UpdateVisibleItems(menu);
 		}
+
+		// Can't select text items
+		if (item->type == MenuItem_Text)
+			continue;
+
+		menu->selected = selected;
+		return;
 	}
 }
 
@@ -152,7 +191,7 @@ static void Menu_ItemCallback(MenuItem *item)
 
 static void Menu_InputForSelectedItem(Direction direction)
 {
-	HSD_PadStatus *pad = &HSD_PadMasterStatus[menu_port];
+	const HSD_PadStatus *pad = &HSD_PadMasterStatus[menu_port];
 	Menu *menu = CurrentMenu;
 	MenuItem *item = (MenuItem*)menu->selected;
 	BOOL pressed_a = (pad->instant_buttons & Button_A) != 0;
@@ -173,6 +212,8 @@ static void Menu_InputForSelectedItem(Direction direction)
 		CurrentMenu = item->u.submenu;
 		// Select first item
 		CurrentMenu->selected = &CurrentMenu->items;
+		CurrentMenu->scroll_item = CurrentMenu->items.next;
+		CurrentMenu->scroll_index = 0;
 		Menu_UpdateSelection(Dir_Down);
 		break;
 
@@ -229,22 +270,26 @@ static void Menu_InputForSelectedItem(Direction direction)
 static void DrawItem(MenuItem *item, BOOL selected)
 {
 	const char *text = item->text;
+	u8 color = selected ? COLOR_SELECTED : COLOR_UNSELECTED;
 
 	if (item->type == MenuItem_Text || item->type == MenuItem_TextSelectable) {
-		DevelopText_StoreColorIndex(menu_text, COLOR_TEXT);
+		if (item->type == MenuItem_TextSelectable)
+			DevelopText_StoreColorIndex(menu_text, color);
+		else
+			DevelopText_StoreColorIndex(menu_text, COLOR_TEXT);
+
 		// Don't use printf, it may overflow with multiline text
 		DevelopText_Print(menu_text, text);
 		DevelopText_Print(menu_text, "\n");
 		return;
 	}
 
-	if (selected) {
-		DevelopText_StoreColorIndex(menu_text, COLOR_SELECTED);
+	DevelopText_StoreColorIndex(menu_text, color);
+
+	if (selected)
 		DevelopText_Print(menu_text, "- ");
-	} else {
-		DevelopText_StoreColorIndex(menu_text, COLOR_UNSELECTED);
+	else
 		DevelopText_Print(menu_text, "  ");
-	}
 
 	switch (item->type) {
 	case MenuItem_Callback:
@@ -277,18 +322,30 @@ static void DrawItem(MenuItem *item, BOOL selected)
 static void Menu_Draw(void)
 {
 	DevelopText_Erase(menu_text);
-	DevelopText_ResetCursorXY(menu_text, 0, 0);
+	DevelopText_SetCursorXY(menu_text, 0, 0);
 
 	Menu *menu = CurrentMenu;
 	DevelopText_StoreColorIndex(menu_text, COLOR_HEADER);
 	DevelopText_Printf(menu_text, "%s\n\n", menu->name);
 
-	ListLink *elem = menu->items.next;
-	while (elem != &menu->items) {
+	if (menu->scroll_index > 0)
+		DevelopText_Print(menu_text, "More Above\n");
+	else
+		DevelopText_Print(menu_text, "\n");
+
+	int count = 0;
+	ListLink *elem = menu->scroll_item;
+
+	while (elem != &menu->items && count++ < menu->visible_items) {
 		MenuItem *item = (MenuItem*)elem;
 		DrawItem(item, menu->selected == elem);
 		elem = elem->next;
 	}
+
+	DevelopText_StoreColorIndex(menu_text, COLOR_HEADER);
+
+	if (menu->scroll_index + menu->visible_items < menu->item_count)
+		DevelopText_Print(menu_text, "More Below");
 }
 
 void Menu_Update(void)
@@ -301,9 +358,8 @@ void Menu_Update(void)
 	if (pad->instant_buttons & Button_B) {
 		// Back out of menu
 		Menu *previous_menu = CurrentMenu->previous_menu;
-		if (previous_menu != NULL) {
+		if (previous_menu != NULL)
 			CurrentMenu = previous_menu;
-		}
 	}
 
 	Direction direction = UpdateInputDirection(pad);
@@ -316,16 +372,76 @@ void Menu_Init(Menu *menu, const char *name)
 {
 	menu->name = name;
 	List_Init(&menu->items);
+	menu->item_count = 0;
+}
+
+static int GetItemLineCount(MenuItem *item)
+{
+	if (item->type != MenuItem_Text && item->type != MenuItem_TextSelectable)
+		return 1;
+
+	int count = 1;
+	int x = 0;
+	for (const char *c = item->text; *c != '\0'; c++) {
+		if (*c == '\n' || ++x == TEXT_WIDTH) {
+			count++;
+			x = 0;
+		}
+	}
+
+	return count;
 }
 
 void Menu_AddItem(Menu *menu, MenuItem *item)
 {
 	List_Append(&menu->items, &item->link);
+	item->index = menu->item_count++;
+	if (item->index == 0)
+		menu->scroll_item = &item->link;
+
+	item->line_count = GetItemLineCount(item);
+	Menu_UpdateVisibleItems(menu);
 }
 
-void Menu_RemoveItem(MenuItem *item)
+void Menu_RemoveItem(Menu *menu, MenuItem *item)
 {
+	ListLink *next = item->link.next;
+	while (next != &menu->items) {
+		((MenuItem*)next)->index--;
+		next = next->next;
+	}
+
+	if (menu->scroll_index > item->index) {
+		menu->scroll_index--;
+	} else if (menu->scroll_index == item->index) {
+		if (item->link.next == &menu->items) {
+			menu->scroll_item = item->link.prev;
+			menu->scroll_index--;
+		} else {
+			menu->scroll_item = item->link.next;
+		}
+	}
+
+	if (menu->selected == &item->link) {
+		if (item->link.next == &menu->items)
+			menu->selected = item->link.prev;
+		else
+			menu->selected = item->link.next;
+	}
+
 	List_Remove(&item->link);
+	menu->item_count--;
+
+	Menu_UpdateVisibleItems(menu);
+}
+
+void Menu_RemoveAllItems(Menu *menu)
+{
+    List_Init(&menu->items);
+    menu->item_count = 0;
+	menu->scroll_index = 0;
+	menu->scroll_item = &menu->items;
+	menu->visible_items = 0;
 }
 
 void Menu_CreateText(void)

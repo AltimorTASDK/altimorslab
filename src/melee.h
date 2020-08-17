@@ -429,7 +429,7 @@ void DevelopText_ShowBackground(DevText *text);
 void DevelopText_Print(DevText *text, const char *message);
 void DevelopText_Printf(DevText *text, const char *format, ...);
 void DevelopText_Erase(DevText *text);
-void DevelopText_ResetCursorXY(DevText *text, u16 x, u16 y);
+void DevelopText_SetCursorXY(DevText *text, u16 x, u16 y);
 void DevelopText_StoreColorIndex(DevText *text, u8 index);
 
 /*

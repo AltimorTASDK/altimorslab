@@ -1,3 +1,4 @@
+#include "os.h"
 #include "melee.h"
 #include "menu.h"
 #include "melee/collision.h"
@@ -15,8 +16,7 @@ static MenuItemLine menu_lines[MAX_LINES];
 
 static void CollisionInfo_Update(MenuItem *item, int port)
 {
-    collision_info_menu.items.next = &collision_info_menu.items;
-    collision_info_menu.items.prev = &collision_info_menu.items;
+    Menu_RemoveAllItems(&collision_info_menu);
 
     if (groundCollParams == NULL)
         return;
@@ -24,28 +24,29 @@ static void CollisionInfo_Update(MenuItem *item, int port)
     if (groundCollLine == NULL || groundCollVtx == NULL)
         return;
 
-    for (int i = 0; i < groundCollParams->line_count; i++) {
+    for (int i = 0; i < min(groundCollParams->line_count, MAX_LINES); i++) {
         CollisionLineDef *def = groundCollLine[i].def;
-        Vector2D from = groundCollVtx[def->points[0]].pos;
-        Vector2D to = groundCollVtx[def->points[1]].pos;
+        Vector2D *from = &groundCollVtx[def->points[0]].pos;
+        Vector2D *to = &groundCollVtx[def->points[1]].pos;
 
         const char *type;
         if (def->type & CollisionLineType_Ledge)
-            type = " (Ledge)";
+            type = " Ldge";
         else if (def->type & CollisionLineType_Platform)
-            type = " (Platform)";
+            type = " Plat";
         else
             type = "";
 
-        sprintf(
-            menu_lines[i].buf,
-            "(%.03f, %.03f) to (%.03f, %.03f)%s",
-            from.x, from.y, to.x, to.y, type);
-
         menu_lines[i] = (MenuItemLine) {
             .base.type = MenuItem_TextSelectable,
-            .base.text = menu_lines[i].buf
+            .base.text = menu_lines[i].buf,
+            .line = i
         };
+
+        sprintf(
+            menu_lines[i].buf,
+            "%2i (%7.03f, %7.03f) to (%7.03f, %7.03f)%s",
+            i, from->x, from->y, to->x, to->y, type);
 
         Menu_AddItem(&collision_info_menu, &menu_lines[i].base);
     }
