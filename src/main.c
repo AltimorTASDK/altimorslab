@@ -9,6 +9,7 @@
 #include "extras_dair.h"
 #include "input_display.h"
 #include "savestates.h"
+#include "collision_info.h"
 
 static BOOL initialized = FALSE;
 
@@ -94,6 +95,7 @@ void hook_main(void *param_1, void *param_2)
 	Overlays_Init();
 	HitboxStats_Init();
 	CPUControl_Init();
+	CollisionInfo_Init();
 
 	orig_main(param_1, param_2);
 }

@@ -12,8 +12,6 @@ DEPDIR := dep
 CFILES := $(foreach dir, $(SOURCES), $(wildcard $(dir)/*.c))
 SFILES := $(foreach dir, $(SOURCES), $(wildcard $(dir)/*.S))
 
-INCLUDES := $(foreach dir, $(SOURCES), -I$(dir))
-
 OBJFILES := \
 	$(patsubst %.c, $(OBJDIR)/%.o, $(CFILES)) \
 	$(patsubst %.S, $(OBJDIR)/%.o, $(SFILES))
@@ -34,7 +32,7 @@ GALE01.ld: GALE01.map map_to_linker_script.py
 $(OBJDIR)/%.o: %.c
 	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
 	@[ -d $(subst $(OBJDIR), $(DEPDIR), $(dir $@)) ] || mkdir -p $(subst $(OBJDIR), $(DEPDIR), $(dir $@))
-	$(CC) -MMD -MP -MF $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $@) $(CFLAGS) $(INCLUDES) -c $< -o $@
+	$(CC) -MMD -MP -MF $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $@) $(CFLAGS) -Isrc -c $< -o $@
 
 $(OBJDIR)/%.o: %.S
 	@[ -d $(dir $@) ] || mkdir -p $(dir $@)

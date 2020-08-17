@@ -2,11 +2,14 @@
 Allocating common symbols
 Common symbol       size              file
 
-main_menu           0x14              obj/src/menu.o
+MainMenu            0x14              obj/src/menu.o
 
 Discarded input sections
 
  .comment       0x0000000000000000       0x23 obj/src/collision_info.o
+ .eh_frame      0x0000000000000000       0x68 obj/src/collision_info.o
+ .gnu.attributes
+                0x0000000000000000       0x10 obj/src/collision_info.o
  .comment       0x0000000000000000       0x23 obj/src/cpu_control.o
  .eh_frame      0x0000000000000000       0xb4 obj/src/cpu_control.o
  .comment       0x0000000000000000       0x23 obj/src/extras_dair.o
@@ -36,7 +39,7 @@ Discarded input sections
  .comment       0x0000000000000000       0x23 obj/src/melee.o
  .eh_frame      0x0000000000000000       0x3c obj/src/melee.o
  .comment       0x0000000000000000       0x23 obj/src/menu.o
- .eh_frame      0x0000000000000000      0x238 obj/src/menu.o
+ .eh_frame      0x0000000000000000      0x260 obj/src/menu.o
  .gnu.attributes
                 0x0000000000000000       0x10 obj/src/menu.o
  .comment       0x0000000000000000       0x23 obj/src/misc_patches.o
@@ -4286,6 +4289,7 @@ LOAD obj/sections/text1.o
                 0x00000000804d5f90                RandomSeed = 0x804d5f90
                 0x00000000804d64ac                StageAnimationFrame = 0x804d64ac
                 0x00000000804d64b4                groundCollParams = 0x804d64b4
+                0x00000000804d64b8                groundCollVtx = 0x804d64b8
                 0x00000000804d64bc                groundCollLine = 0x804d64bc
                 0x00000000804d6d78                NameTagText = 0x804d6d78
                 0x00000000804d782c                plinkhigh_gobjs = 0x804d782c
@@ -4315,7 +4319,7 @@ LOAD obj/sections/text1.o
                 0x0000000080003000        0x4 LONG 0x100 text0_offset
                 0x0000000080003004        0x4 LONG 0x2520 text1_offset
                 0x0000000080003008        0x4 LONG 0x4385e0 text2_offset
-                0x000000008000300c        0x4 LONG 0x43f264 hooks_offset
+                0x000000008000300c        0x4 LONG 0x43f5c0 hooks_offset
                 0x0000000080003010        0x4 LONG 0x0
                 0x0000000080003014        0x4 LONG 0x0
                 0x0000000080003018        0x4 LONG 0x0
@@ -4327,13 +4331,13 @@ LOAD obj/sections/text1.o
                 0x0000000080003030        0x4 LONG 0x3b6840 data5_offset
                 0x0000000080003034        0x4 LONG 0x42e6c0 data6_offset
                 0x0000000080003038        0x4 LONG 0x4313c0 data7_offset
-                0x000000008000303c        0x4 LONG 0x43f2d4 data8_offset
+                0x000000008000303c        0x4 LONG 0x43f630 data8_offset
                 0x0000000080003040        0x4 LONG 0x0
                 0x0000000080003044        0x4 LONG 0x0
                 0x0000000080003048        0x4 LONG 0x80003100 text0_base
                 0x000000008000304c        0x4 LONG 0x80005940 text1_base
                 0x0000000080003050        0x4 LONG 0x804dec00 text2_base
-                0x0000000080003054        0x4 LONG 0x804e5884 hooks_base
+                0x0000000080003054        0x4 LONG 0x804e5be0 hooks_base
                 0x0000000080003058        0x4 LONG 0x0
                 0x000000008000305c        0x4 LONG 0x0
                 0x0000000080003060        0x4 LONG 0x0
@@ -4345,12 +4349,12 @@ LOAD obj/sections/text1.o
                 0x0000000080003078        0x4 LONG 0x803b9840 data5_base
                 0x000000008000307c        0x4 LONG 0x804d36a0 data6_base
                 0x0000000080003080        0x4 LONG 0x804d79e0 data7_base
-                0x0000000080003084        0x4 LONG 0x804e58f4 data8_base
+                0x0000000080003084        0x4 LONG 0x804e5c50 data8_base
                 0x0000000080003088        0x4 LONG 0x0
                 0x000000008000308c        0x4 LONG 0x0
                 0x0000000080003090        0x4 LONG 0x2420 SIZEOF (.text0)
                 0x0000000080003094        0x4 LONG 0x3b1900 SIZEOF (.text1)
-                0x0000000080003098        0x4 LONG 0x6c84 SIZEOF (.text2)
+                0x0000000080003098        0x4 LONG 0x6fe0 SIZEOF (.text2)
                 0x000000008000309c        0x4 LONG 0x70 SIZEOF (.hooks)
                 0x00000000800030a0        0x4 LONG 0x0
                 0x00000000800030a4        0x4 LONG 0x0
@@ -4363,11 +4367,11 @@ LOAD obj/sections/text1.o
                 0x00000000800030c0        0x4 LONG 0x77e80 SIZEOF (.data5)
                 0x00000000800030c4        0x4 LONG 0x2d00 SIZEOF (.data6)
                 0x00000000800030c8        0x4 LONG 0x7220 SIZEOF (.data7)
-                0x00000000800030cc        0x4 LONG 0x1ea4 SIZEOF (.data8)
+                0x00000000800030cc        0x4 LONG 0x1f58 SIZEOF (.data8)
                 0x00000000800030d0        0x4 LONG 0x0
                 0x00000000800030d4        0x4 LONG 0x0
-                0x00000000800030d8        0x4 LONG 0x804e7798 bss_base
-                0x00000000800030dc        0x4 LONG 0x6d40 SIZEOF (.bss)
+                0x00000000800030d8        0x4 LONG 0x804e7ba8 bss_base
+                0x00000000800030dc        0x4 LONG 0x1239c SIZEOF (.bss)
                 0x00000000800030e0        0x4 LONG 0x8000522c ABSOLUTE (start)
 
 .text0          0x0000000080003100     0x2420 load address 0x0000000000000100
@@ -4442,452 +4446,468 @@ LOAD obj/sections/text1.o
                 0x00000000804dec00                text2_base = (data7_base + SIZEOF (.data7))
                 0x00000000004385e0                text2_offset = (data7_offset + SIZEOF (.data7))
 
-.text2          0x00000000804dec00     0x6c84 load address 0x00000000004385e0
+.text2          0x00000000804dec00     0x6fe0 load address 0x00000000004385e0
  *(.load* .text*)
  .text          0x00000000804dec00        0x0 obj/src/collision_info.o
- .text          0x00000000804dec00        0x0 obj/src/cpu_control.o
+ .text.CollisionInfo_Update
+                0x00000000804dec00      0x288 obj/src/collision_info.o
+ .text.CollisionInfo_Init
+                0x00000000804dee88       0x58 obj/src/collision_info.o
+                0x00000000804dee88                CollisionInfo_Init
+ .text          0x00000000804deee0        0x0 obj/src/cpu_control.o
  .text.CPUControl_UpdateInput
-                0x00000000804dec00       0x8c obj/src/cpu_control.o
-                0x00000000804dec00                CPUControl_UpdateInput
+                0x00000000804deee0       0x8c obj/src/cpu_control.o
+                0x00000000804deee0                CPUControl_UpdateInput
  .text.CPUControl_PhysicsMove
-                0x00000000804dec8c       0xe4 obj/src/cpu_control.o
-                0x00000000804dec8c                CPUControl_PhysicsMove
+                0x00000000804def6c       0xe4 obj/src/cpu_control.o
+                0x00000000804def6c                CPUControl_PhysicsMove
  .text.CPUControl_ASChange
-                0x00000000804ded70       0x68 obj/src/cpu_control.o
-                0x00000000804ded70                CPUControl_ASChange
+                0x00000000804df050       0x68 obj/src/cpu_control.o
+                0x00000000804df050                CPUControl_ASChange
  .text.CPUControl_Init
-                0x00000000804dedd8       0x80 obj/src/cpu_control.o
-                0x00000000804dedd8                CPUControl_Init
- .text          0x00000000804dee58        0x0 obj/src/extras_dair.o
- .text.InvLerp  0x00000000804dee58       0x88 obj/src/extras_dair.o
+                0x00000000804df0b8       0x80 obj/src/cpu_control.o
+                0x00000000804df0b8                CPUControl_Init
+ .text          0x00000000804df138        0x0 obj/src/extras_dair.o
+ .text.InvLerp  0x00000000804df138       0x88 obj/src/extras_dair.o
  .text.SmoothStep
-                0x00000000804deee0       0xa8 obj/src/extras_dair.o
+                0x00000000804df1c0       0xa8 obj/src/extras_dair.o
  .text.SmoothStepSum
-                0x00000000804def88       0xe0 obj/src/extras_dair.o
+                0x00000000804df268       0xe0 obj/src/extras_dair.o
  .text.AccelAverageSpeed
-                0x00000000804df068       0x80 obj/src/extras_dair.o
+                0x00000000804df348       0x80 obj/src/extras_dair.o
  .text.DecelAverageSpeed
-                0x00000000804df0e8       0x80 obj/src/extras_dair.o
+                0x00000000804df3c8       0x80 obj/src/extras_dair.o
  .text.CalculateNairRotation
-                0x00000000804df168      0x13c obj/src/extras_dair.o
+                0x00000000804df448      0x13c obj/src/extras_dair.o
  .text.CalculateRotation
-                0x00000000804df2a4      0x150 obj/src/extras_dair.o
+                0x00000000804df584      0x150 obj/src/extras_dair.o
  .text.hook_HSD_JObjAnim
-                0x00000000804df3f4      0x15c obj/src/extras_dair.o
-                0x00000000804df3f4                hook_HSD_JObjAnim
+                0x00000000804df6d4      0x15c obj/src/extras_dair.o
+                0x00000000804df6d4                hook_HSD_JObjAnim
  .text.hook_Player_MeleeDamage
-                0x00000000804df550      0x16c obj/src/extras_dair.o
-                0x00000000804df550                hook_Player_MeleeDamage
+                0x00000000804df830      0x16c obj/src/extras_dair.o
+                0x00000000804df830                hook_Player_MeleeDamage
  .text.ExtrasDair_ASChange
-                0x00000000804df6bc       0xb0 obj/src/extras_dair.o
-                0x00000000804df6bc                ExtrasDair_ASChange
- .text          0x00000000804df76c        0x0 obj/src/hitbox_stats.o
+                0x00000000804df99c       0xb0 obj/src/extras_dair.o
+                0x00000000804df99c                ExtrasDair_ASChange
+ .text          0x00000000804dfa4c        0x0 obj/src/hitbox_stats.o
  .text.VectorMin
-                0x00000000804df76c       0xc8 obj/src/hitbox_stats.o
+                0x00000000804dfa4c       0xc8 obj/src/hitbox_stats.o
  .text.VectorMax
-                0x00000000804df834       0xc8 obj/src/hitbox_stats.o
+                0x00000000804dfb14       0xc8 obj/src/hitbox_stats.o
  .text.VectorAverage
-                0x00000000804df8fc       0x64 obj/src/hitbox_stats.o
+                0x00000000804dfbdc       0x64 obj/src/hitbox_stats.o
  .text.MinMaxText_InitSubtext
-                0x00000000804df960      0x178 obj/src/hitbox_stats.o
+                0x00000000804dfc40      0x178 obj/src/hitbox_stats.o
  .text.MinMaxText_Initialize
-                0x00000000804dfad8       0x84 obj/src/hitbox_stats.o
+                0x00000000804dfdb8       0x84 obj/src/hitbox_stats.o
  .text.GetHitboxBounds
-                0x00000000804dfb5c      0x284 obj/src/hitbox_stats.o
+                0x00000000804dfe3c      0x284 obj/src/hitbox_stats.o
  .text.GetHurtboxBounds
-                0x00000000804dfde0      0x234 obj/src/hitbox_stats.o
+                0x00000000804e00c0      0x234 obj/src/hitbox_stats.o
  .text.PushPointsApart
-                0x00000000804e0014      0x300 obj/src/hitbox_stats.o
+                0x00000000804e02f4      0x300 obj/src/hitbox_stats.o
  .text.PushMinMaxPositionApart
-                0x00000000804e0314      0x16c obj/src/hitbox_stats.o
+                0x00000000804e05f4      0x16c obj/src/hitbox_stats.o
  .text.PreventMinMaxOverlap
-                0x00000000804e0480      0x2a4 obj/src/hitbox_stats.o
+                0x00000000804e0760      0x2a4 obj/src/hitbox_stats.o
  .text.MinMaxPositionsToScreen
-                0x00000000804e0724      0x224 obj/src/hitbox_stats.o
+                0x00000000804e0a04      0x224 obj/src/hitbox_stats.o
  .text.GetTextWidth
-                0x00000000804e0948       0xcc obj/src/hitbox_stats.o
+                0x00000000804e0c28       0xcc obj/src/hitbox_stats.o
  .text.GetMinMaxPositions
-                0x00000000804e0a14      0x2b8 obj/src/hitbox_stats.o
+                0x00000000804e0cf4      0x2b8 obj/src/hitbox_stats.o
  .text.ShadowText_UpdatePosition
-                0x00000000804e0ccc       0xa4 obj/src/hitbox_stats.o
+                0x00000000804e0fac       0xa4 obj/src/hitbox_stats.o
  .text.MinMaxText_Hide
-                0x00000000804e0d70       0xd0 obj/src/hitbox_stats.o
+                0x00000000804e1050       0xd0 obj/src/hitbox_stats.o
  .text.MinMaxText_UpdateComponent
-                0x00000000804e0e40       0xbc obj/src/hitbox_stats.o
+                0x00000000804e1120       0xbc obj/src/hitbox_stats.o
  .text.MinMaxText_Update
-                0x00000000804e0efc      0x13c obj/src/hitbox_stats.o
+                0x00000000804e11dc      0x13c obj/src/hitbox_stats.o
  .text.InitializeSlot
-                0x00000000804e1038       0xa0 obj/src/hitbox_stats.o
+                0x00000000804e1318       0xa0 obj/src/hitbox_stats.o
  .text.HitboxStats_UpdatePlayer
-                0x00000000804e10d8      0x510 obj/src/hitbox_stats.o
-                0x00000000804e10d8                HitboxStats_UpdatePlayer
+                0x00000000804e13b8      0x510 obj/src/hitbox_stats.o
+                0x00000000804e13b8                HitboxStats_UpdatePlayer
  .text.HitboxStats_Update
-                0x00000000804e15e8      0x118 obj/src/hitbox_stats.o
-                0x00000000804e15e8                HitboxStats_Update
+                0x00000000804e18c8      0x118 obj/src/hitbox_stats.o
+                0x00000000804e18c8                HitboxStats_Update
  .text.HitboxStats_SceneInit
-                0x00000000804e1700       0x58 obj/src/hitbox_stats.o
-                0x00000000804e1700                HitboxStats_SceneInit
+                0x00000000804e19e0       0x58 obj/src/hitbox_stats.o
+                0x00000000804e19e0                HitboxStats_SceneInit
  .text.HitboxStats_Init
-                0x00000000804e1758       0xa8 obj/src/hitbox_stats.o
-                0x00000000804e1758                HitboxStats_Init
- .text          0x00000000804e1800        0x0 obj/src/input_display.o
+                0x00000000804e1a38       0xa8 obj/src/hitbox_stats.o
+                0x00000000804e1a38                HitboxStats_Init
+ .text          0x00000000804e1ae0        0x0 obj/src/input_display.o
  .text.IsModXHeld
-                0x00000000804e1800       0xf4 obj/src/input_display.o
+                0x00000000804e1ae0       0xf4 obj/src/input_display.o
  .text.IsModYHeld
-                0x00000000804e18f4       0xf4 obj/src/input_display.o
+                0x00000000804e1bd4       0xf4 obj/src/input_display.o
  .text.DrawB0XXButton
-                0x00000000804e19e8       0xc8 obj/src/input_display.o
- .text.DrawPad  0x00000000804e1ab0      0x478 obj/src/input_display.o
+                0x00000000804e1cc8       0xc8 obj/src/input_display.o
+ .text.DrawPad  0x00000000804e1d90      0x478 obj/src/input_display.o
  .text.IsPadNonZero
-                0x00000000804e1f28       0xd4 obj/src/input_display.o
+                0x00000000804e2208       0xd4 obj/src/input_display.o
  .text.GetHistory
-                0x00000000804e1ffc       0x50 obj/src/input_display.o
+                0x00000000804e22dc       0x50 obj/src/input_display.o
  .text.GetDisplayedHistory
-                0x00000000804e204c       0x50 obj/src/input_display.o
+                0x00000000804e232c       0x50 obj/src/input_display.o
  .text.UpdateDisplay
-                0x00000000804e209c      0x160 obj/src/input_display.o
+                0x00000000804e237c      0x160 obj/src/input_display.o
  .text.InputDisplay_Draw
-                0x00000000804e21fc       0x64 obj/src/input_display.o
-                0x00000000804e21fc                InputDisplay_Draw
- .text          0x00000000804e2260        0x0 obj/src/log_display.o
+                0x00000000804e24dc       0x64 obj/src/input_display.o
+                0x00000000804e24dc                InputDisplay_Draw
+ .text          0x00000000804e2540        0x0 obj/src/log_display.o
  .text.LogDisplay_CreateText
-                0x00000000804e2260      0x1c4 obj/src/log_display.o
-                0x00000000804e2260                LogDisplay_CreateText
+                0x00000000804e2540      0x1c4 obj/src/log_display.o
+                0x00000000804e2540                LogDisplay_CreateText
  .text.LogDisplay_Update
-                0x00000000804e2424       0x90 obj/src/log_display.o
-                0x00000000804e2424                LogDisplay_Update
+                0x00000000804e2704       0x90 obj/src/log_display.o
+                0x00000000804e2704                LogDisplay_Update
  .text.LogDisplay_Print
-                0x00000000804e24b4       0x7c obj/src/log_display.o
-                0x00000000804e24b4                LogDisplay_Print
- .text          0x00000000804e2530        0x0 obj/src/main.o
+                0x00000000804e2794       0x7c obj/src/log_display.o
+                0x00000000804e2794                LogDisplay_Print
+ .text          0x00000000804e2810        0x0 obj/src/main.o
  .text.hook_ActionStateChange
-                0x00000000804e2530       0xa8 obj/src/main.o
-                0x00000000804e2530                hook_ActionStateChange
+                0x00000000804e2810       0xa8 obj/src/main.o
+                0x00000000804e2810                hook_ActionStateChange
  .text.hook_Player_UpdateActionInputTimers
-                0x00000000804e25d8       0x4c obj/src/main.o
-                0x00000000804e25d8                hook_Player_UpdateActionInputTimers
+                0x00000000804e28b8       0x4c obj/src/main.o
+                0x00000000804e28b8                hook_Player_UpdateActionInputTimers
  .text.hook_Physics_Move
-                0x00000000804e2624       0x54 obj/src/main.o
-                0x00000000804e2624                hook_Physics_Move
+                0x00000000804e2904       0x54 obj/src/main.o
+                0x00000000804e2904                hook_Physics_Move
  .text.hook_DevelopText_DrawAll
-                0x00000000804e2678       0x4c obj/src/main.o
-                0x00000000804e2678                hook_DevelopText_DrawAll
+                0x00000000804e2958       0x4c obj/src/main.o
+                0x00000000804e2958                hook_DevelopText_DrawAll
  .text.hook_wP_RunObjectFrameFunctions
-                0x00000000804e26c4       0x4c obj/src/main.o
-                0x00000000804e26c4                hook_wP_RunObjectFrameFunctions
+                0x00000000804e29a4       0x4c obj/src/main.o
+                0x00000000804e29a4                hook_wP_RunObjectFrameFunctions
  .text.hook_DevelopMode_IngameTogglesMost
-                0x00000000804e2710       0x64 obj/src/main.o
-                0x00000000804e2710                hook_DevelopMode_IngameTogglesMost
+                0x00000000804e29f0       0x64 obj/src/main.o
+                0x00000000804e29f0                hook_DevelopMode_IngameTogglesMost
  .text.hook_StartMelee
-                0x00000000804e2774       0x48 obj/src/main.o
-                0x00000000804e2774                hook_StartMelee
+                0x00000000804e2a54       0x48 obj/src/main.o
+                0x00000000804e2a54                hook_StartMelee
  .text.hook_main
-                0x00000000804e27bc       0x54 obj/src/main.o
-                0x00000000804e27bc                hook_main
- .text          0x00000000804e2810        0x0 obj/src/math.o
- .text.sqrtf    0x00000000804e2810       0x6c obj/src/math.o
-                0x00000000804e2810                sqrtf
- .text          0x00000000804e287c        0x0 obj/src/melee.o
+                0x00000000804e2a9c       0x58 obj/src/main.o
+                0x00000000804e2a9c                hook_main
+ .text          0x00000000804e2af4        0x0 obj/src/math.o
+ .text.sqrtf    0x00000000804e2af4       0x6c obj/src/math.o
+                0x00000000804e2af4                sqrtf
+ .text          0x00000000804e2b60        0x0 obj/src/melee.o
  .text.DevelopText_ColorPrint
-                0x00000000804e287c      0x12c obj/src/melee.o
-                0x00000000804e287c                DevelopText_ColorPrint
- .text          0x00000000804e29a8        0x0 obj/src/menu.o
+                0x00000000804e2b60      0x12c obj/src/melee.o
+                0x00000000804e2b60                DevelopText_ColorPrint
+ .text          0x00000000804e2c8c        0x0 obj/src/menu.o
  .text.GetDirection
-                0x00000000804e29a8       0xbc obj/src/menu.o
+                0x00000000804e2c8c       0xbc obj/src/menu.o
  .text.UpdateInputDirection
-                0x00000000804e2a64      0x148 obj/src/menu.o
+                0x00000000804e2d48      0x148 obj/src/menu.o
  .text.Menu_OpenClose
-                0x00000000804e2bac      0x188 obj/src/menu.o
+                0x00000000804e2e90      0x188 obj/src/menu.o
  .text.Menu_UpdateSelection
-                0x00000000804e2d34       0xc0 obj/src/menu.o
+                0x00000000804e3018       0xc0 obj/src/menu.o
+ .text.Menu_ItemCallback
+                0x00000000804e30d8       0x64 obj/src/menu.o
  .text.Menu_InputForSelectedItem
-                0x00000000804e2df4      0x364 obj/src/menu.o
+                0x00000000804e313c      0x368 obj/src/menu.o
  .text.DrawItem
-                0x00000000804e3158      0x248 obj/src/menu.o
+                0x00000000804e34a4      0x258 obj/src/menu.o
  .text.Menu_Draw
-                0x00000000804e33a0      0x100 obj/src/menu.o
+                0x00000000804e36fc      0x100 obj/src/menu.o
  .text.Menu_Update
-                0x00000000804e34a0       0xc0 obj/src/menu.o
-                0x00000000804e34a0                Menu_Update
+                0x00000000804e37fc       0xc0 obj/src/menu.o
+                0x00000000804e37fc                Menu_Update
  .text.Menu_Init
-                0x00000000804e3560       0x54 obj/src/menu.o
-                0x00000000804e3560                Menu_Init
+                0x00000000804e38bc       0x54 obj/src/menu.o
+                0x00000000804e38bc                Menu_Init
  .text.Menu_AddItem
-                0x00000000804e35b4       0x50 obj/src/menu.o
-                0x00000000804e35b4                Menu_AddItem
+                0x00000000804e3910       0x50 obj/src/menu.o
+                0x00000000804e3910                Menu_AddItem
  .text.Menu_RemoveItem
-                0x00000000804e3604       0x40 obj/src/menu.o
-                0x00000000804e3604                Menu_RemoveItem
+                0x00000000804e3960       0x40 obj/src/menu.o
+                0x00000000804e3960                Menu_RemoveItem
  .text.Menu_CreateText
-                0x00000000804e3644      0x1c4 obj/src/menu.o
-                0x00000000804e3644                Menu_CreateText
+                0x00000000804e39a0      0x1c4 obj/src/menu.o
+                0x00000000804e39a0                Menu_CreateText
  .text.IsMenuOpen
-                0x00000000804e3808       0x28 obj/src/menu.o
-                0x00000000804e3808                IsMenuOpen
+                0x00000000804e3b64       0x28 obj/src/menu.o
+                0x00000000804e3b64                IsMenuOpen
  .text.MainMenu_Init
-                0x00000000804e3830       0x58 obj/src/menu.o
-                0x00000000804e3830                MainMenu_Init
- .text          0x00000000804e3888        0x0 obj/src/misc_patches.o
+                0x00000000804e3b8c       0x58 obj/src/menu.o
+                0x00000000804e3b8c                MainMenu_Init
+ .text          0x00000000804e3be4        0x0 obj/src/misc_patches.o
  .text.hook_Stage_CheckStageUnlockStatus
-                0x00000000804e3888       0x28 obj/src/misc_patches.o
-                0x00000000804e3888                hook_Stage_CheckStageUnlockStatus
+                0x00000000804e3be4       0x28 obj/src/misc_patches.o
+                0x00000000804e3be4                hook_Stage_CheckStageUnlockStatus
  .text.hook_Characters_CheckCharUnlockStatus
-                0x00000000804e38b0       0x28 obj/src/misc_patches.o
-                0x00000000804e38b0                hook_Characters_CheckCharUnlockStatus
+                0x00000000804e3c0c       0x28 obj/src/misc_patches.o
+                0x00000000804e3c0c                hook_Characters_CheckCharUnlockStatus
  .text.hook_SinglePlayerModeCheck
-                0x00000000804e38d8       0x28 obj/src/misc_patches.o
-                0x00000000804e38d8                hook_SinglePlayerModeCheck
- .text          0x00000000804e3900        0x0 obj/src/overlays.o
+                0x00000000804e3c34       0x28 obj/src/misc_patches.o
+                0x00000000804e3c34                hook_SinglePlayerModeCheck
+ .text          0x00000000804e3c5c        0x0 obj/src/overlays.o
  .text.AddOverlayToMenu
-                0x00000000804e3900       0xc4 obj/src/overlays.o
+                0x00000000804e3c5c       0xc4 obj/src/overlays.o
  .text.AddASOverlay
-                0x00000000804e39c4       0x98 obj/src/overlays.o
+                0x00000000804e3d20       0x98 obj/src/overlays.o
  .text.RemoveASOverlay
-                0x00000000804e3a5c       0xdc obj/src/overlays.o
+                0x00000000804e3db8       0xdc obj/src/overlays.o
  .text.InitOverlay
-                0x00000000804e3b38      0x2f4 obj/src/overlays.o
+                0x00000000804e3e94      0x2f4 obj/src/overlays.o
  .text.CheckKnockdownFacingOverlay
-                0x00000000804e3e2c       0x9c obj/src/overlays.o
+                0x00000000804e4188       0x9c obj/src/overlays.o
  .text.ShouldApplyOverlay
-                0x00000000804e3ec8       0xcc obj/src/overlays.o
+                0x00000000804e4224       0xcc obj/src/overlays.o
  .text.hook_ColorData_HandleStuff
-                0x00000000804e3f94      0x3ec obj/src/overlays.o
-                0x00000000804e3f94                hook_ColorData_HandleStuff
+                0x00000000804e42f0      0x3ec obj/src/overlays.o
+                0x00000000804e42f0                hook_ColorData_HandleStuff
  .text.Overlays_Init
-                0x00000000804e4380       0xac obj/src/overlays.o
-                0x00000000804e4380                Overlays_Init
- .text          0x00000000804e442c        0x0 obj/src/savestates.o
+                0x00000000804e46dc       0xac obj/src/overlays.o
+                0x00000000804e46dc                Overlays_Init
+ .text          0x00000000804e4788        0x0 obj/src/savestates.o
  .text.SaveState_JObj
-                0x00000000804e442c      0x11c obj/src/savestates.o
+                0x00000000804e4788      0x11c obj/src/savestates.o
  .text.LoadState_JObj
-                0x00000000804e4548      0x104 obj/src/savestates.o
+                0x00000000804e48a4      0x104 obj/src/savestates.o
  .text.SaveState_Player
-                0x00000000804e464c      0x380 obj/src/savestates.o
+                0x00000000804e49a8      0x380 obj/src/savestates.o
  .text.LoadState_Player
-                0x00000000804e49cc      0x374 obj/src/savestates.o
+                0x00000000804e4d28      0x374 obj/src/savestates.o
  .text.SaveState_GObj
-                0x00000000804e4d40       0x90 obj/src/savestates.o
+                0x00000000804e509c       0x90 obj/src/savestates.o
  .text.LoadState_GObj
-                0x00000000804e4dd0       0x70 obj/src/savestates.o
+                0x00000000804e512c       0x70 obj/src/savestates.o
  .text.CountObjects
-                0x00000000804e4e40       0x74 obj/src/savestates.o
+                0x00000000804e519c       0x74 obj/src/savestates.o
  .text.SaveObjects
-                0x00000000804e4eb4       0xa0 obj/src/savestates.o
+                0x00000000804e5210       0xa0 obj/src/savestates.o
  .text.SaveState
-                0x00000000804e4f54       0xa0 obj/src/savestates.o
-                0x00000000804e4f54                SaveState
+                0x00000000804e52b0       0xa0 obj/src/savestates.o
+                0x00000000804e52b0                SaveState
  .text.LoadState
-                0x00000000804e4ff4       0xa0 obj/src/savestates.o
-                0x00000000804e4ff4                LoadState
+                0x00000000804e5350       0xa0 obj/src/savestates.o
+                0x00000000804e5350                LoadState
  .text.SaveStates_Update
-                0x00000000804e5094       0xcc obj/src/savestates.o
-                0x00000000804e5094                SaveStates_Update
- .text          0x00000000804e5160        0x0 obj/src/util.o
+                0x00000000804e53f0       0xcc obj/src/savestates.o
+                0x00000000804e53f0                SaveStates_Update
+ .text          0x00000000804e54bc        0x0 obj/src/util.o
  .text.List_Init
-                0x00000000804e5160       0x40 obj/src/util.o
-                0x00000000804e5160                List_Init
+                0x00000000804e54bc       0x40 obj/src/util.o
+                0x00000000804e54bc                List_Init
  .text.List_Append
-                0x00000000804e51a0       0x60 obj/src/util.o
-                0x00000000804e51a0                List_Append
+                0x00000000804e54fc       0x60 obj/src/util.o
+                0x00000000804e54fc                List_Append
  .text.List_Prepend
-                0x00000000804e5200       0x60 obj/src/util.o
-                0x00000000804e5200                List_Prepend
+                0x00000000804e555c       0x60 obj/src/util.o
+                0x00000000804e555c                List_Prepend
  .text.List_Remove
-                0x00000000804e5260       0x4c obj/src/util.o
-                0x00000000804e5260                List_Remove
+                0x00000000804e55bc       0x4c obj/src/util.o
+                0x00000000804e55bc                List_Remove
  .text.EulerToQuaternion
-                0x00000000804e52ac      0x1b8 obj/src/util.o
-                0x00000000804e52ac                EulerToQuaternion
+                0x00000000804e5608      0x1b8 obj/src/util.o
+                0x00000000804e5608                EulerToQuaternion
  .text.WriteVertex2D
-                0x00000000804e5464       0xbc obj/src/util.o
-                0x00000000804e5464                WriteVertex2D
+                0x00000000804e57c0       0xbc obj/src/util.o
+                0x00000000804e57c0                WriteVertex2D
  .text.FillRectangle2D
-                0x00000000804e5520       0xc4 obj/src/util.o
-                0x00000000804e5520                FillRectangle2D
+                0x00000000804e587c       0xc4 obj/src/util.o
+                0x00000000804e587c                FillRectangle2D
  .text.FillCircle2D
-                0x00000000804e55e4      0x158 obj/src/util.o
-                0x00000000804e55e4                FillCircle2D
+                0x00000000804e5940      0x158 obj/src/util.o
+                0x00000000804e5940                FillCircle2D
  .text.StrokeCircle2D
-                0x00000000804e573c      0x148 obj/src/util.o
-                0x00000000804e573c                StrokeCircle2D
- .text          0x00000000804e5884        0x0 obj/src/hooks.o
-                0x00000000804e5884                hooks_base = (text2_base + SIZEOF (.text2))
-                0x000000000043f264                hooks_offset = (text2_offset + SIZEOF (.text2))
+                0x00000000804e5a98      0x148 obj/src/util.o
+                0x00000000804e5a98                StrokeCircle2D
+ .text          0x00000000804e5be0        0x0 obj/src/hooks.o
+                0x00000000804e5be0                hooks_base = (text2_base + SIZEOF (.text2))
+                0x000000000043f5c0                hooks_offset = (text2_offset + SIZEOF (.text2))
 
-.hooks          0x00000000804e5884       0x70 load address 0x000000000043f264
+.hooks          0x00000000804e5be0       0x70 load address 0x000000000043f5c0
  obj/src/hooks.o()
- .data          0x00000000804e5884        0x0 obj/src/hooks.o
- .bss           0x00000000804e5884        0x0 obj/src/hooks.o
- .hooks         0x00000000804e5884       0x70 obj/src/hooks.o
-                0x00000000804e5884                orig_main
-                0x00000000804e588c                orig_ActionStateChange
-                0x00000000804e5894                orig_Stage_CheckStageUnlockStatus
-                0x00000000804e589c                orig_Characters_CheckCharUnlockStatus
-                0x00000000804e58a4                orig_SinglePlayerModeCheck
-                0x00000000804e58ac                orig_StartMelee
-                0x00000000804e58b4                orig_DevelopMode_IngameTogglesMost
-                0x00000000804e58bc                orig_wP_RunObjectFrameFunctions
-                0x00000000804e58c4                orig_DevelopText_DrawAll
-                0x00000000804e58cc                orig_ColorData_HandleStuff
-                0x00000000804e58d4                orig_HSD_JObjAnim
-                0x00000000804e58dc                orig_Player_MeleeDamage
-                0x00000000804e58e4                orig_Player_UpdateActionInputTimers
-                0x00000000804e58ec                orig_Physics_Move
-                0x00000000804e58f4                data8_base = (hooks_base + SIZEOF (.hooks))
-                0x000000000043f2d4                data8_offset = (hooks_offset + SIZEOF (.hooks))
+ .data          0x00000000804e5be0        0x0 obj/src/hooks.o
+ .bss           0x00000000804e5be0        0x0 obj/src/hooks.o
+ .hooks         0x00000000804e5be0       0x70 obj/src/hooks.o
+                0x00000000804e5be0                orig_main
+                0x00000000804e5be8                orig_ActionStateChange
+                0x00000000804e5bf0                orig_Stage_CheckStageUnlockStatus
+                0x00000000804e5bf8                orig_Characters_CheckCharUnlockStatus
+                0x00000000804e5c00                orig_SinglePlayerModeCheck
+                0x00000000804e5c08                orig_StartMelee
+                0x00000000804e5c10                orig_DevelopMode_IngameTogglesMost
+                0x00000000804e5c18                orig_wP_RunObjectFrameFunctions
+                0x00000000804e5c20                orig_DevelopText_DrawAll
+                0x00000000804e5c28                orig_ColorData_HandleStuff
+                0x00000000804e5c30                orig_HSD_JObjAnim
+                0x00000000804e5c38                orig_Player_MeleeDamage
+                0x00000000804e5c40                orig_Player_UpdateActionInputTimers
+                0x00000000804e5c48                orig_Physics_Move
+                0x00000000804e5c50                data8_base = (hooks_base + SIZEOF (.hooks))
+                0x000000000043f630                data8_offset = (hooks_offset + SIZEOF (.hooks))
 
-.data8          0x00000000804e58f4     0x1ea4 load address 0x000000000043f2d4
+.data8          0x00000000804e5c50     0x1f58 load address 0x000000000043f630
  *(.rodata* .rdata* .data* .sdata*)
- .data          0x00000000804e58f4        0x0 obj/src/collision_info.o
- .data          0x00000000804e58f4        0x0 obj/src/cpu_control.o
- .rodata        0x00000000804e58f4       0x34 obj/src/cpu_control.o
- .data.menu_force_shield.4981
-                0x00000000804e5928       0x28 obj/src/cpu_control.o
- .data.menu_freeze_position.4982
-                0x00000000804e5950       0x28 obj/src/cpu_control.o
- .data.menu_cpu_control.4983
-                0x00000000804e5978       0x28 obj/src/cpu_control.o
- .data          0x00000000804e59a0        0x0 obj/src/extras_dair.o
- .rodata        0x00000000804e59a0       0x3c obj/src/extras_dair.o
- .data          0x00000000804e59dc        0x0 obj/src/hitbox_stats.o
- *fill*         0x00000000804e59dc        0x4 
- .rodata        0x00000000804e59e0      0x110 obj/src/hitbox_stats.o
- .data.menu_description.5237
-                0x00000000804e5af0       0x28 obj/src/hitbox_stats.o
- .data.menu_hitbox_text_enabled.5238
-                0x00000000804e5b18       0x28 obj/src/hitbox_stats.o
- .data.menu_hurtbox_text_enabled.5239
-                0x00000000804e5b40       0x28 obj/src/hitbox_stats.o
- .data.menu_disjoint_text_enabled.5240
-                0x00000000804e5b68       0x28 obj/src/hitbox_stats.o
- .data.menu_hitbox_stats.5241
-                0x00000000804e5b90       0x28 obj/src/hitbox_stats.o
- .data          0x00000000804e5bb8        0x0 obj/src/input_display.o
- .rodata        0x00000000804e5bb8       0xa4 obj/src/input_display.o
- .data          0x00000000804e5c5c        0x0 obj/src/log_display.o
- .rodata        0x00000000804e5c5c        0x8 obj/src/log_display.o
- .data          0x00000000804e5c64        0x0 obj/src/main.o
- .data          0x00000000804e5c64        0x0 obj/src/math.o
- .rodata        0x00000000804e5c64        0x8 obj/src/math.o
- .data          0x00000000804e5c6c        0x0 obj/src/melee.o
- .rodata        0x00000000804e5c6c     0x134c obj/src/melee.o
+ .data          0x00000000804e5c50        0x0 obj/src/collision_info.o
+ .rodata        0x00000000804e5c50       0x4f obj/src/collision_info.o
+ *fill*         0x00000000804e5c9f        0x1 
+ .data.menu_collision_info.5022
+                0x00000000804e5ca0       0x2c obj/src/collision_info.o
+ .data          0x00000000804e5ccc        0x0 obj/src/cpu_control.o
+ .rodata        0x00000000804e5ccc       0x34 obj/src/cpu_control.o
+ .data.menu_force_shield.4983
+                0x00000000804e5d00       0x2c obj/src/cpu_control.o
+ .data.menu_freeze_position.4984
+                0x00000000804e5d2c       0x2c obj/src/cpu_control.o
+ .data.menu_cpu_control.4985
+                0x00000000804e5d58       0x2c obj/src/cpu_control.o
+ .data          0x00000000804e5d84        0x0 obj/src/extras_dair.o
+ *fill*         0x00000000804e5d84        0x4 
+ .rodata        0x00000000804e5d88       0x3c obj/src/extras_dair.o
+ .data          0x00000000804e5dc4        0x0 obj/src/hitbox_stats.o
+ *fill*         0x00000000804e5dc4        0x4 
+ .rodata        0x00000000804e5dc8      0x110 obj/src/hitbox_stats.o
+ .data.menu_description.5239
+                0x00000000804e5ed8       0x2c obj/src/hitbox_stats.o
+ .data.menu_hitbox_text_enabled.5240
+                0x00000000804e5f04       0x2c obj/src/hitbox_stats.o
+ .data.menu_hurtbox_text_enabled.5241
+                0x00000000804e5f30       0x2c obj/src/hitbox_stats.o
+ .data.menu_disjoint_text_enabled.5242
+                0x00000000804e5f5c       0x2c obj/src/hitbox_stats.o
+ .data.menu_hitbox_stats.5243
+                0x00000000804e5f88       0x2c obj/src/hitbox_stats.o
+ .data          0x00000000804e5fb4        0x0 obj/src/input_display.o
+ *fill*         0x00000000804e5fb4        0x4 
+ .rodata        0x00000000804e5fb8       0xa4 obj/src/input_display.o
+ .data          0x00000000804e605c        0x0 obj/src/log_display.o
+ .rodata        0x00000000804e605c        0x8 obj/src/log_display.o
+ .data          0x00000000804e6064        0x0 obj/src/main.o
+ .data          0x00000000804e6064        0x0 obj/src/math.o
+ .rodata        0x00000000804e6064        0x8 obj/src/math.o
+ .data          0x00000000804e606c        0x0 obj/src/melee.o
+ .rodata        0x00000000804e606c     0x134c obj/src/melee.o
  .data.action_state_names
-                0x00000000804e6fb8      0x554 obj/src/melee.o
-                0x00000000804e6fb8                action_state_names
+                0x00000000804e73b8      0x554 obj/src/melee.o
+                0x00000000804e73b8                action_state_names
  .data.debug_level_names
-                0x00000000804e750c       0x14 obj/src/melee.o
-                0x00000000804e750c                debug_level_names
- .data          0x00000000804e7520        0x0 obj/src/menu.o
- .rodata        0x00000000804e7520       0x88 obj/src/menu.o
- .sdata.on_off_text
-                0x00000000804e75a8        0x8 obj/src/menu.o
-                0x00000000804e75a8                on_off_text
+                0x00000000804e790c       0x14 obj/src/melee.o
+                0x00000000804e790c                debug_level_names
+ .data          0x00000000804e7920        0x0 obj/src/menu.o
+ .rodata        0x00000000804e7920       0x88 obj/src/menu.o
+ .sdata.OnOffText
+                0x00000000804e79a8        0x8 obj/src/menu.o
+                0x00000000804e79a8                OnOffText
  .data.develop_toggle_text
-                0x00000000804e75b0       0x14 obj/src/menu.o
-                0x00000000804e75b0                develop_toggle_text
- .data.current_menu
-                0x00000000804e75c4        0x4 obj/src/menu.o
+                0x00000000804e79b0       0x14 obj/src/menu.o
+                0x00000000804e79b0                develop_toggle_text
+ .sdata.CurrentMenu
+                0x00000000804e79c4        0x4 obj/src/menu.o
+                0x00000000804e79c4                CurrentMenu
  .rodata.Menu_InputForSelectedItem
-                0x00000000804e75c8       0x18 obj/src/menu.o
+                0x00000000804e79c8       0x1c obj/src/menu.o
  .rodata.DrawItem
-                0x00000000804e75e0       0x18 obj/src/menu.o
- .data.menu_dblevel.5085
-                0x00000000804e75f8       0x28 obj/src/menu.o
- .data          0x00000000804e7620        0x0 obj/src/misc_patches.o
- .data          0x00000000804e7620        0x0 obj/src/overlays.o
+                0x00000000804e79e4       0x1c obj/src/menu.o
+ .data.menu_dblevel.5090
+                0x00000000804e7a00       0x2c obj/src/menu.o
+ .data          0x00000000804e7a2c        0x0 obj/src/misc_patches.o
+ .data          0x00000000804e7a2c        0x0 obj/src/overlays.o
  .data.overlay_count
-                0x00000000804e7620        0x4 obj/src/overlays.o
- *fill*         0x00000000804e7624        0x4 
- .rodata        0x00000000804e7628       0xd0 obj/src/overlays.o
+                0x00000000804e7a2c        0x4 obj/src/overlays.o
+ .rodata        0x00000000804e7a30       0xd0 obj/src/overlays.o
  .data.special_overlay_names
-                0x00000000804e76f8        0xc obj/src/overlays.o
- .data.menu_add_overlay.5057
-                0x00000000804e7704       0x28 obj/src/overlays.o
- .data.menu_remove_overlay.5058
-                0x00000000804e772c       0x28 obj/src/overlays.o
- .data.menu_overlays.5063
-                0x00000000804e7754       0x28 obj/src/overlays.o
- .data          0x00000000804e777c        0x0 obj/src/savestates.o
- .data          0x00000000804e777c        0x0 obj/src/util.o
- *fill*         0x00000000804e777c        0x4 
- .rodata        0x00000000804e7780       0x18 obj/src/util.o
-                0x00000000804e7798                bss_base = (data8_base + SIZEOF (.data8))
-                0x00000000804e7798                bss_offset = (data8_base + SIZEOF (.data8))
+                0x00000000804e7b00        0xc obj/src/overlays.o
+ .data.menu_add_overlay.5059
+                0x00000000804e7b0c       0x2c obj/src/overlays.o
+ .data.menu_remove_overlay.5060
+                0x00000000804e7b38       0x2c obj/src/overlays.o
+ .data.menu_overlays.5065
+                0x00000000804e7b64       0x2c obj/src/overlays.o
+ .data          0x00000000804e7b90        0x0 obj/src/savestates.o
+ .data          0x00000000804e7b90        0x0 obj/src/util.o
+ .rodata        0x00000000804e7b90       0x18 obj/src/util.o
+                0x00000000804e7ba8                bss_base = (data8_base + SIZEOF (.data8))
+                0x00000000804e7ba8                bss_offset = (data8_base + SIZEOF (.data8))
 
-.bss            0x00000000804e7798     0x6d40
+.bss            0x00000000804e7ba8    0x1239c
  *(.bss* .sbss* COMMON)
- .bss           0x00000000804e7798        0x0 obj/src/collision_info.o
- .bss           0x00000000804e7798        0x0 obj/src/cpu_control.o
+ .bss           0x00000000804e7ba8        0x0 obj/src/collision_info.o
+ .bss.collision_info_menu
+                0x00000000804e7ba8       0x14 obj/src/collision_info.o
+ .bss.menu_lines
+                0x00000000804e7bbc     0xb000 obj/src/collision_info.o
+ .bss           0x00000000804f2bbc        0x0 obj/src/cpu_control.o
  .bss.cpu_control_menu
-                0x00000000804e7798       0x14 obj/src/cpu_control.o
+                0x00000000804f2bbc       0x14 obj/src/cpu_control.o
  .bss.force_shield
-                0x00000000804e77ac        0x4 obj/src/cpu_control.o
+                0x00000000804f2bd0        0x4 obj/src/cpu_control.o
  .bss.freeze_position
-                0x00000000804e77b0        0x4 obj/src/cpu_control.o
- .bss           0x00000000804e77b4        0x0 obj/src/extras_dair.o
+                0x00000000804f2bd4        0x4 obj/src/cpu_control.o
+ .bss           0x00000000804f2bd8        0x0 obj/src/extras_dair.o
  .bss.aerial_state
-                0x00000000804e77b4       0x18 obj/src/extras_dair.o
- .bss           0x00000000804e77cc        0x0 obj/src/hitbox_stats.o
+                0x00000000804f2bd8       0x18 obj/src/extras_dair.o
+ .bss           0x00000000804f2bf0        0x0 obj/src/hitbox_stats.o
  .bss.hitbox_stats_menu
-                0x00000000804e77cc       0x14 obj/src/hitbox_stats.o
+                0x00000000804f2bf0       0x14 obj/src/hitbox_stats.o
  .bss.initialized
-                0x00000000804e77e0        0x6 obj/src/hitbox_stats.o
- *fill*         0x00000000804e77e6        0x2 
+                0x00000000804f2c04        0x6 obj/src/hitbox_stats.o
+ *fill*         0x00000000804f2c0a        0x2 
  .bss.hitbox_text
-                0x00000000804e77e8       0xc0 obj/src/hitbox_stats.o
+                0x00000000804f2c0c       0xc0 obj/src/hitbox_stats.o
  .bss.hurtbox_text
-                0x00000000804e78a8       0xc0 obj/src/hitbox_stats.o
+                0x00000000804f2ccc       0xc0 obj/src/hitbox_stats.o
  .bss.disjoint_text
-                0x00000000804e7968       0xc0 obj/src/hitbox_stats.o
+                0x00000000804f2d8c       0xc0 obj/src/hitbox_stats.o
  .bss.hitbox_text_enabled
-                0x00000000804e7a28        0x4 obj/src/hitbox_stats.o
+                0x00000000804f2e4c        0x4 obj/src/hitbox_stats.o
  .bss.hurtbox_text_enabled
-                0x00000000804e7a2c        0x4 obj/src/hitbox_stats.o
+                0x00000000804f2e50        0x4 obj/src/hitbox_stats.o
  .bss.disjoint_text_enabled
-                0x00000000804e7a30        0x4 obj/src/hitbox_stats.o
- .bss           0x00000000804e7a34        0x0 obj/src/input_display.o
+                0x00000000804f2e54        0x4 obj/src/hitbox_stats.o
+ .bss           0x00000000804f2e58        0x0 obj/src/input_display.o
  .bss.displayed_history
-                0x00000000804e7a34      0x2a8 obj/src/input_display.o
- .bss.history   0x00000000804e7cdc      0x2a8 obj/src/input_display.o
+                0x00000000804f2e58      0x2a8 obj/src/input_display.o
+ .bss.history   0x00000000804f3100      0x2a8 obj/src/input_display.o
  .bss.last_input_frame
-                0x00000000804e7f84        0x4 obj/src/input_display.o
- .bss           0x00000000804e7f88        0x0 obj/src/log_display.o
- .bss.log_text  0x00000000804e7f88        0x4 obj/src/log_display.o
- .bss.text_buf  0x00000000804e7f8c      0x88e obj/src/log_display.o
- *fill*         0x00000000804e881a        0x2 
+                0x00000000804f33a8        0x4 obj/src/input_display.o
+ .bss           0x00000000804f33ac        0x0 obj/src/log_display.o
+ .bss.log_text  0x00000000804f33ac        0x4 obj/src/log_display.o
+ .bss.text_buf  0x00000000804f33b0      0x88e obj/src/log_display.o
+ *fill*         0x00000000804f3c3e        0x2 
  .bss.log_hide_time
-                0x00000000804e881c        0x4 obj/src/log_display.o
- .bss           0x00000000804e8820        0x0 obj/src/main.o
+                0x00000000804f3c40        0x4 obj/src/log_display.o
+ .bss           0x00000000804f3c44        0x0 obj/src/main.o
  .bss.initialized
-                0x00000000804e8820        0x1 obj/src/main.o
- .bss           0x00000000804e8821        0x0 obj/src/math.o
- .bss           0x00000000804e8821        0x0 obj/src/melee.o
- .bss           0x00000000804e8821        0x0 obj/src/menu.o
- *fill*         0x00000000804e8821        0x3 
+                0x00000000804f3c44        0x1 obj/src/main.o
+ .bss           0x00000000804f3c45        0x0 obj/src/math.o
+ .bss           0x00000000804f3c45        0x0 obj/src/melee.o
+ .bss           0x00000000804f3c45        0x0 obj/src/menu.o
+ *fill*         0x00000000804f3c45        0x3 
  .bss.menu_text
-                0x00000000804e8824        0x4 obj/src/menu.o
- .bss.text_buf  0x00000000804e8828      0x7a8 obj/src/menu.o
+                0x00000000804f3c48        0x4 obj/src/menu.o
+ .bss.text_buf  0x00000000804f3c4c      0x7a8 obj/src/menu.o
  .bss.menu_open
-                0x00000000804e8fd0        0x1 obj/src/menu.o
- *fill*         0x00000000804e8fd1        0x3 
+                0x00000000804f43f4        0x1 obj/src/menu.o
+ *fill*         0x00000000804f43f5        0x3 
  .bss.menu_port
-                0x00000000804e8fd4        0x4 obj/src/menu.o
+                0x00000000804f43f8        0x4 obj/src/menu.o
  .bss.held_direction
-                0x00000000804e8fd8        0x4 obj/src/menu.o
+                0x00000000804f43fc        0x4 obj/src/menu.o
  .bss.direction_hold_frames
-                0x00000000804e8fdc        0x4 obj/src/menu.o
- COMMON         0x00000000804e8fe0       0x14 obj/src/menu.o
-                0x00000000804e8fe0                main_menu
- .bss           0x00000000804e8ff4        0x0 obj/src/misc_patches.o
- .bss           0x00000000804e8ff4        0x0 obj/src/overlays.o
+                0x00000000804f4400        0x4 obj/src/menu.o
+ COMMON         0x00000000804f4404       0x14 obj/src/menu.o
+                0x00000000804f4404                MainMenu
+ .bss           0x00000000804f4418        0x0 obj/src/misc_patches.o
+ .bss           0x00000000804f4418        0x0 obj/src/overlays.o
  .bss.overlay_menu
-                0x00000000804e8ff4       0x14 obj/src/overlays.o
- .bss.overlays  0x00000000804e9008     0x54cc obj/src/overlays.o
- .bss           0x00000000804ee4d4        0x0 obj/src/savestates.o
+                0x00000000804f4418       0x14 obj/src/overlays.o
+ .bss.overlays  0x00000000804f442c     0x5b14 obj/src/overlays.o
+ .bss           0x00000000804f9f40        0x0 obj/src/savestates.o
  .sbss.saved_state
-                0x00000000804ee4d4        0x4 obj/src/savestates.o
-                0x00000000804ee4d4                saved_state
- .bss           0x00000000804ee4d8        0x0 obj/src/util.o
+                0x00000000804f9f40        0x4 obj/src/savestates.o
+                0x00000000804f9f40                saved_state
+ .bss           0x00000000804f9f44        0x0 obj/src/util.o
 
 /DISCARD/
  *(*)

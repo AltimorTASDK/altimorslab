@@ -25,7 +25,7 @@
 #define COLOR_TEXT 2
 #define COLOR_HEADER 3
 
-const char *on_off_text[] = { "Off", "On" };
+const char *OnOffText[] = { "Off", "On" };
 
 const char *develop_toggle_text[] = {
 	"Off",
@@ -44,8 +44,8 @@ static int menu_port = 0;
 static Direction held_direction;
 static int direction_hold_frames = 0;
 
-Menu main_menu;
-static Menu *current_menu = &main_menu;
+Menu MainMenu;
+Menu *CurrentMenu = &MainMenu;
 
 static Direction GetDirection(float x, float y)
 {
@@ -107,8 +107,8 @@ static void Menu_OpenClose(void)
 			return;
 
 		// The main menu will have a NULL selection on first use
-		if (current_menu->selected == NULL)
-			current_menu->selected = current_menu->items.next;
+		if (CurrentMenu->selected == NULL)
+			CurrentMenu->selected = CurrentMenu->items.next;
 
 		DevelopText_ShowText(menu_text);
 		DevelopText_ShowBackground(menu_text);
@@ -122,7 +122,7 @@ static void Menu_UpdateSelection(Direction direction)
 	if (direction != Dir_Down && direction != Dir_Up)
 		return;
 
-	Menu *menu = current_menu;
+	Menu *menu = CurrentMenu;
 	ListLink *selected = menu->selected;
 
 	while (1) {
@@ -144,17 +144,23 @@ static void Menu_UpdateSelection(Direction direction)
 	}
 }
 
+static void Menu_ItemCallback(MenuItem *item)
+{
+	if (item->callback != NULL)
+		item->callback(item, menu_port);
+}
+
 static void Menu_InputForSelectedItem(Direction direction)
 {
 	HSD_PadStatus *pad = &HSD_PadMasterStatus[menu_port];
-	Menu *menu = current_menu;
+	Menu *menu = CurrentMenu;
 	MenuItem *item = (MenuItem*)menu->selected;
 	BOOL pressed_a = (pad->instant_buttons & Button_A) != 0;
 
 	switch (item->type) {
 	case MenuItem_Callback:
 		if (pressed_a)
-			item->u.callback(item, menu_port);
+			Menu_ItemCallback(item);
 
 		break;
 
@@ -162,10 +168,11 @@ static void Menu_InputForSelectedItem(Direction direction)
 		if (!pressed_a)
 			break;
 
+		Menu_ItemCallback(item);
 		item->u.submenu->previous_menu = menu;
-		current_menu = item->u.submenu;
+		CurrentMenu = item->u.submenu;
 		// Select first item
-		current_menu->selected = &current_menu->items;
+		CurrentMenu->selected = &CurrentMenu->items;
 		Menu_UpdateSelection(Dir_Down);
 		break;
 
@@ -181,10 +188,14 @@ static void Menu_InputForSelectedItem(Direction direction)
 			*value += increment;
 			if (*value > max)
 				*value = wrap ? min : max;
+
+			Menu_ItemCallback(item);
 		} else if (direction == Dir_Left) {
 			*value -= increment;
 			if (*value < min)
 				*value = wrap ? max : min;
+
+			Menu_ItemCallback(item);
 		}
 
 		break;
@@ -200,10 +211,14 @@ static void Menu_InputForSelectedItem(Direction direction)
 			*value += increment;
 			if (*value > max)
 				*value = wrap ? min : max;
+
+			Menu_ItemCallback(item);
 		} else if (direction == Dir_Left) {
 			*value -= increment;
 			if (*value < min)
 				*value = wrap ? max : min;
+
+			Menu_ItemCallback(item);
 		}
 
 		break;
@@ -215,7 +230,7 @@ static void DrawItem(MenuItem *item, BOOL selected)
 {
 	const char *text = item->text;
 
-	if (item->type == MenuItem_Text) {
+	if (item->type == MenuItem_Text || item->type == MenuItem_TextSelectable) {
 		DevelopText_StoreColorIndex(menu_text, COLOR_TEXT);
 		// Don't use printf, it may overflow with multiline text
 		DevelopText_Print(menu_text, text);
@@ -264,7 +279,7 @@ static void Menu_Draw(void)
 	DevelopText_Erase(menu_text);
 	DevelopText_ResetCursorXY(menu_text, 0, 0);
 
-	Menu *menu = current_menu;
+	Menu *menu = CurrentMenu;
 	DevelopText_StoreColorIndex(menu_text, COLOR_HEADER);
 	DevelopText_Printf(menu_text, "%s\n\n", menu->name);
 
@@ -285,9 +300,9 @@ void Menu_Update(void)
 	HSD_PadStatus *pad = &HSD_PadMasterStatus[menu_port];
 	if (pad->instant_buttons & Button_B) {
 		// Back out of menu
-		Menu *previous_menu = current_menu->previous_menu;
+		Menu *previous_menu = CurrentMenu->previous_menu;
 		if (previous_menu != NULL) {
-			current_menu = previous_menu;
+			CurrentMenu = previous_menu;
 		}
 	}
 
@@ -355,6 +370,6 @@ void MainMenu_Init(void)
 		}
 	};
 
-	Menu_Init(&main_menu, "Lab Tools");
-	Menu_AddItem(&main_menu, &menu_dblevel);
+	Menu_Init(&MainMenu, "Lab Tools");
+	Menu_AddItem(&MainMenu, &menu_dblevel);
 }

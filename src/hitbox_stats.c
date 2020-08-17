@@ -489,7 +489,7 @@ void HitboxStats_Init(void)
 			.adjust_enum = {
 				&hitbox_text_enabled,
 				1, 0, 1, TRUE,
-				on_off_text
+				OnOffText
 			}
 		}
 	};
@@ -501,7 +501,7 @@ void HitboxStats_Init(void)
 			.adjust_enum = {
 				&hurtbox_text_enabled,
 				1, 0, 1, TRUE,
-				on_off_text
+				OnOffText
 			}
 		}
 	};
@@ -513,7 +513,7 @@ void HitboxStats_Init(void)
 			.adjust_enum = {
 				&disjoint_text_enabled,
 				1, 0, 1, TRUE,
-				on_off_text
+				OnOffText
 			}
 		}
 	};
@@ -531,5 +531,5 @@ void HitboxStats_Init(void)
 		.u = { .submenu = &hitbox_stats_menu }
 	};
 
-	Menu_AddItem(&main_menu, &menu_hitbox_stats);
+	Menu_AddItem(&MainMenu, &menu_hitbox_stats);
 }

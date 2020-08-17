@@ -19,6 +19,13 @@ typedef struct _CollisionLine {
     u32 flags;
 } CollisionLine;
 
+typedef struct _CollisionVertex {
+    char pad0000[0x4];
+    float unscaled_y;
+    Vector2D pos;
+    Vector2D pos_duplicate;
+} CollisionVertex;
+
 typedef struct _CollisionParams {
     char pad0000[0x4];
     s32 vertex_count;
@@ -27,3 +34,7 @@ typedef struct _CollisionParams {
     char pad0010[0x28 - 0x10];
     int joint_count;
 } CollisionParams;
+
+extern CollisionParams *groundCollParams;
+extern CollisionVertex *groundCollVtx;
+extern CollisionLine *groundCollLine;

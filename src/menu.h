@@ -16,6 +16,7 @@ typedef void(*MenuCallback)(MenuItem *item, int port);
 
 typedef enum _MenuItemType {
 	MenuItem_Text,
+	MenuItem_TextSelectable,
 	MenuItem_Callback,
 	MenuItem_SubMenu,
 	MenuItem_AdjustInt,
@@ -27,8 +28,8 @@ struct _MenuItem {
 	ListLink link;
 	const char *text;
 	MenuItemType type;
+	MenuCallback callback;
 	union {
-		MenuCallback callback;
 		Menu *submenu;
 		struct {
 			int *value;
@@ -55,8 +56,9 @@ struct _MenuItem {
 	} u;
 };
 
-extern const char *on_off_text[];
-extern Menu main_menu;
+extern const char *OnOffText[];
+extern Menu MainMenu;
+extern Menu *CurrentMenu;
 
 void Menu_CreateText(void);
 void Menu_Update(void);

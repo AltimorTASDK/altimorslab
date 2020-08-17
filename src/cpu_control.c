@@ -40,7 +40,7 @@ void CPUControl_Init(void)
 			.adjust_enum = {
 				&force_shield,
 				1, 0, 1, TRUE,
-				on_off_text
+				OnOffText
 			}
 		}
 	};
@@ -52,7 +52,7 @@ void CPUControl_Init(void)
 			.adjust_enum = {
 				&freeze_position,
 				1, 0, 1, TRUE,
-				on_off_text
+				OnOffText
 			}
 		}
 	};
@@ -68,6 +68,5 @@ void CPUControl_Init(void)
 		.u = { .submenu = &cpu_control_menu }
 	};
 
-	Menu_AddItem(&main_menu, &menu_cpu_control);
-
+	Menu_AddItem(&MainMenu, &menu_cpu_control);
 }

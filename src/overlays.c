@@ -203,13 +203,13 @@ void Overlays_Init(void)
 	static MenuItem menu_add_overlay = {
 		.text = "Add Action State Overlay",
 		.type = MenuItem_Callback,
-		.u = { .callback = AddASOverlay }
+		.callback = AddASOverlay
 	};
 
 	static MenuItem menu_remove_overlay = {
 		.text = "Remove Action State Overlay",
 		.type = MenuItem_Callback,
-		.u = { .callback = RemoveASOverlay }
+		.callback = RemoveASOverlay
 	};
 
 	Menu_Init(&overlay_menu, "Overlays");
@@ -228,5 +228,5 @@ void Overlays_Init(void)
 		.u = { .submenu = &overlay_menu }
 	};
 
-	Menu_AddItem(&main_menu, &menu_overlays);
+	Menu_AddItem(&MainMenu, &menu_overlays);
 }
