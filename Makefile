@@ -5,18 +5,17 @@ AS := powerpc-eabi-as
 CC := powerpc-eabi-gcc
 LD := powerpc-eabi-ld
 
-SRCDIR = src
-OBJDIR = obj
-DEPDIR = dep
-SECTIONDIR = sections
+SOURCES := src src/melee sections
+OBJDIR := obj
+DEPDIR := dep
 
-SRCCFILES := $(wildcard $(SRCDIR)/*.c)
-SRCCOBJFILES := $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCCFILES))
-SRCSFILES := $(wildcard $(SRCDIR)/*.S)
-SRCSOBJFILES := $(patsubst $(SRCDIR)/%.S, $(OBJDIR)/%.o, $(SRCSFILES))
-SECTIONFILES := $(wildcard $(SECTIONDIR)/*.S)
-SECTIONOBJFILES := $(patsubst $(SECTIONDIR)/%.S, $(OBJDIR)/%.o, $(SECTIONFILES))
-OBJFILES := $(SRCCOBJFILES) $(SRCSOBJFILES) $(SECTIONOBJFILES)
+
+CFILES := $(foreach dir,$(SOURCES),$(wildcard $(dir)/*.c))
+SFILES := $(foreach dir,$(SOURCES),$(wildcard $(dir)/*.S))
+
+OBJFILES := \
+	$(patsubst %.c, $(OBJDIR)/%.o, $(CFILES)) \
+	$(patsubst %.S, $(OBJDIR)/%.o, $(SFILES))
 
 LINKSCRIPT := -Tmelee.ld
 LIBS := -nostdlib
@@ -28,13 +27,13 @@ bin/sys/main.dol: $(OBJFILES)
 	$(CC) $(LDFLAGS) $(LIBPATHS) $(LIBS) $(LINKSCRIPT) $^ -o $@
 	python patch_dol.py
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: %.c
+	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
+	@[ -d $(subst $(OBJDIR), $(DEPDIR), $(dir $@)) ] || mkdir -p $(subst $(OBJDIR), $(DEPDIR), $(dir $@))
 	$(CC) -MMD -MP -MF $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $@) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.S
-	$(AS) $^ -o $@
-
-$(OBJDIR)/%.o: $(SECTIONDIR)/%.S
-	$(AS) $^ -o $@
+$(OBJDIR)/%.o: %.S
+	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
+	$(AS) -mregnames -mgekko $^ -o $@
 
 -include $(DEPDIR)/*.d

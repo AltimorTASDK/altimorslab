@@ -6,6 +6,9 @@
 // Useful for calculating log base 10 with logf
 #define LOG10 2.30258509299f
 
+#define PAD(START, END) \
+	char padding##START[END - START];
+
 #define max(a, b) ((a) > (b) ? (a) : (b))
 #define min(a, b) ((a) < (b) ? (a) : (b))
 

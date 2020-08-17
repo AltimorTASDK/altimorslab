@@ -368,6 +368,9 @@ static void InitializeSlot(u8 slot)
 
 void HitboxStats_UpdatePlayer(Player *player)
 {
+	if (player->flags2 & PlayerFlag2_Dormant)
+		return;
+
 	u8 slot = player->slot;
 	if (slot < 0 || slot >= MAX_PLAYERS)
 		return;

@@ -59,6 +59,10 @@ typedef enum _OverlayFlag {
 	OverlayFlag_UseColor = 0x80
 } OverlayFlag;
 
+typedef enum _PlayerFlag2 {
+	PlayerFlag2_Dormant = 0x40
+} PlayerFlag2;
+
 typedef enum _PlayerFlag12 {
 	PlayerFlag12_OverrideColor = 0x20
 } PlayerFlag12;

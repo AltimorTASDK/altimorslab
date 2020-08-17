@@ -115,16 +115,16 @@ SECTIONS
     }
 
     /* original sections */
-    .text0 text0_base : AT(text0_offset) { obj/text0.o }
-    .data0 data0_base : AT(data0_offset) { obj/data0.o }
-    .data1 data1_base : AT(data1_offset) { obj/data1.o }
-    .text1 text1_base : AT(text1_offset) { obj/text1.o }
-    .data2 data2_base : AT(data2_offset) { obj/data2.o }
-    .data3 data3_base : AT(data3_offset) { obj/data3.o }
-    .data4 data4_base : AT(data4_offset) { obj/data4.o }
-    .data5 data5_base : AT(data5_offset) { obj/data5.o }
-    .data6 data6_base : AT(data6_offset) { obj/data6.o }
-    .data7 data7_base : AT(data7_offset) { obj/data7.o }
+    .text0 text0_base : AT(text0_offset) { obj/sections/text0.o }
+    .data0 data0_base : AT(data0_offset) { obj/sections/data0.o }
+    .data1 data1_base : AT(data1_offset) { obj/sections/data1.o }
+    .text1 text1_base : AT(text1_offset) { obj/sections/text1.o }
+    .data2 data2_base : AT(data2_offset) { obj/sections/data2.o }
+    .data3 data3_base : AT(data3_offset) { obj/sections/data3.o }
+    .data4 data4_base : AT(data4_offset) { obj/sections/data4.o }
+    .data5 data5_base : AT(data5_offset) { obj/sections/data5.o }
+    .data6 data6_base : AT(data6_offset) { obj/sections/data6.o }
+    .data7 data7_base : AT(data7_offset) { obj/sections/data7.o }
 
     /* new sections */
     text2_base = data7_base + SIZEOF(.data7);
@@ -133,7 +133,7 @@ SECTIONS
 
     hooks_base = text2_base + SIZEOF(.text2);
     hooks_offset = text2_offset + SIZEOF(.text2);
-    .hooks hooks_base : AT(hooks_offset) { obj/hooks.o }
+    .hooks hooks_base : AT(hooks_offset) { obj/src/hooks.o }
     
     data8_base = hooks_base + SIZEOF(.hooks);
     data8_offset = hooks_offset + SIZEOF(.hooks);

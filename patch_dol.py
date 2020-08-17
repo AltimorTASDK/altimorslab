@@ -99,12 +99,8 @@ def apply_hooks(data):
         print(f"Hook {original:08X} -> {hook:08X}")
 
 def apply_extra_patches(data):
-    with open("patches") as f:
-        while True:
-            line = f.readline()
-            if not line:
-                return
-
+    with open("patches") as file:
+        for line in file:
             if line.find("#") != -1:
                 line = line[:line.find("#")]
 
