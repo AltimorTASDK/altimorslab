@@ -1,3 +1,5 @@
+# Altimor's Lab
+
 WIP Melee labbing mod. Automatically appends code to Melee's DOL using a linker
 script. Also generates a linker script to define all symbols from GALE01.map.
 
@@ -8,7 +10,8 @@ hook descriptor with the overwritten instruction and a branch to after the
 overwrite so it can be used to call the original function.
 
 ## Shoutouts
-UnclePunch
-psiLupan
-taukhan
-Hax fucking $
+
+* UnclePunch
+* psiLupan
+* taukhan
+* Hax fucking $
