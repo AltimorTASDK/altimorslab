@@ -11,7 +11,5 @@
 801A45A0 3C001C1C # Boot to Training Mode
 801A45A4 901E0000
 
-802254D4 60000000 # Always load DbCo.dat
-
 8006AE98 60000000 # CStick in develop mode
 8006AE00 60000000
