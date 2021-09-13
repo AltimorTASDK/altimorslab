@@ -1,14 +1,24 @@
-#include "os/os.h"
+#include "hsd/memory.h"
 #include <new>
 
-// Use the audio heap because it doesn't get destroyed on scene transition
+// Explicitly use heap 0 because it doesn't get destroyed on scene transition
 
-void *operator new(size_t count) noexcept
+void *operator new(size_t count)
 {
-	return Audio_MemAlloc(count);
+	return HSD_MemAllocFromHeap(0, count);
 }
 
-void operator delete(void *ptr) noexcept
+void *operator new[](size_t count)
 {
-	Audio_Free(ptr);
+	return HSD_MemAllocFromHeap(0, count);
+}
+
+void operator delete(void *ptr)
+{
+	HSD_FreeToHeap(0, ptr);
+}
+
+void operator delete[](void *ptr)
+{
+	HSD_FreeToHeap(0, ptr);
 }

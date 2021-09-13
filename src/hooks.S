@@ -13,5 +13,5 @@
 	.int hook_\name
 .endm
 
-add_hook Scene_Main
+add_hook HSD_ResetScene
 add_hook StartMelee
