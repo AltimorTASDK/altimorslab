@@ -1,33 +1,13 @@
 #pragma once
 
 #include "util/int_types.h"
-#include <utility>
-#include <cstddef>
 
-constexpr u32 strhash_impl(u32 hash, char head)
+template<size_t N, size_t index = 0, u32 offset_basis = 0x811C9DC5, u32 prime = 0x01000193>
+constexpr u32 strhash(const char (&str)[N], u32 hash = offset_basis)
 {
-	// Skip null terminator
-	return hash;
-}
-
-template<typename ...T>
-constexpr u32 strhash_impl(u32 hash, char head, T ...tail)
-{
-	// Recursively hash each char
-	constexpr auto fnv_prime = 0x01000193;
-	return strhash_impl((hash ^ head) * fnv_prime, tail...);
-}
-
-template<size_t... indices>
-constexpr u32 strhash_impl(const char str[], std::index_sequence<indices...>)
-{
-	constexpr auto fnv_offset_basis = 0x811C9DC5;
-	// Explode array
-	return strhash_impl(fnv_offset_basis, str[indices]...);
-}
-
-template<size_t N, typename indices = std::make_index_sequence<N>>
-constexpr u32 strhash(const char (&str)[N])
-{
-	return strhash_impl(str, indices{});
+	// Recursively hash each char, excluding null terminator
+	if constexpr (index < N - 1)
+		return strhash<N, index + 1>(str, (hash ^ str[index]) * prime);
+	else
+		return hash;
 }
