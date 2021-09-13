@@ -26,7 +26,9 @@ extern "C" void hook_StartMelee(void *param_1)
 	test2 = test1;
 	test2.to_tuple();
 
-	static_assert(vec3(1.f, 1.f, 0).dot(vec3(.5f, .5f, 0)) == 1.f);
+	static_assert(vec3::dot(vec3(1, 1, 0), vec3(.5f, .5f, 0)) == 1.f);
+	static_assert(vec3::cross(vec3(1, 0, 0), vec3(0, 0, 1)) == vec3(0, -1, 0));
+	static_assert(vec3i(1, 0, 0).x == 1);
 
 	orig_StartMelee(param_1);
 }
