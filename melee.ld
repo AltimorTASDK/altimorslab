@@ -4,8 +4,8 @@
 
 OUTPUT_FORMAT(binary);
 OUTPUT_ARCH(powerpc:common);
-EXTERN(start);
-ENTRY(start);
+EXTERN(__start);
+ENTRY(__start);
 
 INCLUDE GALE01.ld
 
@@ -44,7 +44,7 @@ SECTIONS
         LONG(text1_offset);
         LONG(text2_offset);
         LONG(hooks_offset);
-        LONG(0);
+        LONG(ctors_offset);
         LONG(0);
         LONG(0);
 
@@ -66,7 +66,7 @@ SECTIONS
         LONG(text1_base);
         LONG(text2_base);
         LONG(hooks_base);
-        LONG(0);
+        LONG(ctors_base);
         LONG(0);
         LONG(0);
 
@@ -88,7 +88,7 @@ SECTIONS
         LONG(SIZEOF(.text1));
         LONG(SIZEOF(.text2));
         LONG(SIZEOF(.hooks));
-        LONG(0);
+        LONG(SIZEOF(.ctors));
         LONG(0);
         LONG(0);
 
@@ -111,7 +111,7 @@ SECTIONS
         LONG(SIZEOF(.bss));
 
         /*    00E0  Entry Point */
-        LONG(ABSOLUTE(start));
+        LONG(ABSOLUTE(__start));
     }
 
     /* original sections */
@@ -128,19 +128,29 @@ SECTIONS
 
     /* new sections */
     text2_base = data7_base + SIZEOF(.data7);
+    text2_base = (text2_base + 0x1F) & ~0x1F;
     text2_offset = data7_offset + SIZEOF(.data7);
     .text2 text2_base : AT(text2_offset) { *(.load* .text*) }
 
     hooks_base = text2_base + SIZEOF(.text2);
+    hooks_base = (hooks_base + 0x1F) & ~0x1F;
     hooks_offset = text2_offset + SIZEOF(.text2);
     .hooks hooks_base : AT(hooks_offset) { obj/src/hooks.o }
     
     data8_base = hooks_base + SIZEOF(.hooks);
+    data8_base = (data8_base + 0x1F) & ~0x1F;
     data8_offset = hooks_offset + SIZEOF(.hooks);
     .data8 data8_base : AT(data8_offset) { *(.rodata* .rdata* .data* .sdata*) }
+    
+    ctors_base = data8_base + SIZEOF(.data8);
+    ctors_base = (ctors_base + 0x1F) & ~0x1F;
+    ctors_end = ctors_base + SIZEOF(.ctors);
+    ctors_offset = data8_offset + SIZEOF(.data8);
+    .ctors ctors_base : AT(ctors_offset) { *(.ctors) }
 
-    bss_base = data8_base + SIZEOF(.data8);
-    bss_offset = data8_base + SIZEOF(.data8);
+    bss_base = ctors_base + SIZEOF(.ctors);
+    bss_base = (bss_base + 0x1F) & ~0x1F;
+    bss_offset = ctors_offset + SIZEOF(.ctors);
     .bss bss_base : AT(bss_offset) { *(.bss* .sbss* COMMON) }
 
     /DISCARD/ : { *(*) }

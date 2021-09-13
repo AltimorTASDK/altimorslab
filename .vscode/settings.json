@@ -1,6 +1,10 @@
 {
     "files.associations": {
-        "*.h": "c",
-        "array": "cpp"
+        "new": "cpp",
+        "*.tcc": "cpp",
+        "deque": "cpp",
+        "vector": "cpp",
+        "string": "cpp",
+        "type_traits": "cpp"
     }
 }

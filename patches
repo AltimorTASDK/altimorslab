@@ -1,15 +1,17 @@
-803D4A48 00340102 #Stock Mode [Magus]
-803D4A4C 04000A00 #4 Stocks [Magus]
-803D4A50 08010100 #8 Minutes [Magus]
-803D4A60 FF000000 #No Items [Magus]
-803D4A78 E70000B0 #Singles Stages [Magus]
-8015D94C 4E800020 #Disable Special Messages [Most]
-8015D984 4E800020 #Disable Trophy Messages [Achilles]
+803D4A48 00340102 # Stock Mode [Magus]
+803D4A4C 04000A00 # 4 Stocks [Magus]
+803D4A50 08010100 # 8 Minutes [Magus]
+803D4A60 FF000000 # No Items [Magus]
+803D4A78 E70000B0 # Singles Stages [Magus]
+8015D94C 4E800020 # Disable Special Messages [Most]
+8015D984 4E800020 # Disable Trophy Messages [Achilles]
+802641B0 38000001 # Faster CSS Load [UnclePunch]
+80397878 4800020C # Enable OSReport Print on Crash (1.02) [UnclePunch]
 
-801A45A0 3C001C1C #Boot to Training Mode
+801A45A0 3C001C1C # Boot to Training Mode
 801A45A4 901E0000
 
-802254D4 60000000 #Always load DbCo.dat
+802254D4 60000000 # Always load DbCo.dat
 
-8006AE98 60000000 #CStick in develop mode
+8006AE98 60000000 # CStick in develop mode
 8006AE00 60000000

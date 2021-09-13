@@ -1,1 +1,0 @@
-void CollisionInfo_Init(void);

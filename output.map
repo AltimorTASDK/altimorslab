@@ -1,61 +1,16 @@
 
-Allocating common symbols
-Common symbol       size              file
-
-MainMenu            0x24              obj/src/menu.o
-
 Discarded input sections
 
- .comment       0x0000000000000000       0x23 obj/src/collision_info.o
- .eh_frame      0x0000000000000000       0x68 obj/src/collision_info.o
- .gnu.attributes
-                0x0000000000000000       0x10 obj/src/collision_info.o
- .comment       0x0000000000000000       0x23 obj/src/cpu_control.o
- .eh_frame      0x0000000000000000       0xb4 obj/src/cpu_control.o
- .comment       0x0000000000000000       0x23 obj/src/extras_dair.o
- .eh_frame      0x0000000000000000      0x194 obj/src/extras_dair.o
- .gnu.attributes
-                0x0000000000000000       0x10 obj/src/extras_dair.o
- .comment       0x0000000000000000       0x23 obj/src/hitbox_stats.o
- .eh_frame      0x0000000000000000      0x37c obj/src/hitbox_stats.o
- .gnu.attributes
-                0x0000000000000000       0x10 obj/src/hitbox_stats.o
- .comment       0x0000000000000000       0x23 obj/src/input_display.o
- .eh_frame      0x0000000000000000      0x168 obj/src/input_display.o
- .gnu.attributes
-                0x0000000000000000       0x10 obj/src/input_display.o
- .comment       0x0000000000000000       0x23 obj/src/log_display.o
- .eh_frame      0x0000000000000000       0x8c obj/src/log_display.o
- .gnu.attributes
-                0x0000000000000000       0x10 obj/src/log_display.o
+ .gcc_except_table._ZdlPv
+                0x0000000000000000        0x4 obj/src/libcxx/alloc.o
+ .comment       0x0000000000000000       0x23 obj/src/libcxx/alloc.o
+ .eh_frame      0x0000000000000000       0x5c obj/src/libcxx/alloc.o
+ .comment       0x0000000000000000       0x23 obj/src/libcxx/exception.o
+ .eh_frame      0x0000000000000000      0x264 obj/src/libcxx/exception.o
  .comment       0x0000000000000000       0x23 obj/src/main.o
- .eh_frame      0x0000000000000000      0x154 obj/src/main.o
+ .eh_frame      0x0000000000000000       0x70 obj/src/main.o
  .gnu.attributes
                 0x0000000000000000       0x10 obj/src/main.o
- .comment       0x0000000000000000       0x23 obj/src/math.o
- .eh_frame      0x0000000000000000       0x3c obj/src/math.o
- .gnu.attributes
-                0x0000000000000000       0x10 obj/src/math.o
- .comment       0x0000000000000000       0x23 obj/src/melee.o
- .eh_frame      0x0000000000000000       0x3c obj/src/melee.o
- .comment       0x0000000000000000       0x23 obj/src/menu.o
- .eh_frame      0x0000000000000000      0x2d4 obj/src/menu.o
- .gnu.attributes
-                0x0000000000000000       0x10 obj/src/menu.o
- .comment       0x0000000000000000       0x23 obj/src/misc_patches.o
- .eh_frame      0x0000000000000000       0x80 obj/src/misc_patches.o
- .comment       0x0000000000000000       0x23 obj/src/overlays.o
- .eh_frame      0x0000000000000000      0x154 obj/src/overlays.o
- .gnu.attributes
-                0x0000000000000000       0x10 obj/src/overlays.o
- .comment       0x0000000000000000       0x23 obj/src/savestates.o
- .eh_frame      0x0000000000000000      0x1c8 obj/src/savestates.o
- .gnu.attributes
-                0x0000000000000000       0x10 obj/src/savestates.o
- .comment       0x0000000000000000       0x23 obj/src/util.o
- .eh_frame      0x0000000000000000      0x170 obj/src/util.o
- .gnu.attributes
-                0x0000000000000000       0x10 obj/src/util.o
 
 Memory Configuration
 
@@ -64,20 +19,9 @@ Name             Origin             Length             Attributes
 
 Linker script and memory map
 
-LOAD obj/src/collision_info.o
-LOAD obj/src/cpu_control.o
-LOAD obj/src/extras_dair.o
-LOAD obj/src/hitbox_stats.o
-LOAD obj/src/input_display.o
-LOAD obj/src/log_display.o
+LOAD obj/src/libcxx/alloc.o
+LOAD obj/src/libcxx/exception.o
 LOAD obj/src/main.o
-LOAD obj/src/math.o
-LOAD obj/src/melee.o
-LOAD obj/src/menu.o
-LOAD obj/src/misc_patches.o
-LOAD obj/src/overlays.o
-LOAD obj/src/savestates.o
-LOAD obj/src/util.o
 LOAD obj/src/hooks.o
 LOAD obj/sections/data0.o
 LOAD obj/sections/data1.o
@@ -105,15 +49,15 @@ LOAD obj/sections/text1.o
                 0x0000000080001400                SYS_INT_UNK = 0x80001400
                 0x0000000080001700                SYS_INT_Thermal = 0x80001700
                 0x0000000080003100                memset = 0x80003100
-                0x0000000080003130                fill_mem = 0x80003130
+                0x0000000080003130                __fill_mem = 0x80003130
                 0x00000000800031f4                memcpy = 0x800031f4
                 0x0000000080003244                TRK_memcpy = 0x80003244
                 0x0000000080003268                SYS_another_stdclibrary_unknown = 0x80003268
-                0x00000000800051ec                check_pad3 = 0x800051ec
-                0x000000008000522c                start = 0x8000522c
-                0x000000008000535c                init_data = 0x8000535c
-                0x000000008000541c                init_hardware = 0x8000541c
-                0x000000008000543c                flush_cache = 0x8000543c
+                0x00000000800051ec                __check_pad3 = 0x800051ec
+                0x000000008000522c                __start = 0x8000522c
+                0x000000008000535c                __init_data = 0x8000535c
+                0x000000008000541c                __init_hardware = 0x8000541c
+                0x000000008000543c                __flush_cache = 0x8000543c
                 0x00000000800059dc                SubactionEvent_0x0C = 0x800059dc
                 0x0000000080007ecc                Hitbox_Grab_CollisionWithHurtboxCheck = 0x80007ecc
                 0x00000000800083c4                Hurtbox_Update = 0x800083c4
@@ -179,6 +123,7 @@ LOAD obj/sections/text1.o
                 0x0000000080026f2c                wP_Debug_StartMelee = 0x80026f2c
                 0x0000000080028b9c                CameraInfo_Init = 0x80028b9c
                 0x000000008002a278                Camera_0xA4A8_Store = 0x8002a278
+                0x000000008002a4ac                CObj_UpdateFromCamera = 0x8002a4ac
                 0x000000008002c5b4                Pause_Camera_TranslationMore_PerFrame = 0x8002c5b4
                 0x000000008002cb0c                Pause_CameraThink = 0x8002cb0c
                 0x000000008002ddc4                Camera_WriteValues = 0x8002ddc4
@@ -2264,7 +2209,7 @@ LOAD obj/sections/text1.o
                 0x0000000080219b10                Stages_SnagTrophies_Unk_1 = 0x80219b10
                 0x0000000080219c50                Stage_SnagTrophies_Snag = 0x80219c50
                 0x0000000080219c88                Stage_SnagTrophies_5 = 0x80219c88
-                0x00000000802fd45c                set_debug_bba = 0x80219c98
+                0x00000000802fd45c                __set_debug_bba = 0x80219c98
                 0x0000000080219ca4                Stage_Battlefield_Init = 0x80219ca4
                 0x0000000080219d58                Stage_Battlefield_OnGO = 0x80219d58
                 0x0000000080219d84                Stage_Battlefield_Textures = 0x80219d84
@@ -2631,7 +2576,7 @@ LOAD obj/sections/text1.o
                 0x00000000802c5000                Items_ProjectileSpawn = 0x802c5000
                 0x00000000802d8594                Item_Target_PositionAdjust_EveryFrame = 0x802d8594
                 0x00000000802e6380                fk_CoinDrop = 0x802e6380
-                0x00000000802ea27c                OSUnlockSram_1 = 0x802ea27c
+                0x00000000802ea27c                __OSUnlockSram_1 = 0x802ea27c
                 0x0000000080337cd4                DVDClose = 0x802f10b4
                 0x0000000080339e78                DVDCancel = 0x802f1344
                 0x00000000802f2014                GameInfoManagerSetUserSelectedCupSidekick = 0x802f2014
@@ -2653,7 +2598,7 @@ LOAD obj/sections/text1.o
                 0x00000000802f6ea4                Ab_gfx_LoadBigOnScreenGraphic = 0x802f6ea4
                 0x00000000802f8298                StockDisplayTypeIngame = 0x802f8298
                 0x00000000802fcc44                NameTag_DisplayInGame = 0x802fcc44
-                0x00000000802fd45c                set_debug_bba = 0x802fd45c
+                0x00000000802fd45c                __set_debug_bba = 0x802fd45c
                 0x00000000802fd4c8                Ab_Unknown_LoadOnMatchStart = 0x802fd4c8
                 0x00000000802ff498                Ab_Menu_TextDraw_Unknown = 0x802ff498
                 0x000000008034de98                SIRefreshSamplingRate = 0x802ff934
@@ -2698,60 +2643,60 @@ LOAD obj/sections/text1.o
                 0x000000008030fa50                Ab_Menu_TextDraw_Gallery = 0x8030fa50
                 0x000000008031457c                Ab_Menu_TextDraw_Gallery_3 = 0x8031457c
                 0x0000000080317a60                Ab_Menu_TextDraw_Lottery = 0x80317a60
-                0x0000000080322620                va_arg = 0x80322620
-                0x0000000080322714                destroy_global_chain = 0x80322714
-                0x000000008032275c                unregister_fragment = 0x8032275c
-                0x0000000080322790                register_fragment = 0x80322790
-                0x00000000803228c0                cvt_fp2unsigned = 0x803228c0
-                0x000000008032291c                div2u = 0x8032291c
-                0x0000000080322a08                div2i = 0x80322a08
-                0x0000000080322b40                mod2u = 0x80322b40
-                0x0000000080322c24                mod2i = 0x80322c24
-                0x0000000080322d30                shl2i = 0x80322d30
-                0x0000000080322d54                shr2u = 0x80322d54
-                0x0000000080322d78                shr2i = 0x80322d78
-                0x0000000080322da0                cvt_sll_flt = 0x80322da0
-                0x0000000080322e54                cvt_dbl_usll = 0x80322e54
+                0x0000000080322620                __va_arg = 0x80322620
+                0x0000000080322714                __destroy_global_chain = 0x80322714
+                0x000000008032275c                __unregister_fragment = 0x8032275c
+                0x0000000080322790                __register_fragment = 0x80322790
+                0x00000000803228c0                __cvt_fp2unsigned = 0x803228c0
+                0x000000008032291c                __div2u = 0x8032291c
+                0x0000000080322a08                __div2i = 0x80322a08
+                0x0000000080322b40                __mod2u = 0x80322b40
+                0x0000000080322c24                __mod2i = 0x80322c24
+                0x0000000080322d30                __shl2i = 0x80322d30
+                0x0000000080322d54                __shr2u = 0x80322d54
+                0x0000000080322d78                __shr2i = 0x80322d78
+                0x0000000080322da0                __cvt_sll_flt = 0x80322da0
+                0x0000000080322e54                __cvt_dbl_usll = 0x80322e54
                 0x0000000080322f20                GetR2__Fv = 0x80322f20
-                0x0000000080322f28                fini_cpp_exceptions = 0x80322f28
-                0x0000000080322f5c                init_cpp_exceptions = 0x80322f5c
+                0x0000000080322f28                __fini_cpp_exceptions = 0x80322f28
+                0x0000000080322f5c                __init_cpp_exceptions = 0x80322f5c
                 0x0000000080322f9c                exit = 0x80322f9c
-                0x00000000803230a8                num2dec_internal = 0x803230a8
-                0x000000008032345c                flush_buffer = 0x8032345c
-                0x0000000080323528                prep_buffer = 0x80323528
+                0x00000000803230a8                __num2dec_internal = 0x803230a8
+                0x000000008032345c                __flush_buffer = 0x8032345c
+                0x0000000080323528                __prep_buffer = 0x80323528
                 0x0000000080323560                toupper = 0x80323560
                 0x0000000080323588                tolower = 0x80323588
-                0x00000000803235b0                fwrite = 0x803235b0
+                0x00000000803235b0                __fwrite = 0x803235b0
                 0x00000000803238c8                memcmp = 0x803238c8
                 0x000000008032390c                memchr = 0x8032390c
                 0x0000000080323938                memmove = 0x80323938
-                0x0000000080323a14                copy_longs_rev_unaligned = 0x80323a14
-                0x0000000080323ac4                copy_longs_unaligned = 0x80323ac4
-                0x0000000080323b88                copy_longs_rev_aligned = 0x80323b88
-                0x0000000080323c34                copy_longs_aligned = 0x80323c34
-                0x0000000080323cf0                stdio_atexit = 0x80323cf0
+                0x0000000080323a14                __copy_longs_rev_unaligned = 0x80323a14
+                0x0000000080323ac4                __copy_longs_unaligned = 0x80323ac4
+                0x0000000080323b88                __copy_longs_rev_aligned = 0x80323b88
+                0x0000000080323c34                __copy_longs_aligned = 0x80323c34
+                0x0000000080323cf0                __stdio_atexit = 0x80323cf0
                 0x0000000080323cf4                sprintf = 0x80323cf4
                 0x0000000080323dc8                vsnprintf = 0x80323dc8
                 0x0000000080323e38                vprintf = 0x80323e38
                 0x0000000080323eb4                printf = 0x80323eb4
-                0x0000000080323f80                StringWrite = 0x80323f80
-                0x0000000080323fec                FileWrite = 0x80323fec
-                0x0000000080324044                pformatter = 0x80324044
+                0x0000000080323f80                __StringWrite = 0x80323f80
+                0x0000000080323fec                __FileWrite = 0x80323fec
+                0x0000000080324044                __pformatter = 0x80324044
                 0x0000000080324674                float2str = 0x80324674
                 0x0000000080324cac                round_decimal = 0x80324cac
                 0x0000000080324de0                longlong2str = 0x80324de0
                 0x00000000803250c0                long2str = 0x803250c0
                 0x00000000803252e4                parse_format = 0x803252e4
                 0x00000000803257c4                rand = 0x803257c4
-                0x00000000803257e8                StringRead = 0x803257e8
+                0x00000000803257e8                __StringRead = 0x803257e8
                 0x0000000080325878                strchr = 0x80325878
                 0x00000000803258a8                strncmp = 0x803258a8
                 0x00000000803258e8                strcmp = 0x803258e8
                 0x0000000080325a0c                strncpy = 0x80325a0c
                 0x0000000080325a50                strcpy = 0x80325a50
                 0x0000000080325b04                strlen = 0x80325b04
-                0x0000000080325bd0                strtoul = 0x80325b24
-                0x0000000080325bd0                strtoul = 0x80325bd0
+                0x0000000080325b24                strtoul = 0x80325b24
+                0x0000000080325bd0                __strtoul = 0x80325bd0
                 0x0000000080326098                fwide = 0x80326098
                 0x0000000080326118                frexp = 0x80326118
                 0x00000000803261b4                fabs = 0x803261b4
@@ -2813,7 +2758,7 @@ LOAD obj/sections/text1.o
                 0x000000008032b770                DBRead = 0x8032b770
                 0x000000008032b7fc                DBWrite = 0x8032b7fc
                 0x000000008032ba6c                ExtHandler = 0x8032ba6c
-                0x000000008032baa8                DVDPrintFatalMessage = 0x8032baa8
+                0x000000008032baa8                __DVDPrintFatalMessage = 0x8032baa8
                 0x000000008032bad8                DbgHandler = 0x8032bad8
                 0x000000008032bb44                TxHandler = 0x8032bb44
                 0x000000008032bb84                RxHandler = 0x8032bb84
@@ -2857,9 +2802,9 @@ LOAD obj/sections/text1.o
                 0x000000008032e504                MCCWrite = 0x8032e504
                 0x000000008032e868                MCCCheckAsyncDone = 0x8032e868
                 0x000000008032ed8c                UnusedCode_4 = 0x8032ed8c
-                0x0000000080334880                THPHuffDecodeDCTCompY = 0x80334880
-                0x0000000080334f00                THPHuffDecodeDCTCompX_assumption = 0x80334f00
-                0x00000000803355b0                THPHuffDecodeDCTCompZ_assumption = 0x803355b0
+                0x0000000080334880                __THPHuffDecodeDCTCompY = 0x80334880
+                0x0000000080334f00                __THPHuffDecodeDCTCompX_assumption = 0x80334f00
+                0x00000000803355b0                __THPHuffDecodeDCTCompZ_assumption = 0x803355b0
                 0x0000000080335e5c                PPCMfmsr = 0x80335e5c
                 0x0000000080335e64                PPCMtmsr = 0x80335e64
                 0x0000000080335e6c                PPCMfhid0 = 0x80335e6c
@@ -2873,9 +2818,9 @@ LOAD obj/sections/text1.o
                 0x0000000080335eb8                PPCMtwpar = 0x80335eb8
                 0x0000000080335ec0                DBInit = 0x80335ec0
                 0x0000000080335ee8                DBIsDebuggerPresent = 0x80335ee8
-                0x0000000080335f04                DBExceptionDestinationAux = 0x80335f04
-                0x0000000080335f4c                DBExceptionDestination = 0x80335f4c
-                0x0000000080335f5c                DBIsExceptionMarked = 0x80335f5c
+                0x0000000080335f04                __DBExceptionDestinationAux = 0x80335f04
+                0x0000000080335f4c                __DBExceptionDestination = 0x80335f4c
+                0x0000000080335f5c                __DBIsExceptionMarked = 0x80335f5c
                 0x0000000080335f78                DBPrintf = 0x80335f78
                 0x0000000080335fc8                DSPCheckMailToDSP = 0x80335fc8
                 0x0000000080335fd8                DSPCheckMailFromDSP = 0x80335fd8
@@ -2885,14 +2830,14 @@ LOAD obj/sections/text1.o
                 0x00000000803360cc                DSPCheckInit = 0x803360cc
                 0x00000000803360d4                DSPAddTask = 0x803360d4
                 0x0000000080336144                DSPAssertTask = 0x80336144
-                0x000000008033620c                DSP_debug_printf = 0x8033620c
-                0x000000008033625c                DSPHandler = 0x8033625c
-                0x0000000080336680                DSP_exec_task = 0x80336680
-                0x0000000080336820                DSP_boot_task = 0x80336820
-                0x00000000803369ac                DSP_insert_task = 0x803369ac
-                0x0000000080336a4c                DSP_remove_task = 0x80336a4c
-                0x0000000080336ae0                DVDInitWA = 0x80336ae0
-                0x0000000080336b20                DVDInterruptHandler = 0x80336b20
+                0x000000008033620c                __DSP_debug_printf = 0x8033620c
+                0x000000008033625c                __DSPHandler = 0x8033625c
+                0x0000000080336680                __DSP_exec_task = 0x80336680
+                0x0000000080336820                __DSP_boot_task = 0x80336820
+                0x00000000803369ac                __DSP_insert_task = 0x803369ac
+                0x0000000080336a4c                __DSP_remove_task = 0x80336a4c
+                0x0000000080336ae0                __DVDInitWA = 0x80336ae0
+                0x0000000080336b20                __DVDInterruptHandler = 0x80336b20
                 0x0000000080336e14                DVDAlarmHandler = 0x80336e14
                 0x0000000080336e98                AlarmHandlerForTimeout = 0x80336e98
                 0x0000000080336f08                Read = 0x80336f08
@@ -2910,8 +2855,8 @@ LOAD obj/sections/text1.o
                 0x0000000080337808                DVDLowReset = 0x80337808
                 0x00000000803378c4                DVDLowBreak = 0x803378c4
                 0x00000000803378d8                DVDLowClearCallback = 0x803378d8
-                0x00000000803378f0                DVDLowSetWAType = 0x803378f0
-                0x0000000080337934                DVDFSInit = 0x80337934
+                0x00000000803378f0                __DVDLowSetWAType = 0x803378f0
+                0x0000000080337934                __DVDFSInit = 0x80337934
                 0x000000008033796c                DVDConvertPathToEntrynum = 0x8033796c
                 0x0000000080337c60                DVDFastOpen = 0x80337c60
                 0x0000000080337cd4                DVDClose = 0x80337cd4
@@ -2954,37 +2899,37 @@ LOAD obj/sections/text1.o
                 0x0000000080339f24                cbForCancelSync = 0x80339f24
                 0x0000000080339f48                DVDGetCurrentDiskID = 0x80339f48
                 0x0000000080339f50                DVDCheckDisk = 0x80339f50
-                0x000000008033a034                DVDPrepareResetAsync = 0x8033a034
-                0x000000008033a150                DVDClearWaitingQueue = 0x8033a150
-                0x000000008033a188                DVDPushWaitingQueue = 0x8033a188
-                0x000000008033a1f0                DVDPopWaitingQueue = 0x8033a1f0
-                0x000000008033a290                DVDCheckWaitingQueue = 0x8033a290
-                0x000000008033a2e8                DVDDequeueWaitingQueue = 0x8033a2e8
-                0x000000008033a348                DVDStoreErrorCode = 0x8033a348
+                0x000000008033a034                __DVDPrepareResetAsync = 0x8033a034
+                0x000000008033a150                __DVDClearWaitingQueue = 0x8033a150
+                0x000000008033a188                __DVDPushWaitingQueue = 0x8033a188
+                0x000000008033a1f0                __DVDPopWaitingQueue = 0x8033a1f0
+                0x000000008033a290                __DVDCheckWaitingQueue = 0x8033a290
+                0x000000008033a2e8                __DVDDequeueWaitingQueue = 0x8033a2e8
+                0x000000008033a348                __DVDStoreErrorCode = 0x8033a348
                 0x000000008033a4a0                cb = 0x8033a4a0
-                0x000000008033a578                fstLoad = 0x8033a578
-                0x000000008033a6e0                GXDefaultTexRegionCallback = 0x8033a6e0
-                0x000000008033a75c                GXDefaultTlutRegionCallback = 0x8033a75c
+                0x000000008033a578                __fstLoad = 0x8033a578
+                0x000000008033a6e0                __GXDefaultTexRegionCallback = 0x8033a6e0
+                0x000000008033a75c                __GXDefaultTlutRegionCallback = 0x8033a75c
                 0x000000008033a780                GXInit = 0x8033a780
-                0x000000008033af40                GXInitGX = 0x8033af40
+                0x000000008033af40                __GXInitGX = 0x8033af40
                 0x000000008033b788                GXCPInterruptHandler = 0x8033b788
                 0x000000008033b8c4                GXInitFifoBase = 0x8033b8c4
                 0x000000008033b930                GXInitFifoPtrs = 0x8033b930
                 0x000000008033b9a0                GXInitFifoLimits = 0x8033b9a0
                 0x000000008033b9ac                GXSetCPUFifo = 0x8033b9ac
                 0x000000008033babc                GXSetGPFifo = 0x8033babc
-                0x000000008033bc34                GXFifoInit = 0x8033bc34
-                0x000000008033bc80                GXFifoReadEnable = 0x8033bc80
-                0x000000008033bca8                GXFifoReadDisable = 0x8033bca8
-                0x000000008033bccc                GXFifoLink = 0x8033bccc
-                0x000000008033bd10                GXWriteFifoIntEnable = 0x8033bd10
-                0x000000008033bd5c                GXWriteFifoIntReset = 0x8033bd5c
-                0x000000008033bda8                GXXfVtxSpecs = 0x8033bda8
+                0x000000008033bc34                __GXFifoInit = 0x8033bc34
+                0x000000008033bc80                __GXFifoReadEnable = 0x8033bc80
+                0x000000008033bca8                __GXFifoReadDisable = 0x8033bca8
+                0x000000008033bccc                __GXFifoLink = 0x8033bccc
+                0x000000008033bd10                __GXWriteFifoIntEnable = 0x8033bd10
+                0x000000008033bd5c                __GXWriteFifoIntReset = 0x8033bd5c
+                0x000000008033bda8                __GXXfVtxSpecs = 0x8033bda8
                 0x000000008033bf00                GXSetVtxDesc = 0x8033bf00
-                0x000000008033c260                GXSetVCD = 0x8033c260
+                0x000000008033c260                __GXSetVCD = 0x8033c260
                 0x000000008033c3c8                GXClearVtxDesc = 0x8033c3c8
                 0x000000008033c414                GXSetVtxAttrFmt = 0x8033c414
-                0x000000008033c770                GXSetVAT = 0x8033c770
+                0x000000008033c770                __GXSetVAT = 0x8033c770
                 0x000000008033c80c                GXSetArray = 0x8033c80c
                 0x000000008033c898                GXInvalidateVtxCache = 0x8033c898
                 0x000000008033c8a8                GXSetTexCoordGen2 = 0x8033c8a8
@@ -3005,16 +2950,16 @@ LOAD obj/sections/text1.o
                 0x000000008033ce80                GXTokenInterruptHandler = 0x8033ce80
                 0x000000008033cf08                GXSetDrawDoneCallback = 0x8033cf08
                 0x000000008033cf4c                GXFinishInterruptHandler = 0x8033cf4c
-                0x000000008033cfd0                GXPEInit = 0x8033cfd0
-                0x000000008033d050                GXSetDirtyState = 0x8033d050
+                0x000000008033cfd0                __GXPEInit = 0x8033cfd0
+                0x000000008033d050                __GXSetDirtyState = 0x8033d050
                 0x000000008033d0dc                GXBegin = 0x8033d0dc
-                0x000000008033d1b8                GXSendFlushPrim = 0x8033d1b8
+                0x000000008033d1b8                __GXSendFlushPrim = 0x8033d1b8
                 0x000000008033d240                GXSetLineWidth = 0x8033d240
                 0x000000008033d298                GXSetPointSize = 0x8033d298
                 0x000000008033d2ec                GXEnableTexOffsets = 0x8033d2ec
                 0x000000008033d350                GXSetCullMode = 0x8033d350
                 0x000000008033d3a0                GXSetCoPlanar = 0x8033d3a0
-                0x000000008033d3e4                GXSetGenMode = 0x8033d3e4
+                0x000000008033d3e4                __GXSetGenMode = 0x8033d3e4
                 0x000000008033d408                GXSetDispCopySrc = 0x8033d408
                 0x000000008033d4c8                GXSetTexCopySrc = 0x8033d4c8
                 0x000000008033d588                GXSetDispCopyDst = 0x8033d588
@@ -3042,7 +2987,7 @@ LOAD obj/sections/text1.o
                 0x000000008033e55c                GXSetNumChans = 0x8033e55c
                 0x000000008033e5a8                GXSetChanCtrl = 0x8033e5a8
                 0x000000008033e78c                GXGetTexBufferSize = 0x8033e78c
-                0x000000008033e8e8                GetImageTileCount = 0x8033e8e8
+                0x000000008033e8e8                __GetImageTileCount = 0x8033e8e8
                 0x000000008033e9b0                GXInitTexObj = 0x8033e9b0
                 0x000000008033ec24                GXInitTexObjCI = 0x8033ec24
                 0x000000008033ec6c                GXInitTexObjLOD = 0x8033ec6c
@@ -3058,17 +3003,17 @@ LOAD obj/sections/text1.o
                 0x000000008033f270                GXInvalidateTexAll = 0x8033f270
                 0x000000008033f2b8                GXSetTexRegionCallback = 0x8033f2b8
                 0x000000008033f2cc                GXSetTlutRegionCallback = 0x8033f2cc
-                0x000000008033f2e0                SetSURegs = 0x8033f2e0
-                0x000000008033f3ac                GXSetSUTexRegs = 0x8033f3ac
-                0x000000008033f518                GXSetTmemConfig = 0x8033f518
+                0x000000008033f2e0                __SetSURegs = 0x8033f2e0
+                0x000000008033f3ac                __GXSetSUTexRegs = 0x8033f3ac
+                0x000000008033f518                __GXSetTmemConfig = 0x8033f518
                 0x000000008033f758                GXSetTevIndirect = 0x8033f758
                 0x000000008033f7f4                GXSetIndTexMtx = 0x8033f7f4
                 0x000000008033f954                GXSetIndTexCoordScale = 0x8033f954
                 0x000000008033fb28                GXSetIndTexOrder = 0x8033fb28
                 0x000000008033fc60                GXSetNumIndStages = 0x8033fc60
                 0x000000008033fc8c                GXSetTevDirect = 0x8033fc8c
-                0x000000008033fcd4                GXUpdateBPMask = 0x8033fcd4
-                0x000000008033fda0                GXFlushTextureState = 0x8033fda0
+                0x000000008033fcd4                __GXUpdateBPMask = 0x8033fcd4
+                0x000000008033fda0                __GXFlushTextureState = 0x8033fda0
                 0x000000008033fdc4                GXSetTevOp = 0x8033fdc4
                 0x000000008033ff68                GXSetTevColorIn = 0x8033ff68
                 0x000000008033ffe8                GXSetTevAlphaIn = 0x8033ffe8
@@ -3099,7 +3044,7 @@ LOAD obj/sections/text1.o
                 0x0000000080340fc8                GXSetDstAlpha = 0x80340fc8
                 0x000000008034101c                GXSetFieldMask = 0x8034101c
                 0x0000000080341054                GXSetFieldMode = 0x80341054
-                0x00000000803410d4                GXSetRange = 0x803410d4
+                0x00000000803410d4                __GXSetRange = 0x803410d4
                 0x00000000803410d8                GXCallDisplayList = 0x803410d8
                 0x0000000080341148                GXProject = 0x80341148
                 0x00000000803412bc                GXSetProjectionv = 0x803412bc
@@ -3117,7 +3062,7 @@ LOAD obj/sections/text1.o
                 0x000000008034175c                GXSetScissor = 0x8034175c
                 0x000000008034180c                GXSetScissorBoxOffset = 0x8034180c
                 0x0000000080341850                GXSetClipMode = 0x80341850
-                0x0000000080341878                GXSetMatrixIndex = 0x80341878
+                0x0000000080341878                __GXSetMatrixIndex = 0x80341878
                 0x00000000803418fc                GXSetGPMetric = 0x803418fc
                 0x0000000080342194                GXClearGPMetric = 0x80342194
                 0x00000000803421a4                PSMTXIdentity = 0x803421a4
@@ -3151,13 +3096,13 @@ LOAD obj/sections/text1.o
                 0x0000000080342ebc                ClearArena = 0x80342ebc
                 0x0000000080342fc8                OSInit = 0x80342fc8
                 0x000000008034330c                OSExceptionInit = 0x8034330c
-                0x000000008034358c                OSDBIntegrator = 0x8034358c
-                0x00000000803435b0                OSDBJump = 0x803435b0
-                0x00000000803435b4                OSSetExceptionHandler = 0x803435b4
-                0x00000000803435d0                OSGetExceptionHandler = 0x803435d0
+                0x000000008034358c                __OSDBIntegrator = 0x8034358c
+                0x00000000803435b0                __OSDBJump = 0x803435b0
+                0x00000000803435b4                __OSSetExceptionHandler = 0x803435b4
+                0x00000000803435d0                __OSGetExceptionHandler = 0x803435d0
                 0x00000000803435e4                OSExceptionVector = 0x803435e4
-                0x00000000803436d4                OSPSInit = 0x803436d4
-                0x000000008034370c                OSGetDIConfig = 0x8034370c
+                0x00000000803436d4                __OSPSInit = 0x803436d4
+                0x000000008034370c                __OSGetDIConfig = 0x8034370c
                 0x0000000080343720                OSInitAlarm = 0x80343720
                 0x000000008034376c                OSCreateAlarm = 0x8034376c
                 0x0000000080343778                InsertAlarm = 0x80343778
@@ -3180,8 +3125,8 @@ LOAD obj/sections/text1.o
                 0x00000000803444e0                OSSetArenaLo = 0x803444e0
                 0x00000000803444e8                OSAllocFromArenaLo = 0x803444e8
                 0x0000000080344514                OSAllocFromArenaHi = 0x80344514
-                0x0000000080344534                OSInitAudioSystem = 0x80344534
-                0x00000000803446f0                OSStopAudioSystem = 0x803446f0
+                0x0000000080344534                __OSInitAudioSystem = 0x80344534
+                0x00000000803446f0                __OSStopAudioSystem = 0x803446f0
                 0x00000000803447c8                DCEnable = 0x803447c8
                 0x00000000803447dc                DCInvalidateRange = 0x803447dc
                 0x000000008034480c                DCFlushRange = 0x8034480c
@@ -3191,7 +3136,7 @@ LOAD obj/sections/text1.o
                 0x00000000803448d4                ICInvalidateRange = 0x803448d4
                 0x000000008034490c                ICFlashInvalidate = 0x8034490c
                 0x000000008034491c                ICEnable = 0x8034491c
-                0x00000000803449fc                LCEnable = 0x80344930
+                0x0000000080344930                __LCEnable = 0x80344930
                 0x00000000803449fc                LCEnable = 0x803449fc
                 0x0000000080344a34                LCDisable = 0x80344a34
                 0x0000000080344a5c                LCStoreBlocks = 0x80344a5c
@@ -3199,9 +3144,9 @@ LOAD obj/sections/text1.o
                 0x0000000080344b2c                LCQueueWait = 0x80344b2c
                 0x0000000080344b44                L2GlobalInvalidate = 0x80344b44
                 0x0000000080344bdc                DMAErrorHandler = 0x80344bdc
-                0x0000000080344d3c                OSCacheInit = 0x80344d3c
-                0x000000008034507c                OSLoadFPUContext = 0x80344e30
-                0x0000000080345084                OSSaveFPUContext = 0x80344f54
+                0x0000000080344d3c                __OSCacheInit = 0x80344d3c
+                0x0000000080344e30                __OSLoadFPUContext = 0x80344e30
+                0x0000000080344f54                __OSSaveFPUContext = 0x80344f54
                 0x000000008034507c                OSLoadFPUContext = 0x8034507c
                 0x0000000080345084                OSSaveFPUContext = 0x80345084
                 0x000000008034508c                OSSetCurrentContext = 0x8034508c
@@ -3213,11 +3158,11 @@ LOAD obj/sections/text1.o
                 0x0000000080345278                OSInitContext = 0x80345278
                 0x0000000080345334                OSDumpContext = 0x80345334
                 0x00000000803455dc                OSSwitchFPUContext = 0x803455dc
-                0x0000000080345660                OSContextInit = 0x80345660
+                0x0000000080345660                __OSContextInit = 0x80345660
                 0x00000000803456a8                OSReport = 0x803456a8
                 0x0000000080345728                OSPanic = 0x80345728
                 0x0000000080345854                OSSetErrorHandler = 0x80345854
-                0x0000000080345870                OSUnhandledException = 0x80345870
+                0x0000000080345870                __OSUnhandledException = 0x80345870
                 0x0000000080345a70                SetExiInterruptMask = 0x80345a70
                 0x0000000080345b64                EXIImm = 0x80345b64
                 0x0000000080345dc0                EXIImmEx = 0x80345dc0
@@ -3225,7 +3170,7 @@ LOAD obj/sections/text1.o
                 0x0000000080345f4c                EXISync = 0x80345f4c
                 0x0000000080346154                EXIClearInterrupts = 0x80346154
                 0x000000008034619c                EXISetExiCallback = 0x8034619c
-                0x000000008034638c                EXIProbe = 0x80346218
+                0x0000000080346218                __EXIProbe = 0x80346218
                 0x000000008034638c                EXIProbe = 0x8034638c
                 0x000000008034640c                EXIProbeEx = 0x8034640c
                 0x00000000803464c0                EXIAttach = 0x803464c0
@@ -3245,45 +3190,45 @@ LOAD obj/sections/text1.o
                 0x0000000080347364                OSDisableInterrupts = 0x80347364
                 0x0000000080347378                OSEnableInterrupts = 0x80347378
                 0x000000008034738c                OSRestoreInterrupts = 0x8034738c
-                0x00000000803473b0                OSSetInterruptHandler = 0x803473b0
-                0x00000000803473cc                OSGetInterruptHandler = 0x803473cc
-                0x00000000803473e0                OSInterruptInit = 0x803473e0
+                0x00000000803473b0                __OSSetInterruptHandler = 0x803473b0
+                0x00000000803473cc                __OSGetInterruptHandler = 0x803473cc
+                0x00000000803473e0                __OSInterruptInit = 0x803473e0
                 0x0000000080347454                SetInterruptMask = 0x80347454
-                0x000000008034772c                OSMaskInterrupts = 0x8034772c
-                0x00000000803477b4                OSUnmaskInterrupts = 0x803477b4
-                0x000000008034783c                OSDispatchInterrupt = 0x8034783c
+                0x000000008034772c                __OSMaskInterrupts = 0x8034772c
+                0x00000000803477b4                __OSUnmaskInterrupts = 0x803477b4
+                0x000000008034783c                __OSDispatchInterrupt = 0x8034783c
                 0x0000000080347b80                ExternalInterruptHandler = 0x80347b80
-                0x0000000080347bcc                OSModuleInit = 0x80347bcc
+                0x0000000080347bcc                __OSModuleInit = 0x80347bcc
                 0x0000000080347be4                OSGetPhysicalMemSize = 0x80347be4
                 0x0000000080347bf0                OSGetConsoleSimulatedMemSize = 0x80347bf0
                 0x0000000080347bfc                OSOnReset = 0x80347bfc
                 0x0000000080347c38                MEMIntrruptHandler = 0x80347c38
                 0x0000000080347ca4                Config24MB = 0x80347ca4
                 0x0000000080347da4                RealMode = 0x80347da4
-                0x0000000080347dbc                OSInitMemoryProtection = 0x80347dbc
-                0x0000000080347edc                OSUnlockAllMutex = 0x80347edc
-                0x0000000080347f4c                OSCheckMutex = 0x80347f4c
-                0x000000008034804c                OSCheckDeadLock = 0x8034804c
-                0x0000000080348084                OSCheckMutexes = 0x80348084
+                0x0000000080347dbc                __OSInitMemoryProtection = 0x80347dbc
+                0x0000000080347edc                __OSUnlockAllMutex = 0x80347edc
+                0x0000000080347f4c                __OSCheckMutex = 0x80347f4c
+                0x000000008034804c                __OSCheckDeadLock = 0x8034804c
+                0x0000000080348084                __OSCheckMutexes = 0x80348084
                 0x0000000080348138                Callback = 0x80348138
-                0x0000000080348144                OSReboot = 0x80348144
+                0x0000000080348144                __OSReboot = 0x80348144
                 0x0000000080348310                OSRegisterResetFunction = 0x80348310
                 0x0000000080348394                Reset = 0x80348394
-                0x0000000080348404                OSDoHotReset = 0x80348404
+                0x0000000080348404                __OSDoHotReset = 0x80348404
                 0x000000008034844c                OSResetSystem = 0x8034844c
                 0x00000000803486b4                OSGetResetCode = 0x803486b4
-                0x00000000803486e4                OSResetSWInterruptHandler = 0x803486e4
+                0x00000000803486e4                __OSResetSWInterruptHandler = 0x803486e4
                 0x00000000803487d8                OSGetResetButtonState = 0x803487d8
                 0x0000000080348a70                OSGetResetSwitchState = 0x80348a70
                 0x0000000080348a90                WriteSramCallback = 0x80348a90
                 0x0000000080348af0                WriteSram = 0x80348af0
-                0x0000000080348c08                OSInitSram = 0x80348c08
-                0x0000000080348d3c                OSLockSram = 0x80348d3c
-                0x0000000080348d98                OSLockSramEx = 0x80348d98
+                0x0000000080348c08                __OSInitSram = 0x80348c08
+                0x0000000080348d3c                __OSLockSram = 0x80348d3c
+                0x0000000080348d98                __OSLockSramEx = 0x80348d98
                 0x0000000080348df4                UnlockSram = 0x80348df4
-                0x00000000803490fc                OSUnlockSram_2 = 0x803490fc
-                0x0000000080349120                OSUnlockSramEx = 0x80349120
-                0x0000000080349144                OSSyncSram = 0x80349144
+                0x00000000803490fc                __OSUnlockSram_2 = 0x803490fc
+                0x0000000080349120                __OSUnlockSramEx = 0x80349120
+                0x0000000080349144                __OSSyncSram = 0x80349144
                 0x0000000080349154                OSGetSoundMode = 0x80349154
                 0x00000000803491d4                OSSetSoundMode = 0x803491d4
                 0x0000000080349278                OSGetProgressiveMode = 0x80349278
@@ -3298,7 +3243,7 @@ LOAD obj/sections/text1.o
                 0x0000000080349bf0                SIRegisterPollingHandler = 0x80349bf0
                 0x0000000080349cbc                SIUnregisterPollingHandler = 0x80349cbc
                 0x0000000080349db0                SIInit = 0x80349db0
-                0x000000008034a47c                SITransfer = 0x80349e44
+                0x0000000080349e44                __SITransfer = 0x80349e44
                 0x000000008034a050                SIGetStatus = 0x8034a050
                 0x000000008034a0cc                SISetCommand = 0x8034a0cc
                 0x000000008034a0e0                SITransferCommands = 0x8034a0e0
@@ -3313,17 +3258,17 @@ LOAD obj/sections/text1.o
                 0x000000008034a880                SIGetType = 0x8034a880
                 0x000000008034aa44                SIGetTypeAsync = 0x8034aa44
                 0x000000008034ab80                SystemCallVector = 0x8034ab80
-                0x000000008034aba0                OSInitSystemCall = 0x8034aba0
-                0x000000008034ac04                OSThreadInit = 0x8034ac04
+                0x000000008034aba0                __OSInitSystemCall = 0x8034aba0
+                0x000000008034ac04                __OSThreadInit = 0x8034ac04
                 0x000000008034ad2c                OSInitThreadQueue = 0x8034ad2c
                 0x000000008034ad3c                OSGetCurrentContext = 0x8034ad3c
                 0x000000008034ad48                OSDisableScheduler = 0x8034ad48
                 0x000000008034ad88                OSEnableScheduler = 0x8034ad88
                 0x000000008034adc8                UnsetRun = 0x8034adc8
-                0x000000008034ae30                OSGetEffectivePriority = 0x8034ae30
+                0x000000008034ae30                __OSGetEffectivePriority = 0x8034ae30
                 0x000000008034ae6c                SetEffectivePriority = 0x8034ae6c
                 0x000000008034b02c                SelectThread = 0x8034b02c
-                0x000000008034b22c                OSReschedule = 0x8034b22c
+                0x000000008034b22c                __OSReschedule = 0x8034b22c
                 0x000000008034b25c                OSCreateThread = 0x8034b25c
                 0x000000008034b37c                OSExitThread = 0x8034b37c
                 0x000000008034b460                OSCancelThread = 0x8034b460
@@ -3335,13 +3280,13 @@ LOAD obj/sections/text1.o
                 0x000000008034bca0                OSCheckActiveThreads = 0x8034bca0
                 0x000000008034c3f0                OSGetTime = 0x8034c3f0
                 0x000000008034c408                OSGetTick = 0x8034c408
-                0x000000008034c410                OSGetSystemTime = 0x8034c410
-                0x000000008034c474                OSTimeToSystemTime = 0x8034c474
+                0x000000008034c410                __OSGetSystemTime = 0x8034c410
+                0x000000008034c474                __OSTimeToSystemTime = 0x8034c474
                 0x000000008034c4cc                GetDates = 0x8034c4cc
                 0x000000008034c668                OSTicksToCalendarTime = 0x8034c668
-                0x000000008034cabc                init_user = 0x8034cabc
-                0x000000008034cadc                init_cpp = 0x8034cadc
-                0x000000008034cb30                ExitProcess = 0x8034cb30
+                0x000000008034cabc                __init_user = 0x8034cabc
+                0x000000008034cadc                __init_cpp = 0x8034cadc
+                0x000000008034cb30                _ExitProcess = 0x8034cb30
                 0x000000008034cb50                ClampStick = 0x8034cb50
                 0x000000008034cc80                PADClamp = 0x8034cc80
                 0x000000008034cd88                UpdateOrigin = 0x8034cd88
@@ -3364,12 +3309,12 @@ LOAD obj/sections/text1.o
                 0x000000008034e6a0                PADOnReset = 0x8034e6a0
                 0x000000008034e834                SamplingHandler = 0x8034e834
                 0x000000008034e894                PADSetSamplingCallback = 0x8034e894
-                0x000000008034e8e8                PADDisableRecalibration = 0x8034e8e8
-                0x000000008034e964                VIRetraceHandler = 0x8034e964
+                0x000000008034e8e8                __PADDisableRecalibration = 0x8034e8e8
+                0x000000008034e964                __VIRetraceHandler = 0x8034e964
                 0x000000008034eb8c                VISetPreRetraceCallback = 0x8034eb8c
                 0x000000008034ebd0                VISetPostRetraceCallback = 0x8034ebd0
                 0x000000008034ec14                getTiming = 0x8034ec14
-                0x000000008034ee9c                VIInit = 0x8034eca4
+                0x000000008034eca4                __VIInit = 0x8034eca4
                 0x000000008034ee9c                VIInit = 0x8034ee9c
                 0x000000008034f314                VIWaitForRetrace = 0x8034f314
                 0x000000008034f368                setFbbRegs = 0x8034f368
@@ -3391,101 +3336,101 @@ LOAD obj/sections/text1.o
                 0x00000000803505a0                AIGetStreamPlayState_1 = 0x803505a0
                 0x00000000803505b0                AISetDSPSampleRate = 0x803505b0
                 0x0000000080350690                AIGetDSPSampleRate = 0x80350690
-                0x00000000803506a4                AI_set_stream_sample_rate = 0x803506a4
+                0x00000000803506a4                __AI_set_stream_sample_rate = 0x803506a4
                 0x0000000080350778                AIGetStreamSampleRate = 0x80350778
                 0x0000000080350788                AISetStreamVolLeft = 0x80350788
                 0x00000000803507a4                AIGetStreamPlayState_2 = 0x803507a4
                 0x00000000803507b4                AISetStreamVolRight = 0x803507b4
                 0x00000000803507d0                AIGetStreamPlayState_3 = 0x803507d0
                 0x00000000803507e0                AIInit = 0x803507e0
-                0x0000000080350944                AISHandler = 0x80350944
-                0x00000000803509c0                AIDHandler = 0x803509c0
-                0x0000000080350a50                AICallbackStackSwitch = 0x80350a50
-                0x0000000080350aa8                AI_SRC_INIT = 0x80350aa8
+                0x0000000080350944                __AISHandler = 0x80350944
+                0x00000000803509c0                __AIDHandler = 0x803509c0
+                0x0000000080350a50                __AICallbackStackSwitch = 0x80350a50
+                0x0000000080350aa8                __AI_SRC_INIT = 0x80350aa8
                 0x0000000080350c8c                AIRegisterDMACallback = 0x80350c8c
                 0x0000000080350cd0                ARStartDMA = 0x80350cd0
                 0x0000000080350e28                ARAlloc = 0x80350dc0
                 0x0000000080350e28                ARAlloc = 0x80350e28
                 0x0000000080350e9c                ARInit = 0x80350e9c
                 0x0000000080350f90                ARGet_BaseAddressOrSizeOrInternalSize = 0x80350f90
-                0x0000000080350f98                ARHandler = 0x80350f98
-                0x0000000080351010                ARChecksize = 0x80351010
-                0x0000000080351edc                ARQServiceQueueLo = 0x80351edc
-                0x0000000080351fe0                ARQInterruptServiceRoutine = 0x80351fe0
+                0x0000000080350f98                __ARHandler = 0x80350f98
+                0x0000000080351010                __ARChecksize = 0x80351010
+                0x0000000080351edc                __ARQServiceQueueLo = 0x80351edc
+                0x0000000080351fe0                __ARQInterruptServiceRoutine = 0x80351fe0
                 0x00000000803520ac                ARQInit = 0x803520ac
                 0x0000000080352114                ARQPostRequest = 0x80352114
-                0x0000000080352270                CARDDefaultApiCallback = 0x80352270
-                0x0000000080352274                CARDSyncCallback = 0x80352274
-                0x00000000803522a8                CARDExtHandler = 0x803522a8
-                0x0000000080352380                CARDExiHandler = 0x80352380
-                0x0000000080352498                CARDTxHandler = 0x80352498
-                0x0000000080352540                CARDUnlockedHandler = 0x80352540
-                0x00000000803525c4                CARDEnableInterrupt = 0x803525c4
-                0x0000000080352684                CARDReadStatus = 0x80352684
-                0x0000000080352774                CARDClearStatus = 0x80352774
+                0x0000000080352270                __CARDDefaultApiCallback = 0x80352270
+                0x0000000080352274                __CARDSyncCallback = 0x80352274
+                0x00000000803522a8                __CARDExtHandler = 0x803522a8
+                0x0000000080352380                __CARDExiHandler = 0x80352380
+                0x0000000080352498                __CARDTxHandler = 0x80352498
+                0x0000000080352540                __CARDUnlockedHandler = 0x80352540
+                0x00000000803525c4                __CARDEnableInterrupt = 0x803525c4
+                0x0000000080352684                __CARDReadStatus = 0x80352684
+                0x0000000080352774                __CARDClearStatus = 0x80352774
                 0x0000000080352820                TimeoutHandler = 0x80352820
                 0x00000000803528c4                Retry = 0x803528c4
                 0x0000000080352af0                UnlockedCallback = 0x80352af0
-                0x0000000080352c00                CARDStart = 0x80352c00
-                0x0000000080352db4                CARDReadSegment = 0x80352db4
-                0x0000000080352ee8                CARDWritePage = 0x80352ee8
-                0x0000000080353004                CARDEraseSector = 0x80353004
+                0x0000000080352c00                __CARDStart = 0x80352c00
+                0x0000000080352db4                __CARDReadSegment = 0x80352db4
+                0x0000000080352ee8                __CARDWritePage = 0x80352ee8
+                0x0000000080353004                __CARDEraseSector = 0x80353004
                 0x00000000803530e4                CARDInit = 0x803530e4
-                0x0000000080353180                CARDSetDiskID = 0x80353180
-                0x00000000803531b8                CARDGetControlBlock = 0x803531b8
-                0x0000000080353270                CARDPutControlBlock = 0x80353270
+                0x0000000080353180                __CARDSetDiskID = 0x80353180
+                0x00000000803531b8                __CARDGetControlBlock = 0x803531b8
+                0x0000000080353270                __CARDPutControlBlock = 0x80353270
                 0x00000000803532d4                CARDFreeBlocks = 0x803532d4
-                0x0000000080353424                CARDSync = 0x80353424
+                0x0000000080353424                __CARDSync = 0x80353424
                 0x00000000803534bc                CARDOnReset = 0x803534bc
                 0x000000008035350c                bitrev = 0x8035350c
                 0x0000000080353678                ReadArrayUnlock = 0x80353678
                 0x00000000803537bc                DummyLen = 0x803537bc
-                0x0000000080353850                CARDUnlock = 0x80353850
+                0x0000000080353850                __CARDUnlock = 0x80353850
                 0x000000008035438c                InitCallback = 0x8035438c
                 0x00000000803543fc                DoneCallback = 0x803543fc
                 0x0000000080354860                BlockReadCallback = 0x80354720
-                0x0000000080357e88                CARDRead = 0x803547fc
+                0x00000000803547fc                __CARDRead = 0x803547fc
                 0x0000000080354860                BlockReadCallback = 0x80354860
-                0x0000000080358204                CARDWrite = 0x8035493c
+                0x000000008035493c                __CARDWrite = 0x8035493c
                 0x00000000803549a0                CARDGetXferredBytes = 0x803549a0
-                0x00000000803549b8                CARDGetFatBlock = 0x803549b8
+                0x00000000803549b8                __CARDGetFatBlock = 0x803549b8
                 0x00000000803549c0                WriteCallback_1 = 0x803549c0
                 0x0000000080354a94                EraseCallback_1 = 0x80354a94
-                0x0000000080354b5c                CARDAllocBlock = 0x80354b5c
-                0x0000000080354c74                CARDFreeBlock = 0x80354c74
-                0x0000000080354d10                CARDUpdateFatBlock = 0x80354d10
-                0x0000000080354dbc                CARDGetDirBlock = 0x80354dbc
+                0x0000000080354b5c                __CARDAllocBlock = 0x80354b5c
+                0x0000000080354c74                __CARDFreeBlock = 0x80354c74
+                0x0000000080354d10                __CARDUpdateFatBlock = 0x80354d10
+                0x0000000080354dbc                __CARDGetDirBlock = 0x80354dbc
                 0x0000000080354dc4                WriteCallback_2 = 0x80354dc4
                 0x0000000080354e94                EraseCallback_2 = 0x80354e94
-                0x0000000080354f5c                CARDUpdateDir = 0x80354f5c
-                0x0000000080355020                CARDCheckSum = 0x80355020
+                0x0000000080354f5c                __CARDUpdateDir = 0x80354f5c
+                0x0000000080355020                __CARDCheckSum = 0x80355020
                 0x00000000803551d0                VerifyID = 0x803551d0
                 0x0000000080355454                VerifyDir = 0x80355454
                 0x0000000080355694                VerifyFAT = 0x80355694
-                0x0000000080355918                CARDVerify = 0x80355918
+                0x0000000080355918                __CARDVerify = 0x80355918
                 0x00000000803559a4                CARDCheckExAsync = 0x803559a4
                 0x0000000080355f34                CARDCheckAsync = 0x80355f34
                 0x0000000080355f5c                CARDProbe = 0x80355f5c
                 0x0000000080355f94                CARDProbeEx = 0x80355f94
                 0x0000000080356130                DoMount = 0x80356130
-                0x0000000080356580                CARDMountCallback = 0x80356580
+                0x0000000080356580                __CARDMountCallback = 0x80356580
                 0x0000000080356688                CARDMountAsync = 0x80356688
                 0x0000000080356828                DoUnmount = 0x80356828
                 0x00000000803568c4                CARDUnmount = 0x803568c4
                 0x0000000080356970                FormatCallback = 0x80356970
-                0x0000000080356ab4                CARDFormatRegionAsync = 0x80356ab4
+                0x0000000080356ab4                __CARDFormatRegionAsync = 0x80356ab4
                 0x000000008035710c                CARDFormatAsync = 0x8035710c
-                0x0000000080357154                CARDCompareFileName = 0x80357154
-                0x00000000803571bc                CARDAccess = 0x803571bc
-                0x0000000080357254                CARDIsPublic = 0x80357254
-                0x0000000080357284                CARDGetFileNo = 0x80357284
+                0x0000000080357154                __CARDCompareFileName = 0x80357154
+                0x00000000803571bc                __CARDAccess = 0x803571bc
+                0x0000000080357254                __CARDIsPublic = 0x80357254
+                0x0000000080357284                __CARDGetFileNo = 0x80357284
                 0x00000000803573d4                CARDFastOpen = 0x803573d4
                 0x0000000080357534                CARDOpen = 0x80357534
                 0x00000000803576ac                CARDClose = 0x803576ac
-                0x0000000080357700                CARDIsOpened = 0x80357700
+                0x0000000080357700                __CARDIsOpened = 0x80357700
                 0x0000000080357708                CreateCallbackFat = 0x80357708
                 0x0000000080357838                CARDCreateAsync = 0x80357838
-                0x0000000080357a58                CARDSeek = 0x80357a58
+                0x0000000080357a58                __CARDSeek = 0x80357a58
                 0x0000000080357c10                ReadCallback = 0x80357c10
                 0x0000000080357d40                CARDReadAsync = 0x80357d40
                 0x0000000080357e88                CARDRead = 0x80357e88
@@ -3500,46 +3445,46 @@ LOAD obj/sections/text1.o
                 0x0000000080358724                CARDSetStatusAsync = 0x80358724
                 0x0000000080358898                CARDRenameAsync = 0x80358898
                 0x0000000080358a94                AXInitEx = 0x80358a94
-                0x0000000080358ac8                AXGetStackHead = 0x80358ac8
-                0x0000000080358ae0                AXServiceCallbackStack = 0x80358ae0
-                0x0000000080358b60                AXAllocInit = 0x80358b60
-                0x0000000080358c14                AXPushFreeStack = 0x80358c14
-                0x0000000080358c34                AXPushCallbackStack = 0x80358c34
-                0x0000000080358c44                AXPopCallbackStack = 0x80358c44
-                0x0000000080358c60                AXRemoveFromStack = 0x80358c60
+                0x0000000080358ac8                __AXGetStackHead = 0x80358ac8
+                0x0000000080358ae0                __AXServiceCallbackStack = 0x80358ae0
+                0x0000000080358b60                __AXAllocInit = 0x80358b60
+                0x0000000080358c14                __AXPushFreeStack = 0x80358c14
+                0x0000000080358c34                __AXPushCallbackStack = 0x80358c34
+                0x0000000080358c44                __AXPopCallbackStack = 0x80358c44
+                0x0000000080358c60                __AXRemoveFromStack = 0x80358c60
                 0x0000000080358cf4                AXFreeVoice = 0x80358cf4
                 0x0000000080358d74                AXAcquireVoice = 0x80358d74
                 0x0000000080358ee8                AXSetVoicePriority = 0x80358ee8
-                0x0000000080358f90                AXAuxInit = 0x80358f90
-                0x000000008035906c                AXGetAuxAInput = 0x8035906c
-                0x00000000803590a0                AXGetAuxAInputDpl2 = 0x803590a0
-                0x00000000803590bc                AXGetAuxBInput = 0x803590bc
-                0x00000000803590f0                AXGetAuxBOutput = 0x803590f0
-                0x000000008035910c                AXProcessAux = 0x8035910c
+                0x0000000080358f90                __AXAuxInit = 0x80358f90
+                0x000000008035906c                __AXGetAuxAInput = 0x8035906c
+                0x00000000803590a0                __AXGetAuxAInputDpl2 = 0x803590a0
+                0x00000000803590bc                __AXGetAuxBInput = 0x803590bc
+                0x00000000803590f0                __AXGetAuxBOutput = 0x803590f0
+                0x000000008035910c                __AXProcessAux = 0x8035910c
                 0x000000008035929c                AXRegisterAuxACallback = 0x8035929c
                 0x00000000803592a8                AXRegisterAuxBCallback = 0x803592a8
-                0x00000000803592b4                AXGetCommandListCycles = 0x803592b4
-                0x00000000803592bc                AXGetCommandListAddress = 0x803592bc
-                0x00000000803592f8                AXNextFrame = 0x803592f8
-                0x0000000080359708                AXClInit = 0x80359708
-                0x0000000080359724                AXOutNewFrame = 0x80359724
-                0x00000000803598ac                AXOutAiCallback = 0x803598ac
-                0x0000000080359914                AXDSPInitCallback = 0x80359914
-                0x0000000080359920                AXDSPResumeCallback = 0x80359920
-                0x0000000080359978                AXDSPDoneCallback = 0x80359978
-                0x0000000080359984                AXOutInitDSP = 0x80359984
-                0x0000000080359a48                AXOutInit = 0x80359a48
+                0x00000000803592b4                __AXGetCommandListCycles = 0x803592b4
+                0x00000000803592bc                __AXGetCommandListAddress = 0x803592bc
+                0x00000000803592f8                __AXNextFrame = 0x803592f8
+                0x0000000080359708                __AXClInit = 0x80359708
+                0x0000000080359724                __AXOutNewFrame = 0x80359724
+                0x00000000803598ac                __AXOutAiCallback = 0x803598ac
+                0x0000000080359914                __AXDSPInitCallback = 0x80359914
+                0x0000000080359920                __AXDSPResumeCallback = 0x80359920
+                0x0000000080359978                __AXDSPDoneCallback = 0x80359978
+                0x0000000080359984                __AXOutInitDSP = 0x80359984
+                0x0000000080359a48                __AXOutInit = 0x80359a48
                 0x0000000080359d84                AXRegisterCallback = 0x80359d84
-                0x0000000080359d8c                AXGetStudio = 0x80359d8c
-                0x0000000080359d98                AXPrintStudio = 0x80359d98
-                0x000000008035a190                AXSPBInit = 0x8035a190
-                0x000000008035a1bc                AXDepopVoice = 0x8035a1bc
-                0x000000008035a250                AXGetNumVoices = 0x8035a250
-                0x000000008035a258                AXServiceVPB = 0x8035a258
-                0x000000008035a934                AXSyncPBs = 0x8035a934
-                0x000000008035ab7c                AXGetPBs = 0x8035ab7c
-                0x000000008035ab88                AXSetPBDefault = 0x8035ab88
-                0x000000008035abc4                AXVPBInit = 0x8035abc4
+                0x0000000080359d8c                __AXGetStudio = 0x80359d8c
+                0x0000000080359d98                __AXPrintStudio = 0x80359d98
+                0x000000008035a190                __AXSPBInit = 0x8035a190
+                0x000000008035a1bc                __AXDepopVoice = 0x8035a1bc
+                0x000000008035a250                __AXGetNumVoices = 0x8035a250
+                0x000000008035a258                __AXServiceVPB = 0x8035a258
+                0x000000008035a934                __AXSyncPBs = 0x8035a934
+                0x000000008035ab7c                __AXGetPBs = 0x8035ab7c
+                0x000000008035ab88                __AXSetPBDefault = 0x8035ab88
+                0x000000008035abc4                __AXVPBInit = 0x8035abc4
                 0x000000008035adc4                AXSetVoiceState = 0x8035adc4
                 0x000000008035ae20                AXSetVoiceMix = 0x8035ae20
                 0x000000008035b07c                AXSetVoiceItdOn = 0x8035b07c
@@ -3555,7 +3500,7 @@ LOAD obj/sections/text1.o
                 0x000000008035b4dc                AXSetVoiceSrc = 0x8035b4dc
                 0x000000008035b574                AXSetVoiceSrcRatio = 0x8035b574
                 0x000000008035b60c                AXSetVoiceAdpcmLoop = 0x8035b60c
-                0x000000008035b678                AXGetCurrentProfile = 0x8035b678
+                0x000000008035b678                __AXGetCurrentProfile = 0x8035b678
                 0x000000008035b6c0                ReverbHICreate = 0x8035b6c0
                 0x000000008035bbac                DoCrossTalk = 0x8035bbac
                 0x000000008035c910                HandleReverb = 0x8035bd3c
@@ -3579,8 +3524,8 @@ LOAD obj/sections/text1.o
                 0x000000008035da60                AXFXDelaySettings = 0x8035da60
                 0x000000008035dc64                AXFXDelayInit = 0x8035dc64
                 0x000000008035dcac                AXFXDelayShutdown = 0x8035dcac
-                0x000000008035dd3c                AXFXAllocFunction = 0x8035dd3c
-                0x000000008035dd64                AXFXFreeFunction = 0x8035dd64
+                0x000000008035dd3c                __AXFXAllocFunction = 0x8035dd3c
+                0x000000008035dd64                __AXFXFreeFunction = 0x8035dd64
                 0x000000008035dd8c                AXFXSetHooks = 0x8035dd8c
                 0x000000008035dd98                HSD_DObjSetCurrent = 0x8035dd98
                 0x000000008035dda0                HSD_DObjGetFlags = 0x8035dda0
@@ -3614,7 +3559,7 @@ LOAD obj/sections/text1.o
                 0x000000008035ed28                HSD_TObjLoadDesc = 0x8035ed28
                 0x000000008035edc0                HSD_TlutLoadDesc = 0x8035edc0
                 0x000000008035ee14                HSD_TObjTevLoadDesc = 0x8035ee14
-                0x000000008035ee68                HSD_TObjGetCurrentByType = 0x8035ee68
+                0x000000008035ee68                _HSD_TObjGetCurrentByType = 0x8035ee68
                 0x000000008035eea4                HSD_TexMapID2PTTexMtx = 0x8035eea4
                 0x000000008035ef38                MakeTextureMtx = 0x8035ef38
                 0x000000008035f0ec                TObjSetupMtx = 0x8035f0ec
@@ -3662,9 +3607,9 @@ LOAD obj/sections/text1.o
                 0x0000000080361e14                HSD_StateSetDstAlpha = 0x80361e14
                 0x0000000080361e8c                HSD_StateSetZCompLoc = 0x80361e8c
                 0x0000000080361ee0                HSD_StateSetDither = 0x80361ee0
-                0x0000000080361f34                HSD_StateInvalidatePrimitive = 0x80361f34
-                0x0000000080361f4c                HSD_StateInvalidateVtxAttr = 0x80361f4c
-                0x0000000080361f6c                HSD_StateInvalidateRenderMode = 0x80361f6c
+                0x0000000080361f34                _HSD_StateInvalidatePrimitive = 0x80361f34
+                0x0000000080361f4c                _HSD_StateInvalidateVtxAttr = 0x80361f4c
+                0x0000000080361f6c                _HSD_StateInvalidateRenderMode = 0x80361f6c
                 0x0000000080361fc4                HSD_StateInvalidate = 0x80361fc4
                 0x0000000080362024                HSD_RenderInitAllocData = 0x80362024
                 0x0000000080362080                HSD_RenderGetAllocData = 0x80362080
@@ -3687,10 +3632,10 @@ LOAD obj/sections/text1.o
                 0x0000000080362908                HSD_TevStage2Num = 0x80362908
                 0x00000000803629d8                HSD_SetTevRegAll = 0x803629d8
                 0x0000000080362aa4                HSD_TexCoordID2Num = 0x80362aa4
-                0x0000000080362ca0                HSD_StateInvalidateColorChannel = 0x80362ca0
-                0x0000000080362cf8                HSD_StateInvalidateTevStage = 0x80362cf8
-                0x0000000080362d04                HSD_StateInvalidateTevRegister = 0x80362d04
-                0x0000000080362d24                HSD_StateInvalidateTexCoordGen = 0x80362d24
+                0x0000000080362ca0                _HSD_StateInvalidateColorChannel = 0x80362ca0
+                0x0000000080362cf8                _HSD_StateInvalidateTevStage = 0x80362cf8
+                0x0000000080362d04                _HSD_StateInvalidateTevRegister = 0x80362d04
+                0x0000000080362d24                _HSD_StateInvalidateTexCoordGen = 0x80362d24
                 0x0000000080362d30                HSD_MObjSetCurrent = 0x80362d30
                 0x0000000080362d38                HSD_MObjSetFlags = 0x80362d38
                 0x0000000080362d50                HSD_MObjClearFlags = 0x80362d50
@@ -3740,7 +3685,7 @@ LOAD obj/sections/text1.o
                 0x000000008036531c                HSD_AObjSetRewindFrame = 0x8036531c
                 0x000000008036532c                HSD_AObjSetEndFrame = 0x8036532c
                 0x000000008036533c                HSD_AObjSetCurrentFrame = 0x8036533c
-                0x0000000080365390                HSD_AObjForgetMemory = 0x80365390
+                0x0000000080365390                _HSD_AObjForgetMemory = 0x80365390
                 0x000000008036539c                HSD_LObjGetFlags = 0x8036539c
                 0x00000000803653b4                HSD_LObjSetFlags = 0x803653b4
                 0x00000000803653cc                HSD_LObjClearFlags = 0x803653cc
@@ -3982,18 +3927,18 @@ LOAD obj/sections/text1.o
                 0x0000000080373b90                mkHBillBoardMtx = 0x80373b90
                 0x0000000080373e44                mkBillBoardMtx = 0x80373e44
                 0x00000000803740e8                mkRBillBoardMtx = 0x803740e8
-                0x00000000803742ac                HSD_mkEnvelopeModelNodeMtx = 0x803742ac
+                0x00000000803742ac                _HSD_mkEnvelopeModelNodeMtx = 0x803742ac
                 0x00000000803743b8                HSD_JObjDispSub = 0x803743b8
                 0x0000000080374480                HSD_JObjDispDObj = 0x80374480
                 0x0000000080374680                zlist_sort = 0x80374680
-                0x00000000803747f8                HSD_ZListSort = 0x803747f8
-                0x0000000080374848                HSD_ZListDisp = 0x80374848
-                0x0000000080374910                HSD_ZListClear = 0x80374910
+                0x00000000803747f8                _HSD_ZListSort = 0x803747f8
+                0x0000000080374848                _HSD_ZListDisp = 0x80374848
+                0x0000000080374910                _HSD_ZListClear = 0x80374910
                 0x00000000803749b0                HSD_JObjDisp = 0x803749b0
                 0x0000000080374a80                HSD_JObjSetSPtclCallback = 0x80374a80
                 0x0000000080374a88                HSD_SetEraseColor = 0x80374a88
                 0x0000000080374aa0                HSD_EraseRect = 0x80374aa0
-                0x0000000080374e14                HSD_DispForgetMemory = 0x80374e14
+                0x0000000080374e14                _HSD_DispForgetMemory = 0x80374e14
                 0x0000000080374e48                HSD_InitComponent = 0x80374e48
                 0x0000000080374f60                HSD_GXSetFifoObj = 0x80374f60
                 0x0000000080374f78                HSD_DVDInit = 0x80374f78
@@ -4080,7 +4025,7 @@ LOAD obj/sections/text1.o
                 0x000000008037abc8                HSD_ObjAlloc = 0x8037abc8
                 0x000000008037ad20                HSD_ObjFree = 0x8037ad20
                 0x000000008037ad48                HSD_ObjAllocInit = 0x8037ad48
-                0x000000008037ae28                HSD_ObjAllocForgetMemory = 0x8037ae28
+                0x000000008037ae28                _HSD_ObjAllocForgetMemory = 0x8037ae28
                 0x000000008037ae34                HSD_RObjInitAllocData = 0x8037ae34
                 0x000000008037ae78                HSD_RObjGetAllocData = 0x8037ae78
                 0x000000008037ae84                HSD_RvalueObjGetAllocData = 0x8037ae84
@@ -4110,14 +4055,14 @@ LOAD obj/sections/text1.o
                 0x000000008037cab4                bcexpLoadDesc = 0x8037cab4
                 0x000000008037cba4                HSD_RvalueResolveRefsAll = 0x8037cba4
                 0x000000008037cc90                HSD_RObjSetConstraintObj = 0x8037cc90
-                0x000000008037cd5c                HSD_RObjForgetMemory = 0x8037cd5c
+                0x000000008037cd5c                _HSD_RObjForgetMemory = 0x8037cd5c
                 0x000000008037cd80                HSD_IDGetAllocData = 0x8037cd80
                 0x000000008037cd8c                HSD_IDInitAllocData = 0x8037cd8c
                 0x000000008037cdbc                HSD_IDSetup = 0x8037cdbc
                 0x000000008037cdec                HSD_IDInsertToTable = 0x8037cdec
                 0x000000008037cee8                HSD_IDRemoveByIDFromTable = 0x8037cee8
                 0x000000008037cf98                HSD_IDGetDataFromTable = 0x8037cf98
-                0x000000008037d020                HSD_IDForgetMemory = 0x8037d020
+                0x000000008037d020                _HSD_IDForgetMemory = 0x8037d020
                 0x000000008037d050                HSD_WObjRemoveAnim = 0x8037d050
                 0x000000008037d094                HSD_WObjReqAnim = 0x8037d094
                 0x000000008037d0e4                HSD_WObjAddAnim = 0x8037d0e4
@@ -4185,17 +4130,17 @@ LOAD obj/sections/text1.o
                 0x00000000803804f8                HSD_Rand = 0x803804f8
                 0x0000000080380528                HSD_Randf = 0x80380528
                 0x0000000080380580                HSD_Randi = 0x80380580
-                0x00000000803805bc                HSD_RandForgetMemory = 0x803805bc
+                0x00000000803805bc                _HSD_RandForgetMemory = 0x803805bc
                 0x00000000803805dc                HSD_ByteCodeEval = 0x803805dc
                 0x0000000080381c18                hsdInitClassInfo = 0x80381c18
                 0x0000000080381d58                GetMemoryEntry = 0x80381d58
                 0x0000000080381fa8                hsdAllocMemPiece = 0x80381fa8
                 0x000000008038216c                hsdFreeMemPiece = 0x8038216c
-                0x00000000803821c4                hsdClassAlloc = 0x803821c4
-                0x000000008038221c                hsdClassInit = 0x8038221c
-                0x0000000080382224                hsdClassRelease = 0x80382224
-                0x0000000080382228                hsdClassDestroy = 0x80382228
-                0x0000000080382294                hsdClassAmnesia = 0x80382294
+                0x00000000803821c4                _hsdClassAlloc = 0x803821c4
+                0x000000008038221c                _hsdClassInit = 0x8038221c
+                0x0000000080382224                _hsdClassRelease = 0x80382224
+                0x0000000080382228                _hsdClassDestroy = 0x80382228
+                0x0000000080382294                _hsdClassAmnesia = 0x80382294
                 0x0000000080382344                hsdNew = 0x80382344
                 0x0000000080382814                hsdSearchClassInfo = 0x80382814
                 0x0000000080382b40                HSD_HashSearch = 0x80382b40
@@ -4223,8 +4168,10 @@ LOAD obj/sections/text1.o
                 0x00000000803854b4                HSD_TExpCompile = 0x803854b4
                 0x0000000080385758                HSD_TExpFreeTevDesc = 0x80385758
                 0x0000000080385798                assign_reg = 0x80385798
-                0x0000000080388220                assert = 0x80388220
+                0x0000000080388220                __assert = 0x80388220
                 0x0000000080388278                HSD_Panic = 0x80388278
+                0x0000000080388330                Audio_MemAlloc = 0x80388330
+                0x000000008038838c                Audio_Free = 0x8038838c
                 0x0000000080388b50                glx_GetFreeMemory = 0x80388b50
                 0x000000008038b5ac                Music_SongIDStore = 0x8038b5ac
                 0x000000008038bd6c                SFX_StopAll = 0x8038bd6c
@@ -4236,7 +4183,7 @@ LOAD obj/sections/text1.o
                 0x0000000080391070                TextureDisplay = 0x80391070
                 0x00000000803910b4                Started = 0x803910b4
                 0x0000000080392480                SYS_UnknownSysFunc = 0x80392480
-                0x0000000080392528                OSUnlockSram_3 = 0x80392528
+                0x0000000080392528                __OSUnlockSram_3 = 0x80392528
                 0x0000000080392a3c                DevelopMode_CPUProcessorStats = 0x80392a3c
                 0x0000000080392ccc                hioEnumCallback = 0x80392ccc
                 0x0000000080393a5c                UnusedCode_5 = 0x80393a5c
@@ -4319,8 +4266,8 @@ LOAD obj/sections/text1.o
                 0x0000000080003000        0x4 LONG 0x100 text0_offset
                 0x0000000080003004        0x4 LONG 0x2520 text1_offset
                 0x0000000080003008        0x4 LONG 0x4385e0 text2_offset
-                0x000000008000300c        0x4 LONG 0x43fbe8 hooks_offset
-                0x0000000080003010        0x4 LONG 0x0
+                0x000000008000300c        0x4 LONG 0x438ac8 hooks_offset
+                0x0000000080003010        0x4 LONG 0x438d0c ctors_offset
                 0x0000000080003014        0x4 LONG 0x0
                 0x0000000080003018        0x4 LONG 0x0
                 0x000000008000301c        0x4 LONG 0x3b3e20 data0_offset
@@ -4331,14 +4278,14 @@ LOAD obj/sections/text1.o
                 0x0000000080003030        0x4 LONG 0x3b6840 data5_offset
                 0x0000000080003034        0x4 LONG 0x42e6c0 data6_offset
                 0x0000000080003038        0x4 LONG 0x4313c0 data7_offset
-                0x000000008000303c        0x4 LONG 0x43fc58 data8_offset
+                0x000000008000303c        0x4 LONG 0x438ad8 data8_offset
                 0x0000000080003040        0x4 LONG 0x0
                 0x0000000080003044        0x4 LONG 0x0
                 0x0000000080003048        0x4 LONG 0x80003100 text0_base
                 0x000000008000304c        0x4 LONG 0x80005940 text1_base
                 0x0000000080003050        0x4 LONG 0x804dec00 text2_base
-                0x0000000080003054        0x4 LONG 0x804e6208 hooks_base
-                0x0000000080003058        0x4 LONG 0x0
+                0x0000000080003054        0x4 LONG 0x804df100 hooks_base
+                0x0000000080003058        0x4 LONG 0x804df360 ctors_base
                 0x000000008000305c        0x4 LONG 0x0
                 0x0000000080003060        0x4 LONG 0x0
                 0x0000000080003064        0x4 LONG 0x80005520 data0_base
@@ -4349,14 +4296,14 @@ LOAD obj/sections/text1.o
                 0x0000000080003078        0x4 LONG 0x803b9840 data5_base
                 0x000000008000307c        0x4 LONG 0x804d36a0 data6_base
                 0x0000000080003080        0x4 LONG 0x804d79e0 data7_base
-                0x0000000080003084        0x4 LONG 0x804e6278 data8_base
+                0x0000000080003084        0x4 LONG 0x804df120 data8_base
                 0x0000000080003088        0x4 LONG 0x0
                 0x000000008000308c        0x4 LONG 0x0
                 0x0000000080003090        0x4 LONG 0x2420 SIZEOF (.text0)
                 0x0000000080003094        0x4 LONG 0x3b1900 SIZEOF (.text1)
-                0x0000000080003098        0x4 LONG 0x7608 SIZEOF (.text2)
-                0x000000008000309c        0x4 LONG 0x70 SIZEOF (.hooks)
-                0x00000000800030a0        0x4 LONG 0x0
+                0x0000000080003098        0x4 LONG 0x4e8 SIZEOF (.text2)
+                0x000000008000309c        0x4 LONG 0x10 SIZEOF (.hooks)
+                0x00000000800030a0        0x4 LONG 0x0 SIZEOF (.ctors)
                 0x00000000800030a4        0x4 LONG 0x0
                 0x00000000800030a8        0x4 LONG 0x0
                 0x00000000800030ac        0x4 LONG 0x1a0 SIZEOF (.data0)
@@ -4367,12 +4314,12 @@ LOAD obj/sections/text1.o
                 0x00000000800030c0        0x4 LONG 0x77e80 SIZEOF (.data5)
                 0x00000000800030c4        0x4 LONG 0x2d00 SIZEOF (.data6)
                 0x00000000800030c8        0x4 LONG 0x7220 SIZEOF (.data7)
-                0x00000000800030cc        0x4 LONG 0x1fd8 SIZEOF (.data8)
+                0x00000000800030cc        0x4 LONG 0x234 SIZEOF (.data8)
                 0x00000000800030d0        0x4 LONG 0x0
                 0x00000000800030d4        0x4 LONG 0x0
-                0x00000000800030d8        0x4 LONG 0x804e8250 bss_base
-                0x00000000800030dc        0x4 LONG 0x1387c SIZEOF (.bss)
-                0x00000000800030e0        0x4 LONG 0x8000522c ABSOLUTE (start)
+                0x00000000800030d8        0x4 LONG 0x804df360 bss_base
+                0x00000000800030dc        0x4 LONG 0x0 SIZEOF (.bss)
+                0x00000000800030e0        0x4 LONG 0x8000522c ABSOLUTE (__start)
 
 .text0          0x0000000080003100     0x2420 load address 0x0000000000000100
  obj/sections/text0.o()
@@ -4444,477 +4391,202 @@ LOAD obj/sections/text1.o
  .bss           0x00000000804d79e0        0x0 obj/sections/data7.o
  .origdata7     0x00000000804d79e0     0x7220 obj/sections/data7.o
                 0x00000000804dec00                text2_base = (data7_base + SIZEOF (.data7))
+                0x00000000804dec00                text2_base = ((text2_base + 0x1f) & 0xffffffffffffffe0)
                 0x00000000004385e0                text2_offset = (data7_offset + SIZEOF (.data7))
 
-.text2          0x00000000804dec00     0x7608 load address 0x00000000004385e0
+.text2          0x00000000804dec00      0x4e8 load address 0x00000000004385e0
  *(.load* .text*)
- .text          0x00000000804dec00        0x0 obj/src/collision_info.o
- .text.CollisionInfo_Update
-                0x00000000804dec00      0x2a4 obj/src/collision_info.o
- .text.CollisionInfo_Init
-                0x00000000804deea4       0x58 obj/src/collision_info.o
-                0x00000000804deea4                CollisionInfo_Init
- .text          0x00000000804deefc        0x0 obj/src/cpu_control.o
- .text.CPUControl_UpdateInput
-                0x00000000804deefc       0x8c obj/src/cpu_control.o
-                0x00000000804deefc                CPUControl_UpdateInput
- .text.CPUControl_PhysicsMove
-                0x00000000804def88       0xe4 obj/src/cpu_control.o
-                0x00000000804def88                CPUControl_PhysicsMove
- .text.CPUControl_ASChange
-                0x00000000804df06c       0x68 obj/src/cpu_control.o
-                0x00000000804df06c                CPUControl_ASChange
- .text.CPUControl_Init
-                0x00000000804df0d4       0x80 obj/src/cpu_control.o
-                0x00000000804df0d4                CPUControl_Init
- .text          0x00000000804df154        0x0 obj/src/extras_dair.o
- .text.InvLerp  0x00000000804df154       0x88 obj/src/extras_dair.o
- .text.SmoothStep
-                0x00000000804df1dc       0xa8 obj/src/extras_dair.o
- .text.SmoothStepSum
-                0x00000000804df284       0xe0 obj/src/extras_dair.o
- .text.AccelAverageSpeed
-                0x00000000804df364       0x80 obj/src/extras_dair.o
- .text.DecelAverageSpeed
-                0x00000000804df3e4       0x80 obj/src/extras_dair.o
- .text.CalculateNairRotation
-                0x00000000804df464      0x13c obj/src/extras_dair.o
- .text.CalculateRotation
-                0x00000000804df5a0      0x150 obj/src/extras_dair.o
- .text.hook_HSD_JObjAnim
-                0x00000000804df6f0      0x15c obj/src/extras_dair.o
-                0x00000000804df6f0                hook_HSD_JObjAnim
- .text.hook_Player_MeleeDamage
-                0x00000000804df84c      0x16c obj/src/extras_dair.o
-                0x00000000804df84c                hook_Player_MeleeDamage
- .text.ExtrasDair_ASChange
-                0x00000000804df9b8       0xb0 obj/src/extras_dair.o
-                0x00000000804df9b8                ExtrasDair_ASChange
- .text          0x00000000804dfa68        0x0 obj/src/hitbox_stats.o
- .text.VectorMin
-                0x00000000804dfa68       0xc8 obj/src/hitbox_stats.o
- .text.VectorMax
-                0x00000000804dfb30       0xc8 obj/src/hitbox_stats.o
- .text.VectorAverage
-                0x00000000804dfbf8       0x64 obj/src/hitbox_stats.o
- .text.MinMaxText_InitSubtext
-                0x00000000804dfc5c      0x178 obj/src/hitbox_stats.o
- .text.MinMaxText_Initialize
-                0x00000000804dfdd4       0x84 obj/src/hitbox_stats.o
- .text.GetHitboxBounds
-                0x00000000804dfe58      0x284 obj/src/hitbox_stats.o
- .text.GetHurtboxBounds
-                0x00000000804e00dc      0x234 obj/src/hitbox_stats.o
- .text.PushPointsApart
-                0x00000000804e0310      0x300 obj/src/hitbox_stats.o
- .text.PushMinMaxPositionApart
-                0x00000000804e0610      0x16c obj/src/hitbox_stats.o
- .text.PreventMinMaxOverlap
-                0x00000000804e077c      0x2a4 obj/src/hitbox_stats.o
- .text.MinMaxPositionsToScreen
-                0x00000000804e0a20      0x224 obj/src/hitbox_stats.o
- .text.GetTextWidth
-                0x00000000804e0c44       0xcc obj/src/hitbox_stats.o
- .text.GetMinMaxPositions
-                0x00000000804e0d10      0x2b8 obj/src/hitbox_stats.o
- .text.ShadowText_UpdatePosition
-                0x00000000804e0fc8       0xa4 obj/src/hitbox_stats.o
- .text.MinMaxText_Hide
-                0x00000000804e106c       0xd0 obj/src/hitbox_stats.o
- .text.MinMaxText_UpdateComponent
-                0x00000000804e113c       0xbc obj/src/hitbox_stats.o
- .text.MinMaxText_Update
-                0x00000000804e11f8      0x13c obj/src/hitbox_stats.o
- .text.InitializeSlot
-                0x00000000804e1334       0xa0 obj/src/hitbox_stats.o
- .text.HitboxStats_UpdatePlayer
-                0x00000000804e13d4      0x510 obj/src/hitbox_stats.o
-                0x00000000804e13d4                HitboxStats_UpdatePlayer
- .text.HitboxStats_Update
-                0x00000000804e18e4      0x118 obj/src/hitbox_stats.o
-                0x00000000804e18e4                HitboxStats_Update
- .text.HitboxStats_SceneInit
-                0x00000000804e19fc       0x58 obj/src/hitbox_stats.o
-                0x00000000804e19fc                HitboxStats_SceneInit
- .text.HitboxStats_Init
-                0x00000000804e1a54       0xa8 obj/src/hitbox_stats.o
-                0x00000000804e1a54                HitboxStats_Init
- .text          0x00000000804e1afc        0x0 obj/src/input_display.o
- .text.IsModXHeld
-                0x00000000804e1afc       0xf4 obj/src/input_display.o
- .text.IsModYHeld
-                0x00000000804e1bf0       0xf4 obj/src/input_display.o
- .text.DrawB0XXButton
-                0x00000000804e1ce4       0xc8 obj/src/input_display.o
- .text.DrawPad  0x00000000804e1dac      0x478 obj/src/input_display.o
- .text.IsPadNonZero
-                0x00000000804e2224       0xd4 obj/src/input_display.o
- .text.GetHistory
-                0x00000000804e22f8       0x50 obj/src/input_display.o
- .text.GetDisplayedHistory
-                0x00000000804e2348       0x50 obj/src/input_display.o
- .text.UpdateDisplay
-                0x00000000804e2398      0x160 obj/src/input_display.o
- .text.InputDisplay_Draw
-                0x00000000804e24f8       0x64 obj/src/input_display.o
-                0x00000000804e24f8                InputDisplay_Draw
- .text          0x00000000804e255c        0x0 obj/src/log_display.o
- .text.LogDisplay_CreateText
-                0x00000000804e255c      0x1c4 obj/src/log_display.o
-                0x00000000804e255c                LogDisplay_CreateText
- .text.LogDisplay_Update
-                0x00000000804e2720       0x90 obj/src/log_display.o
-                0x00000000804e2720                LogDisplay_Update
- .text.LogDisplay_Print
-                0x00000000804e27b0       0x7c obj/src/log_display.o
-                0x00000000804e27b0                LogDisplay_Print
- .text          0x00000000804e282c        0x0 obj/src/main.o
- .text.hook_ActionStateChange
-                0x00000000804e282c       0xa8 obj/src/main.o
-                0x00000000804e282c                hook_ActionStateChange
- .text.hook_Player_UpdateActionInputTimers
-                0x00000000804e28d4       0x4c obj/src/main.o
-                0x00000000804e28d4                hook_Player_UpdateActionInputTimers
- .text.hook_Physics_Move
-                0x00000000804e2920       0x54 obj/src/main.o
-                0x00000000804e2920                hook_Physics_Move
- .text.hook_DevelopText_DrawAll
-                0x00000000804e2974       0x44 obj/src/main.o
-                0x00000000804e2974                hook_DevelopText_DrawAll
- .text.hook_wP_RunObjectFrameFunctions
-                0x00000000804e29b8       0x4c obj/src/main.o
-                0x00000000804e29b8                hook_wP_RunObjectFrameFunctions
- .text.hook_DevelopMode_IngameTogglesMost
-                0x00000000804e2a04       0x64 obj/src/main.o
-                0x00000000804e2a04                hook_DevelopMode_IngameTogglesMost
+ .text          0x00000000804dec00        0x0 obj/src/libcxx/alloc.o
+ .text._Znwj    0x00000000804dec00        0x4 obj/src/libcxx/alloc.o
+                0x00000000804dec00                _Znwj
+ .text._ZdlPv   0x00000000804dec04        0x4 obj/src/libcxx/alloc.o
+                0x00000000804dec04                _ZdlPv
+ .text          0x00000000804dec08        0x0 obj/src/libcxx/exception.o
+ .text._ZSt21__throw_bad_exceptionv
+                0x00000000804dec08       0x28 obj/src/libcxx/exception.o
+                0x00000000804dec08                _ZSt21__throw_bad_exceptionv
+ .text._ZSt17__throw_bad_allocv
+                0x00000000804dec30       0x28 obj/src/libcxx/exception.o
+                0x00000000804dec30                _ZSt17__throw_bad_allocv
+ .text._ZSt28__throw_bad_array_new_lengthv
+                0x00000000804dec58       0x28 obj/src/libcxx/exception.o
+                0x00000000804dec58                _ZSt28__throw_bad_array_new_lengthv
+ .text._ZSt16__throw_bad_castv
+                0x00000000804dec80       0x28 obj/src/libcxx/exception.o
+                0x00000000804dec80                _ZSt16__throw_bad_castv
+ .text._ZSt18__throw_bad_typeidv
+                0x00000000804deca8       0x28 obj/src/libcxx/exception.o
+                0x00000000804deca8                _ZSt18__throw_bad_typeidv
+ .text._ZSt25__throw_bad_function_callv
+                0x00000000804decd0       0x28 obj/src/libcxx/exception.o
+                0x00000000804decd0                _ZSt25__throw_bad_function_callv
+ .text._ZSt19__throw_logic_errorPKc
+                0x00000000804decf8       0x28 obj/src/libcxx/exception.o
+                0x00000000804decf8                _ZSt19__throw_logic_errorPKc
+ .text._ZSt20__throw_domain_errorPKc
+                0x00000000804ded20       0x28 obj/src/libcxx/exception.o
+                0x00000000804ded20                _ZSt20__throw_domain_errorPKc
+ .text._ZSt24__throw_invalid_argumentPKc
+                0x00000000804ded48       0x28 obj/src/libcxx/exception.o
+                0x00000000804ded48                _ZSt24__throw_invalid_argumentPKc
+ .text._ZSt20__throw_length_errorPKc
+                0x00000000804ded70       0x28 obj/src/libcxx/exception.o
+                0x00000000804ded70                _ZSt20__throw_length_errorPKc
+ .text._ZSt20__throw_out_of_rangePKc
+                0x00000000804ded98       0x28 obj/src/libcxx/exception.o
+                0x00000000804ded98                _ZSt20__throw_out_of_rangePKc
+ .text._ZSt24__throw_out_of_range_fmtPKcz
+                0x00000000804dedc0       0x28 obj/src/libcxx/exception.o
+                0x00000000804dedc0                _ZSt24__throw_out_of_range_fmtPKcz
+ .text._ZSt21__throw_runtime_errorPKc
+                0x00000000804dede8       0x28 obj/src/libcxx/exception.o
+                0x00000000804dede8                _ZSt21__throw_runtime_errorPKc
+ .text._ZSt19__throw_range_errorPKc
+                0x00000000804dee10       0x28 obj/src/libcxx/exception.o
+                0x00000000804dee10                _ZSt19__throw_range_errorPKc
+ .text._ZSt22__throw_overflow_errorPKc
+                0x00000000804dee38       0x28 obj/src/libcxx/exception.o
+                0x00000000804dee38                _ZSt22__throw_overflow_errorPKc
+ .text._ZSt23__throw_underflow_errorPKc
+                0x00000000804dee60       0x28 obj/src/libcxx/exception.o
+                0x00000000804dee60                _ZSt23__throw_underflow_errorPKc
+ .text.__cxa_allocate_exception
+                0x00000000804dee88       0x28 obj/src/libcxx/exception.o
+                0x00000000804dee88                __cxa_allocate_exception
+ .text.__cxa_free_exception
+                0x00000000804deeb0       0x28 obj/src/libcxx/exception.o
+                0x00000000804deeb0                __cxa_free_exception
+ .text.__cxa_throw
+                0x00000000804deed8       0x28 obj/src/libcxx/exception.o
+                0x00000000804deed8                __cxa_throw
+ .text.__cxa_rethrow
+                0x00000000804def00       0x28 obj/src/libcxx/exception.o
+                0x00000000804def00                __cxa_rethrow
+ .text.__cxa_begin_catch
+                0x00000000804def28        0x4 obj/src/libcxx/exception.o
+                0x00000000804def28                __cxa_begin_catch
+ .text.__cxa_end_catch
+                0x00000000804def2c        0x4 obj/src/libcxx/exception.o
+                0x00000000804def2c                __cxa_end_catch
+ .text.__cxa_tm_cleanup
+                0x00000000804def30       0x28 obj/src/libcxx/exception.o
+                0x00000000804def30                __cxa_tm_cleanup
+ .text._Unwind_DeleteException
+                0x00000000804def58       0x28 obj/src/libcxx/exception.o
+                0x00000000804def58                _Unwind_DeleteException
+ .text._Unwind_Resume
+                0x00000000804def80       0x28 obj/src/libcxx/exception.o
+                0x00000000804def80                _Unwind_Resume
+ .text          0x00000000804defa8        0x0 obj/src/main.o
  .text.hook_StartMelee
-                0x00000000804e2a68       0x48 obj/src/main.o
-                0x00000000804e2a68                hook_StartMelee
- .text.hook_main
-                0x00000000804e2ab0       0x58 obj/src/main.o
-                0x00000000804e2ab0                hook_main
- .text          0x00000000804e2b08        0x0 obj/src/math.o
- .text.sqrtf    0x00000000804e2b08       0x6c obj/src/math.o
-                0x00000000804e2b08                sqrtf
- .text          0x00000000804e2b74        0x0 obj/src/melee.o
- .text.DevelopText_ColorPrint
-                0x00000000804e2b74      0x12c obj/src/melee.o
-                0x00000000804e2b74                DevelopText_ColorPrint
- .text          0x00000000804e2ca0        0x0 obj/src/menu.o
- .text.GetDirection
-                0x00000000804e2ca0       0xbc obj/src/menu.o
- .text.UpdateInputDirection
-                0x00000000804e2d5c      0x148 obj/src/menu.o
- .text.Menu_OpenClose
-                0x00000000804e2ea4      0x1b0 obj/src/menu.o
- .text.Menu_UpdateVisibleItems
-                0x00000000804e3054       0xb0 obj/src/menu.o
- .text.Menu_UpdateSelection
-                0x00000000804e3104      0x1d0 obj/src/menu.o
- .text.Menu_ItemCallback
-                0x00000000804e32d4       0x64 obj/src/menu.o
- .text.Menu_InputForSelectedItem
-                0x00000000804e3338      0x390 obj/src/menu.o
- .text.DrawItem
-                0x00000000804e36c8      0x288 obj/src/menu.o
- .text.Menu_Draw
-                0x00000000804e3950      0x1b8 obj/src/menu.o
- .text.Menu_Update
-                0x00000000804e3b08       0xc0 obj/src/menu.o
-                0x00000000804e3b08                Menu_Update
- .text.Menu_Init
-                0x00000000804e3bc8       0x60 obj/src/menu.o
-                0x00000000804e3bc8                Menu_Init
- .text.GetItemLineCount
-                0x00000000804e3c28       0xc8 obj/src/menu.o
- .text.Menu_AddItem
-                0x00000000804e3cf0       0xa4 obj/src/menu.o
-                0x00000000804e3cf0                Menu_AddItem
- .text.Menu_RemoveItem
-                0x00000000804e3d94      0x18c obj/src/menu.o
-                0x00000000804e3d94                Menu_RemoveItem
- .text.Menu_RemoveAllItems
-                0x00000000804e3f20       0x78 obj/src/menu.o
-                0x00000000804e3f20                Menu_RemoveAllItems
- .text.Menu_CreateText
-                0x00000000804e3f98      0x1c4 obj/src/menu.o
-                0x00000000804e3f98                Menu_CreateText
- .text.IsMenuOpen
-                0x00000000804e415c       0x28 obj/src/menu.o
-                0x00000000804e415c                IsMenuOpen
- .text.MainMenu_Init
-                0x00000000804e4184       0x58 obj/src/menu.o
-                0x00000000804e4184                MainMenu_Init
- .text          0x00000000804e41dc        0x0 obj/src/misc_patches.o
- .text.hook_Stage_CheckStageUnlockStatus
-                0x00000000804e41dc       0x28 obj/src/misc_patches.o
-                0x00000000804e41dc                hook_Stage_CheckStageUnlockStatus
- .text.hook_Characters_CheckCharUnlockStatus
-                0x00000000804e4204       0x28 obj/src/misc_patches.o
-                0x00000000804e4204                hook_Characters_CheckCharUnlockStatus
- .text.hook_SinglePlayerModeCheck
-                0x00000000804e422c       0x28 obj/src/misc_patches.o
-                0x00000000804e422c                hook_SinglePlayerModeCheck
- .text          0x00000000804e4254        0x0 obj/src/overlays.o
- .text.AddOverlayToMenu
-                0x00000000804e4254       0xc4 obj/src/overlays.o
- .text.AddASOverlay
-                0x00000000804e4318       0x98 obj/src/overlays.o
- .text.RemoveASOverlay
-                0x00000000804e43b0      0x10c obj/src/overlays.o
- .text.InitOverlay
-                0x00000000804e44bc      0x2f4 obj/src/overlays.o
- .text.CheckKnockdownFacingOverlay
-                0x00000000804e47b0       0x9c obj/src/overlays.o
- .text.ShouldApplyOverlay
-                0x00000000804e484c       0xcc obj/src/overlays.o
- .text.hook_ColorData_HandleStuff
-                0x00000000804e4918      0x3ec obj/src/overlays.o
-                0x00000000804e4918                hook_ColorData_HandleStuff
- .text.Overlays_Init
-                0x00000000804e4d04       0xac obj/src/overlays.o
-                0x00000000804e4d04                Overlays_Init
- .text          0x00000000804e4db0        0x0 obj/src/savestates.o
- .text.SaveState_JObj
-                0x00000000804e4db0      0x11c obj/src/savestates.o
- .text.LoadState_JObj
-                0x00000000804e4ecc      0x104 obj/src/savestates.o
- .text.SaveState_Player
-                0x00000000804e4fd0      0x380 obj/src/savestates.o
- .text.LoadState_Player
-                0x00000000804e5350      0x374 obj/src/savestates.o
- .text.SaveState_GObj
-                0x00000000804e56c4       0x90 obj/src/savestates.o
- .text.LoadState_GObj
-                0x00000000804e5754       0x70 obj/src/savestates.o
- .text.CountObjects
-                0x00000000804e57c4       0x74 obj/src/savestates.o
- .text.SaveObjects
-                0x00000000804e5838       0xa0 obj/src/savestates.o
- .text.SaveState
-                0x00000000804e58d8       0xa0 obj/src/savestates.o
-                0x00000000804e58d8                SaveState
- .text.LoadState
-                0x00000000804e5978       0xa0 obj/src/savestates.o
-                0x00000000804e5978                LoadState
- .text.SaveStates_Update
-                0x00000000804e5a18       0xcc obj/src/savestates.o
-                0x00000000804e5a18                SaveStates_Update
- .text          0x00000000804e5ae4        0x0 obj/src/util.o
- .text.List_Init
-                0x00000000804e5ae4       0x40 obj/src/util.o
-                0x00000000804e5ae4                List_Init
- .text.List_Append
-                0x00000000804e5b24       0x60 obj/src/util.o
-                0x00000000804e5b24                List_Append
- .text.List_Prepend
-                0x00000000804e5b84       0x60 obj/src/util.o
-                0x00000000804e5b84                List_Prepend
- .text.List_Remove
-                0x00000000804e5be4       0x4c obj/src/util.o
-                0x00000000804e5be4                List_Remove
- .text.EulerToQuaternion
-                0x00000000804e5c30      0x1b8 obj/src/util.o
-                0x00000000804e5c30                EulerToQuaternion
- .text.WriteVertex2D
-                0x00000000804e5de8       0xbc obj/src/util.o
-                0x00000000804e5de8                WriteVertex2D
- .text.FillRectangle2D
-                0x00000000804e5ea4       0xc4 obj/src/util.o
-                0x00000000804e5ea4                FillRectangle2D
- .text.FillCircle2D
-                0x00000000804e5f68      0x158 obj/src/util.o
-                0x00000000804e5f68                FillCircle2D
- .text.StrokeCircle2D
-                0x00000000804e60c0      0x148 obj/src/util.o
-                0x00000000804e60c0                StrokeCircle2D
- .text          0x00000000804e6208        0x0 obj/src/hooks.o
-                0x00000000804e6208                hooks_base = (text2_base + SIZEOF (.text2))
-                0x000000000043fbe8                hooks_offset = (text2_offset + SIZEOF (.text2))
+                0x00000000804defa8       0xe0 obj/src/main.o
+                0x00000000804defa8                hook_StartMelee
+ .text.hook_Scene_Main
+                0x00000000804df088       0x60 obj/src/main.o
+                0x00000000804df088                hook_Scene_Main
+ .text          0x00000000804df0e8        0x0 obj/src/hooks.o
+                0x00000000804df100                hooks_base = (text2_base + SIZEOF (.text2))
+                0x00000000804df100                hooks_base = ((hooks_base + 0x1f) & 0xffffffffffffffe0)
+                0x0000000000438ac8                hooks_offset = (text2_offset + SIZEOF (.text2))
 
-.hooks          0x00000000804e6208       0x70 load address 0x000000000043fbe8
+.hooks          0x00000000804df100       0x10 load address 0x0000000000438ac8
  obj/src/hooks.o()
- .data          0x00000000804e6208        0x0 obj/src/hooks.o
- .bss           0x00000000804e6208        0x0 obj/src/hooks.o
- .hooks         0x00000000804e6208       0x70 obj/src/hooks.o
-                0x00000000804e6208                orig_main
-                0x00000000804e6210                orig_ActionStateChange
-                0x00000000804e6218                orig_Stage_CheckStageUnlockStatus
-                0x00000000804e6220                orig_Characters_CheckCharUnlockStatus
-                0x00000000804e6228                orig_SinglePlayerModeCheck
-                0x00000000804e6230                orig_StartMelee
-                0x00000000804e6238                orig_DevelopMode_IngameTogglesMost
-                0x00000000804e6240                orig_wP_RunObjectFrameFunctions
-                0x00000000804e6248                orig_DevelopText_DrawAll
-                0x00000000804e6250                orig_ColorData_HandleStuff
-                0x00000000804e6258                orig_HSD_JObjAnim
-                0x00000000804e6260                orig_Player_MeleeDamage
-                0x00000000804e6268                orig_Player_UpdateActionInputTimers
-                0x00000000804e6270                orig_Physics_Move
-                0x00000000804e6278                data8_base = (hooks_base + SIZEOF (.hooks))
-                0x000000000043fc58                data8_offset = (hooks_offset + SIZEOF (.hooks))
+ .data          0x00000000804df100        0x0 obj/src/hooks.o
+ .bss           0x00000000804df100        0x0 obj/src/hooks.o
+ .hooks         0x00000000804df100       0x10 obj/src/hooks.o
+                0x00000000804df100                orig_Scene_Main
+                0x00000000804df108                orig_StartMelee
+                0x00000000804df120                data8_base = (hooks_base + SIZEOF (.hooks))
+                0x00000000804df120                data8_base = ((data8_base + 0x1f) & 0xffffffffffffffe0)
+                0x0000000000438ad8                data8_offset = (hooks_offset + SIZEOF (.hooks))
 
-.data8          0x00000000804e6278     0x1fd8 load address 0x000000000043fc58
+.data8          0x00000000804df120      0x234 load address 0x0000000000438ad8
  *(.rodata* .rdata* .data* .sdata*)
- .data          0x00000000804e6278        0x0 obj/src/collision_info.o
- .rodata        0x00000000804e6278       0x4f obj/src/collision_info.o
- *fill*         0x00000000804e62c7        0x1 
- .data.menu_collision_info.5036
-                0x00000000804e62c8       0x34 obj/src/collision_info.o
- .data          0x00000000804e62fc        0x0 obj/src/cpu_control.o
- .rodata        0x00000000804e62fc       0x34 obj/src/cpu_control.o
- .data.menu_force_shield.4992
-                0x00000000804e6330       0x34 obj/src/cpu_control.o
- .data.menu_freeze_position.4993
-                0x00000000804e6364       0x34 obj/src/cpu_control.o
- .data.menu_cpu_control.4994
-                0x00000000804e6398       0x34 obj/src/cpu_control.o
- .data          0x00000000804e63cc        0x0 obj/src/extras_dair.o
- *fill*         0x00000000804e63cc        0x4 
- .rodata        0x00000000804e63d0       0x3c obj/src/extras_dair.o
- .data          0x00000000804e640c        0x0 obj/src/hitbox_stats.o
- *fill*         0x00000000804e640c        0x4 
- .rodata        0x00000000804e6410      0x110 obj/src/hitbox_stats.o
- .data.menu_description.5248
-                0x00000000804e6520       0x34 obj/src/hitbox_stats.o
- .data.menu_hitbox_text_enabled.5249
-                0x00000000804e6554       0x34 obj/src/hitbox_stats.o
- .data.menu_hurtbox_text_enabled.5250
-                0x00000000804e6588       0x34 obj/src/hitbox_stats.o
- .data.menu_disjoint_text_enabled.5251
-                0x00000000804e65bc       0x34 obj/src/hitbox_stats.o
- .data.menu_hitbox_stats.5252
-                0x00000000804e65f0       0x34 obj/src/hitbox_stats.o
- .data          0x00000000804e6624        0x0 obj/src/input_display.o
- *fill*         0x00000000804e6624        0x4 
- .rodata        0x00000000804e6628       0xa4 obj/src/input_display.o
- .data          0x00000000804e66cc        0x0 obj/src/log_display.o
- .rodata        0x00000000804e66cc        0x8 obj/src/log_display.o
- .data          0x00000000804e66d4        0x0 obj/src/main.o
- .data          0x00000000804e66d4        0x0 obj/src/math.o
- .rodata        0x00000000804e66d4        0x8 obj/src/math.o
- .data          0x00000000804e66dc        0x0 obj/src/melee.o
- .rodata        0x00000000804e66dc     0x134c obj/src/melee.o
- .data.action_state_names
-                0x00000000804e7a28      0x554 obj/src/melee.o
-                0x00000000804e7a28                action_state_names
- .data.debug_level_names
-                0x00000000804e7f7c       0x14 obj/src/melee.o
-                0x00000000804e7f7c                debug_level_names
- .data          0x00000000804e7f90        0x0 obj/src/menu.o
- .rodata        0x00000000804e7f90       0xa0 obj/src/menu.o
- .sdata.OnOffText
-                0x00000000804e8030        0x8 obj/src/menu.o
-                0x00000000804e8030                OnOffText
- .data.develop_toggle_text
-                0x00000000804e8038       0x14 obj/src/menu.o
-                0x00000000804e8038                develop_toggle_text
- .sdata.CurrentMenu
-                0x00000000804e804c        0x4 obj/src/menu.o
-                0x00000000804e804c                CurrentMenu
- .rodata.Menu_InputForSelectedItem
-                0x00000000804e8050       0x1c obj/src/menu.o
- .rodata.DrawItem
-                0x00000000804e806c       0x1c obj/src/menu.o
- .data.menu_dblevel.5136
-                0x00000000804e8088       0x34 obj/src/menu.o
- .data          0x00000000804e80bc        0x0 obj/src/misc_patches.o
- .data          0x00000000804e80bc        0x0 obj/src/overlays.o
- .data.overlay_count
-                0x00000000804e80bc        0x4 obj/src/overlays.o
- .rodata        0x00000000804e80c0       0xd0 obj/src/overlays.o
- .data.special_overlay_names
-                0x00000000804e8190        0xc obj/src/overlays.o
- .data.menu_add_overlay.5068
-                0x00000000804e819c       0x34 obj/src/overlays.o
- .data.menu_remove_overlay.5069
-                0x00000000804e81d0       0x34 obj/src/overlays.o
- .data.menu_overlays.5074
-                0x00000000804e8204       0x34 obj/src/overlays.o
- .data          0x00000000804e8238        0x0 obj/src/savestates.o
- .data          0x00000000804e8238        0x0 obj/src/util.o
- .rodata        0x00000000804e8238       0x18 obj/src/util.o
-                0x00000000804e8250                bss_base = (data8_base + SIZEOF (.data8))
-                0x00000000804e8250                bss_offset = (data8_base + SIZEOF (.data8))
+ .data          0x00000000804df120        0x0 obj/src/libcxx/alloc.o
+ .data          0x00000000804df120        0x0 obj/src/libcxx/exception.o
+ .rodata._Unwind_DeleteException.str1.4
+                0x00000000804df120       0x18 obj/src/libcxx/exception.o
+ .rodata._Unwind_Resume.str1.4
+                0x00000000804df138        0xf obj/src/libcxx/exception.o
+ *fill*         0x00000000804df147        0x1 
+ .rodata._ZSt16__throw_bad_castv.str1.4
+                0x00000000804df148       0x11 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df159        0x3 
+ .rodata._ZSt17__throw_bad_allocv.str1.4
+                0x00000000804df15c       0x12 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df16e        0x2 
+ .rodata._ZSt18__throw_bad_typeidv.str1.4
+                0x00000000804df170       0x13 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df183        0x1 
+ .rodata._ZSt19__throw_logic_errorPKc.str1.4
+                0x00000000804df184       0x14 obj/src/libcxx/exception.o
+ .rodata._ZSt19__throw_range_errorPKc.str1.4
+                0x00000000804df198       0x14 obj/src/libcxx/exception.o
+ .rodata._ZSt20__throw_domain_errorPKc.str1.4
+                0x00000000804df1ac       0x15 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df1c1        0x3 
+ .rodata._ZSt20__throw_length_errorPKc.str1.4
+                0x00000000804df1c4       0x15 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df1d9        0x3 
+ .rodata._ZSt20__throw_out_of_rangePKc.str1.4
+                0x00000000804df1dc       0x15 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df1f1        0x3 
+ .rodata._ZSt21__throw_bad_exceptionv.str1.4
+                0x00000000804df1f4       0x31 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df225        0x3 
+ .rodata._ZSt21__throw_runtime_errorPKc.str1.4
+                0x00000000804df228       0x16 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df23e        0x2 
+ .rodata._ZSt22__throw_overflow_errorPKc.str1.4
+                0x00000000804df240       0x17 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df257        0x1 
+ .rodata._ZSt23__throw_underflow_errorPKc.str1.4
+                0x00000000804df258       0x18 obj/src/libcxx/exception.o
+ .rodata._ZSt24__throw_invalid_argumentPKc.str1.4
+                0x00000000804df270       0x19 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df289        0x3 
+ .rodata._ZSt24__throw_out_of_range_fmtPKcz.str1.4
+                0x00000000804df28c       0x19 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df2a5        0x3 
+ .rodata._ZSt25__throw_bad_function_callv.str1.4
+                0x00000000804df2a8       0x1a obj/src/libcxx/exception.o
+ *fill*         0x00000000804df2c2        0x2 
+ .rodata._ZSt28__throw_bad_array_new_lengthv.str1.4
+                0x00000000804df2c4       0x1d obj/src/libcxx/exception.o
+ *fill*         0x00000000804df2e1        0x3 
+ .rodata.__cxa_allocate_exception.str1.4
+                0x00000000804df2e4       0x19 obj/src/libcxx/exception.o
+ *fill*         0x00000000804df2fd        0x3 
+ .rodata.__cxa_rethrow.str1.4
+                0x00000000804df300        0xe obj/src/libcxx/exception.o
+ *fill*         0x00000000804df30e        0x2 
+ .rodata.__cxa_throw.str1.4
+                0x00000000804df310        0xc obj/src/libcxx/exception.o
+ .rodata.__cxa_tm_cleanup.str1.4
+                0x00000000804df31c       0x11 obj/src/libcxx/exception.o
+ .data          0x00000000804df32d        0x0 obj/src/main.o
+ *fill*         0x00000000804df32d        0x3 
+ .rodata        0x00000000804df330        0xc obj/src/main.o
+ .rodata.hook_StartMelee.cst4
+                0x00000000804df33c        0x8 obj/src/main.o
+ .rodata.hook_StartMelee.str1.4
+                0x00000000804df344       0x10 obj/src/main.o
+                0x00000000804df360                ctors_base = (data8_base + SIZEOF (.data8))
+                0x00000000804df360                ctors_base = ((ctors_base + 0x1f) & 0xffffffffffffffe0)
+                0x00000000804df360                ctors_end = (ctors_base + SIZEOF (.ctors))
+                0x0000000000438d0c                ctors_offset = (data8_offset + SIZEOF (.data8))
 
-.bss            0x00000000804e8250    0x1387c
+.ctors          0x00000000804df360        0x0 load address 0x0000000000438d0c
+ *(.ctors)
+                0x00000000804df360                bss_base = (ctors_base + SIZEOF (.ctors))
+                0x00000000804df360                bss_base = ((bss_base + 0x1f) & 0xffffffffffffffe0)
+                0x0000000000438d0c                bss_offset = (ctors_offset + SIZEOF (.ctors))
+
+.bss            0x00000000804df360        0x0 load address 0x0000000000438d0c
  *(.bss* .sbss* COMMON)
- .bss           0x00000000804e8250        0x0 obj/src/collision_info.o
- .bss.collision_info_menu
-                0x00000000804e8250       0x24 obj/src/collision_info.o
- .bss.menu_lines
-                0x00000000804e8274     0xb800 obj/src/collision_info.o
- .bss           0x00000000804f3a74        0x0 obj/src/cpu_control.o
- .bss.cpu_control_menu
-                0x00000000804f3a74       0x24 obj/src/cpu_control.o
- .bss.force_shield
-                0x00000000804f3a98        0x4 obj/src/cpu_control.o
- .bss.freeze_position
-                0x00000000804f3a9c        0x4 obj/src/cpu_control.o
- .bss           0x00000000804f3aa0        0x0 obj/src/extras_dair.o
- .bss.aerial_state
-                0x00000000804f3aa0       0x18 obj/src/extras_dair.o
- .bss           0x00000000804f3ab8        0x0 obj/src/hitbox_stats.o
- .bss.hitbox_stats_menu
-                0x00000000804f3ab8       0x24 obj/src/hitbox_stats.o
- .bss.initialized
-                0x00000000804f3adc        0x6 obj/src/hitbox_stats.o
- *fill*         0x00000000804f3ae2        0x2 
- .bss.hitbox_text
-                0x00000000804f3ae4       0xc0 obj/src/hitbox_stats.o
- .bss.hurtbox_text
-                0x00000000804f3ba4       0xc0 obj/src/hitbox_stats.o
- .bss.disjoint_text
-                0x00000000804f3c64       0xc0 obj/src/hitbox_stats.o
- .bss.hitbox_text_enabled
-                0x00000000804f3d24        0x4 obj/src/hitbox_stats.o
- .bss.hurtbox_text_enabled
-                0x00000000804f3d28        0x4 obj/src/hitbox_stats.o
- .bss.disjoint_text_enabled
-                0x00000000804f3d2c        0x4 obj/src/hitbox_stats.o
- .bss           0x00000000804f3d30        0x0 obj/src/input_display.o
- .bss.displayed_history
-                0x00000000804f3d30      0x2a8 obj/src/input_display.o
- .bss.history   0x00000000804f3fd8      0x2a8 obj/src/input_display.o
- .bss.last_input_frame
-                0x00000000804f4280        0x4 obj/src/input_display.o
- .bss           0x00000000804f4284        0x0 obj/src/log_display.o
- .bss.log_text  0x00000000804f4284        0x4 obj/src/log_display.o
- .bss.text_buf  0x00000000804f4288      0x88e obj/src/log_display.o
- *fill*         0x00000000804f4b16        0x2 
- .bss.log_hide_time
-                0x00000000804f4b18        0x4 obj/src/log_display.o
- .bss           0x00000000804f4b1c        0x0 obj/src/main.o
- .bss.initialized
-                0x00000000804f4b1c        0x1 obj/src/main.o
- .bss           0x00000000804f4b1d        0x0 obj/src/math.o
- .bss           0x00000000804f4b1d        0x0 obj/src/melee.o
- .bss           0x00000000804f4b1d        0x0 obj/src/menu.o
- *fill*         0x00000000804f4b1d        0x3 
- .bss.menu_text
-                0x00000000804f4b20        0x4 obj/src/menu.o
- .bss.text_buf  0x00000000804f4b24      0x7a8 obj/src/menu.o
- .bss.menu_open
-                0x00000000804f52cc        0x1 obj/src/menu.o
- *fill*         0x00000000804f52cd        0x3 
- .bss.menu_port
-                0x00000000804f52d0        0x4 obj/src/menu.o
- .bss.held_direction
-                0x00000000804f52d4        0x4 obj/src/menu.o
- .bss.direction_hold_frames
-                0x00000000804f52d8        0x4 obj/src/menu.o
- COMMON         0x00000000804f52dc       0x24 obj/src/menu.o
-                0x00000000804f52dc                MainMenu
- .bss           0x00000000804f5300        0x0 obj/src/misc_patches.o
- .bss           0x00000000804f5300        0x0 obj/src/overlays.o
- .bss.overlay_menu
-                0x00000000804f5300       0x24 obj/src/overlays.o
- .bss.overlays  0x00000000804f5324     0x67a4 obj/src/overlays.o
- .bss           0x00000000804fbac8        0x0 obj/src/savestates.o
- .sbss.saved_state
-                0x00000000804fbac8        0x4 obj/src/savestates.o
-                0x00000000804fbac8                saved_state
- .bss           0x00000000804fbacc        0x0 obj/src/util.o
+ .bss           0x00000000804df360        0x0 obj/src/libcxx/alloc.o
+ .bss           0x00000000804df360        0x0 obj/src/libcxx/exception.o
+ .bss           0x00000000804df360        0x0 obj/src/main.o
 
 /DISCARD/
  *(*)

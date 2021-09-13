@@ -17,8 +17,8 @@ def main():
 
             name = "".join(c for c in name if is_char_allowed(c))
             # Remove leading underscores
-            while name.startswith("_"):
-                name = name[1:]
+            #while name.startswith("_"):
+            #    name = name[1:]
 
             script += f"{name:60s} = 0x{address};\n"
 
