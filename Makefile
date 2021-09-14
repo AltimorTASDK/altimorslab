@@ -28,7 +28,7 @@ LIBRARIES  := -L$(LIBOGC)/lib/cube -logc
 LDFLAGS    := -Wl,-Map=output.map -nostdlib $(LIBRARIES)
 
 CFLAGS   := -DGEKKO -mogc -mcpu=750 -meabi -mhard-float -O3 -Wall -Wno-register
-CXXFLAGS := $(CFLAGS) -std=c++2a -fconcepts -fno-rtti -fno-exceptions
+CXXFLAGS := $(CFLAGS) -std=c++2b -fconcepts -fno-rtti -fno-exceptions
 INCLUDE  := -Isrc -I$(LIBOGC)/include
 
 bin/sys/main.dol: $(OBJFILES) GALE01.ld melee.ld patch_dol.py | clean_unused
