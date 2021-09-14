@@ -1,53 +1,44 @@
 #include "util/int_types.h"
-#include <functional>
+#include "util/misc.h"
+#include "util/operators.h"
+#include <cmath>
 #include <utility>
 #include <tuple>
 #include <type_traits>
 
 template<typename base>
 class vec_impl : public base {
-private:
-	static constexpr size_t elem_count =
-		std::tuple_size_v<decltype(std::declval<vec_impl>().elems())>;
+public:
+	using base::elems;
 
+private:
+	using elem_tuple = decltype(std::declval<const base>().elems());
+	static constexpr auto elem_count = sizeof_tuple<elem_tuple>;
 	static constexpr auto elem_indices = std::make_index_sequence<elem_count>();
 
-	constexpr auto foreach(const auto &callable)
+	template<size_t N>
+	using check_elem_count = std::enable_if_t<N == elem_count>;
+
+	template<typename ...T, typename = check_elem_count<sizeof...(T)>>
+	constexpr auto foreach(auto &&callable, std::tuple<T...> &&tuple)
 	{
-		if constexpr(std::is_same_v<decltype(callable(get<0>())), void>) {
-			[&]<size_t ...I>(std::index_sequence<I...>) {
-				(callable(this->get<I>()), ...);
-			}(elem_indices);
-		} else {
-			return [&]<size_t ...I>(std::index_sequence<I...>) {
-				return std::make_tuple(callable(this->get<I>())...);
-			}(elem_indices);
-		}
+		return zip_apply(callable, elems(), tuple);
 	}
 
-	constexpr auto foreach(const auto &callable, auto ...args)
+	constexpr auto foreach(auto &&callable)
 	{
-		static_assert(sizeof...(args) == elem_count);
-
-		if constexpr ((std::is_same_v<decltype(callable(get<0>(), args)), void> || ...)) {
-			[&]<size_t ...I>(std::index_sequence<I...>) {
-				(callable(this->get<I>(), args), ...);
-			}(elem_indices);
-		} else {
-			return [&]<size_t ...I>(std::index_sequence<I...>) {
-				return std::make_tuple(callable(this->get<I>(), args)...);
-			}(elem_indices);
-		}
+		return zip_apply(callable, elems());
 	}
 
-	constexpr auto foreach(const auto &callable, const auto &tuple)
+	template<typename ...T, typename = check_elem_count<sizeof...(T)>>
+	constexpr auto foreach(auto &&callable, std::tuple<T...> &&tuple) const
 	{
-		return std::apply([&](auto ...args) { return foreach(callable, args...); }, tuple);
+		return zip_apply(callable, elems(), tuple);
 	}
 
-	constexpr auto foreach(const auto &callable, const vec_impl &other)
+	constexpr auto foreach(auto &&callable) const
 	{
-		return foreach(callable, other.to_tuple());
+		return zip_apply(callable, elems());
 	}
 
 public:
@@ -56,9 +47,15 @@ public:
 		foreach([](auto &elem) { elem = 0; });
 	}
 
-	constexpr vec_impl(auto ...values)
+	template<typename ...T, typename = check_elem_count<sizeof...(T)>>
+	constexpr vec_impl(T ...values)
 	{
-		foreach([](auto &elem, auto value) { elem = value; }, values...);
+		foreach([](auto &elem, auto value) { elem = value; }, std::make_tuple(values...));
+	}
+
+	explicit constexpr vec_impl(elem_tuple &&tuple)
+	{
+		foreach([](auto &elem, auto value) { elem = value; }, tuple);
 	}
 
 	constexpr vec_impl(const vec_impl &other)
@@ -67,37 +64,46 @@ public:
 	}
 
 	template<size_t N>
-	constexpr auto &get() { return std::get<N>(base::elems()); }
+	constexpr auto &get() { return std::get<N>(elems()); }
 
 	template<size_t N>
-	constexpr auto get() const { return std::get<N>(base::elems()); }
-
-	constexpr auto to_tuple() const
-	{
-		return [&]<size_t ...I>(std::index_sequence<I...>) {
-			return std::make_tuple(this->get<I>()...);
-		}(elem_indices);
-	}
+	constexpr auto get() const { return std::get<N>(elems()); }
 
 	template<typename... T>
 	constexpr vec_impl &operator=(const vec_impl &other)
 	{
-		foreach([](auto &elem, auto value) { elem = value; }, other);
+		foreach([](auto &elem, auto value) { elem = value; }, other.elems());
 		return *this;
 	}
 
 	template<typename... T>
 	constexpr vec_impl &operator+=(const vec_impl &other)
 	{
-		foreach([](auto &elem, auto value) { elem += value; }, other);
+		foreach([](auto &elem, auto value) { elem += value; }, other.elems());
 		return *this;
+	}
+
+	template<typename... T>
+	constexpr vec_impl operator+(const vec_impl &other) const
+	{
+		return vec_impl(foreach([](auto elem, auto value) {
+			return elem + value;
+		}, other.elems()));
 	}
 
 	template<typename... T>
 	constexpr vec_impl &operator-=(const vec_impl &other)
 	{
-		foreach([](auto &elem, auto value) { elem -= value; }, other);
+		foreach([](auto &elem, auto value) { elem -= value; }, other.elems());
 		return *this;
+	}
+
+	template<typename... T>
+	constexpr vec_impl operator-(const vec_impl &other) const
+	{
+		return vec_impl(foreach([](auto elem, auto value) {
+			return elem - value;
+		}, other.elems()));
 	}
 
 	template<typename... T>
@@ -108,6 +114,12 @@ public:
 	}
 
 	template<typename... T>
+	constexpr vec_impl operator*(auto value) const
+	{
+		return vec_impl(foreach([](auto elem, auto value) { return elem * value; }));
+	}
+
+	template<typename... T>
 	constexpr vec_impl &operator/=(auto value)
 	{
 		foreach([&](auto &elem) { elem /= value; });
@@ -115,23 +127,36 @@ public:
 	}
 
 	template<typename... T>
-	constexpr bool operator==(const vec_impl &other)
+	constexpr vec_impl operator/(auto value) const
 	{
-		return to_tuple() == other.to_tuple();
+		return vec_impl(foreach([](auto elem, auto value) { return elem / value; }));
+	}
+
+	template<typename... T>
+	constexpr bool operator==(const vec_impl &other) const
+	{
+		return elems() == other.elems();
+	}
+
+	constexpr auto length_sqr() const
+	{
+		return dot(*this, *this);
+	}
+
+	constexpr auto length() const
+	{
+		return sqrt(length_sqr());
 	}
 
 	static constexpr auto dot(const vec_impl &a, const vec_impl &b)
 	{
-		return [&]<size_t ...I>(std::index_sequence<I...>) {
-			return ((a.get<I>() * b.get<I>()) + ...);
-		}(elem_indices);
+		return sum_tuple(zip_apply(operators::mul, a.elems(), b.elems()));
 	}
 };
 
 template<typename T>
 struct vec2_base {
-	float x, y;
-protected:
+	T x, y;
 	constexpr auto elems() { return std::tie(x, y); }
 	constexpr auto elems() const { return std::make_tuple(x, y); }
 };
@@ -143,11 +168,9 @@ using vec2d = vec_impl<vec2_base<double>>;
 template<typename T>
 struct vec3_base {
 	T x, y, z;
-protected:
 	constexpr auto elems() { return std::tie(x, y, z); }
 	constexpr auto elems() const { return std::make_tuple(x, y, z); }
 
-public:
 	static constexpr vec_impl<vec3_base> cross(const auto &a, const auto &b)
 	{
 		return vec_impl<vec3_base>(
@@ -164,7 +187,6 @@ using vec3d = vec_impl<vec3_base<double>>;
 template<typename T>
 struct color_rgb_base {
 	T r, g, b;
-protected:
 	constexpr auto elems() { return std::tie(r, g, b); }
 	constexpr auto elems() const { return std::make_tuple(r, g, b); }
 };
@@ -175,7 +197,6 @@ using color_rgb_f32 = vec_impl<color_rgb_base<float>>;
 template<typename T>
 struct color_rgba_base {
 	T r, g, b, a;
-protected:
 	constexpr auto elems() { return std::tie(r, g, b, a); }
 	constexpr auto elems() const { return std::make_tuple(r, g, b, a); }
 };
