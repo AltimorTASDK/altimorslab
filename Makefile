@@ -39,28 +39,28 @@ GALE01.ld: GALE01.map map_to_linker_script.py
 	python map_to_linker_script.py
 
 $(OBJDIR)/%.o: %.c
-	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
-	@[ -d $(subst $(OBJDIR), $(DEPDIR), $(dir $@)) ] || mkdir -p $(subst $(OBJDIR), $(DEPDIR), $(dir $@))
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	@[ -d $(subst $(OBJDIR), $(DEPDIR), $(@D)) ] || mkdir -p $(subst $(OBJDIR), $(DEPDIR), $(@D))
 	$(CC) -MMD -MP -MF $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $@) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 $(OBJDIR)/%.o: %.cpp
-	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
-	@[ -d $(subst $(OBJDIR), $(DEPDIR), $(dir $@)) ] || mkdir -p $(subst $(OBJDIR), $(DEPDIR), $(dir $@))
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	@[ -d $(subst $(OBJDIR), $(DEPDIR), $(@D)) ] || mkdir -p $(subst $(OBJDIR), $(DEPDIR), $(@D))
 	$(CXX) -MMD -MP -MF $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $@) $(CXXFLAGS) $(INCLUDE) -c $< -o $@
 
 $(OBJDIR)/%.o: %.S
-	@[ -d $(dir $@) ] || mkdir -p $(dir $@)
+	@[ -d $(@D) ] || mkdir -p $(@D)
+	@[ -d $(subst $(OBJDIR), $(DEPDIR), $(@D)) ] || mkdir -p $(subst $(OBJDIR), $(DEPDIR), $(@D))
 	$(AS) -mregnames -mgekko $^ -o $@
 
-.PHONY: clean
+.PHONY: clean clean_unused
 
 clean:
-	rm -rf obj/* dep/*
+	rm -rf $(OBJDIR)/* $(DEPDIR)/*
 
 # Remove unused obj/dep files
 clean_unused:
 	$(foreach file, $(shell find obj -type f), $(if $(filter $(file), $(OBJFILES)),, $(shell rm $(file))))
 	$(foreach file, $(shell find dep -type f), $(if $(filter $(file), $(DEPFILES)),, $(shell rm $(file))))
-	$(foreach dir, $(shell find obj dep -type d), $(if $(wildcard $(dir)/*),, $(shell rm -r $(dir))))
 
 -include $(DEPFILES)
