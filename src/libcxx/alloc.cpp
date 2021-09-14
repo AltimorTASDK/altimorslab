@@ -18,7 +18,17 @@ void operator delete(void *ptr)
 	HSD_FreeToHeap(0, ptr);
 }
 
+void operator delete(void *ptr, size_t sz)
+{
+	HSD_FreeToHeap(0, ptr);
+}
+
 void operator delete[](void *ptr)
+{
+	HSD_FreeToHeap(0, ptr);
+}
+
+void operator delete[](void *ptr, size_t sz)
 {
 	HSD_FreeToHeap(0, ptr);
 }

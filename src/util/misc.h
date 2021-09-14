@@ -33,6 +33,16 @@ constexpr auto tuple_or_void(auto &&tuple)
 		return std::move(tuple);
 }
 
+// Like std::bind_front
+constexpr auto bind_back(auto &&callable, auto &&...args)
+{
+	return [&](auto &&...head) {
+		return callable(
+			std::forward<decltype(head)>(head)...,
+			std::forward<decltype(args)>(args)...);
+	};
+}
+
 template<size_t start, size_t end, typename ...T>
 constexpr auto slice_tuple(std::tuple<T...> &&tuple)
 {
@@ -72,7 +82,7 @@ constexpr auto zip(auto &&...tuples)
 		constexpr auto longest = std::max(sizeof_tuple<decltype(tuples)>...);
 
 		return [&]<size_t ...I>(std::index_sequence<I...>) {
-			return std::forward_as_tuple(zip_at_index<I>(tuples...)...);
+			return std::make_tuple(zip_at_index<I>(tuples...)...);
 		}(std::make_index_sequence<longest>());
 	} else {
 		// If only one tuple, wrap each element in a tuple
@@ -91,7 +101,7 @@ constexpr auto apply_multi(auto &&callable, auto &&...tuples)
 {
 	return tuple_or_void(std::tuple_cat([&]() {
 		if constexpr (!is_void<decltype(std::apply(callable, tuples))>) {
-			return std::forward_as_tuple(std::apply(callable, tuples));
+			return std::make_tuple(std::apply(callable, tuples));
 		} else {
 			std::apply(callable, tuples);
 			return std::make_tuple();
@@ -112,6 +122,6 @@ constexpr auto apply_multi(auto &&callable, auto &&...tuples)
 constexpr auto zip_apply(auto &&callable, auto &&...tuples)
 {
 	return std::apply([&](auto &&...args) {
-		return apply_multi(callable, args...);
+		return apply_multi(callable, std::forward<decltype(args)>(args)...);
 	}, zip(tuples...));
 }

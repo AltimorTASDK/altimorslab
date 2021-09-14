@@ -16,46 +16,33 @@ private:
 	static constexpr auto elem_count = sizeof_tuple<elem_tuple>;
 	static constexpr auto elem_indices = std::make_index_sequence<elem_count>();
 
-	template<size_t N>
-	using check_elem_count = std::enable_if_t<N == elem_count>;
-
-	template<typename ...T, typename = check_elem_count<sizeof...(T)>>
-	constexpr auto foreach(auto &&callable, std::tuple<T...> &&tuple)
+	constexpr auto foreach(auto &&callable, auto &&...tuples)
 	{
-		return zip_apply(callable, elems(), tuple);
+		static_assert(((sizeof_tuple<decltype(tuples)> == elem_count) && ...));
+		return zip_apply(callable, elems(), tuples...);
 	}
 
-	constexpr auto foreach(auto &&callable)
+	constexpr auto foreach(auto &&callable, auto &&...tuples) const
 	{
-		return zip_apply(callable, elems());
-	}
-
-	template<typename ...T, typename = check_elem_count<sizeof...(T)>>
-	constexpr auto foreach(auto &&callable, std::tuple<T...> &&tuple) const
-	{
-		return zip_apply(callable, elems(), tuple);
-	}
-
-	constexpr auto foreach(auto &&callable) const
-	{
-		return zip_apply(callable, elems());
+		static_assert(((sizeof_tuple<decltype(tuples)> == elem_count) && ...));
+		return zip_apply(callable, elems(), tuples...);
 	}
 
 public:
 	constexpr vec_impl()
 	{
-		foreach([](auto &elem) { elem = 0; });
+		foreach(bind_back(operators::eq, 0));
 	}
 
-	template<typename ...T, typename = check_elem_count<sizeof...(T)>>
+	template<typename ...T, typename = std::enable_if_t<sizeof...(T) == elem_count>>
 	constexpr vec_impl(T ...values)
 	{
-		foreach([](auto &elem, auto value) { elem = value; }, std::make_tuple(values...));
+		elems() = std::make_tuple(values...);
 	}
 
 	explicit constexpr vec_impl(elem_tuple &&tuple)
 	{
-		foreach([](auto &elem, auto value) { elem = value; }, tuple);
+		elems() = tuple;
 	}
 
 	constexpr vec_impl(const vec_impl &other)
@@ -72,64 +59,60 @@ public:
 	template<typename... T>
 	constexpr vec_impl &operator=(const vec_impl &other)
 	{
-		foreach([](auto &elem, auto value) { elem = value; }, other.elems());
+		elems() = other.elems();
 		return *this;
 	}
 
 	template<typename... T>
 	constexpr vec_impl &operator+=(const vec_impl &other)
 	{
-		foreach([](auto &elem, auto value) { elem += value; }, other.elems());
+		foreach(operators::add_eq, other.elems());
 		return *this;
 	}
 
 	template<typename... T>
 	constexpr vec_impl operator+(const vec_impl &other) const
 	{
-		return vec_impl(foreach([](auto elem, auto value) {
-			return elem + value;
-		}, other.elems()));
+		return vec_impl(foreach(operators::add, other.elems()));
 	}
 
 	template<typename... T>
 	constexpr vec_impl &operator-=(const vec_impl &other)
 	{
-		foreach([](auto &elem, auto value) { elem -= value; }, other.elems());
+		foreach(operators::sub_eq, other.elems());
 		return *this;
 	}
 
 	template<typename... T>
 	constexpr vec_impl operator-(const vec_impl &other) const
 	{
-		return vec_impl(foreach([](auto elem, auto value) {
-			return elem - value;
-		}, other.elems()));
+		return vec_impl(foreach(operators::sub, other.elems()));
 	}
 
 	template<typename... T>
 	constexpr vec_impl &operator*=(auto value)
 	{
-		foreach([&](auto &elem) { elem *= value; });
+		foreach(bind_back(operators::mul_eq, value));
 		return *this;
 	}
 
 	template<typename... T>
 	constexpr vec_impl operator*(auto value) const
 	{
-		return vec_impl(foreach([](auto elem, auto value) { return elem * value; }));
+		return vec_impl(foreach(bind_back(operators::mul, value)));
 	}
 
 	template<typename... T>
 	constexpr vec_impl &operator/=(auto value)
 	{
-		foreach([&](auto &elem) { elem /= value; });
+		foreach(bind_back(operators::div_eq, value));
 		return *this;
 	}
 
 	template<typename... T>
 	constexpr vec_impl operator/(auto value) const
 	{
-		return vec_impl(foreach([](auto elem, auto value) { return elem / value; }));
+		return vec_impl(foreach(bind_back(operators::div, value)));
 	}
 
 	template<typename... T>
