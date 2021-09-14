@@ -2,6 +2,8 @@
 #include "util/hash.h"
 #include "util/vector.h"
 #include "util/gc/file.h"
+#include "util/draw/prims.h"
+#include <ogc/gx.h>
 #include <vector>
 
 extern "C" void orig_StartMelee(void *param_1);
@@ -60,5 +62,10 @@ struct asdf {
 		static_assert(vec3i(1, 0, 0).x == 1);
 
 		dvd_file file("EfFxData.dat");
+		OSReport("first word: %02X %02X %02X %02X\n",
+			file.data[0],
+			file.data[1],
+			file.data[2],
+			file.data[3]);
 	}
 } asdf;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "util/int_types.h"
+#include "util/types.h"
 #include <cstddef>
 
 #define HEAP_DEFAULT (-1)

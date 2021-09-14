@@ -1,4 +1,6 @@
-#include "util/int_types.h"
+#pragma once
+
+#include "util/types.h"
 #include "util/misc.h"
 #include "util/operators.h"
 #include <cmath>

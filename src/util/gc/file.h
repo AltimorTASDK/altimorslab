@@ -7,17 +7,15 @@
 #include <string>
 
 class dvd_file {
-	size_t length;
-	std::unique_ptr<char[]> data;
-
 public:
-	dvd_file(const std::string &path)
-	{
-		length = File_GetLength(path.c_str());
-		data = std::make_unique<char[]>(align(length, 32));
-		File_Read(path.c_str(), data.get(), &length);
-	}
+	const size_t length;
+	const std::unique_ptr<char[]> data;
 
-	size_t get_length() const { return length; }
-	char *get_data() const { return data.get(); }
+	dvd_file(const std::string &path) :
+		length(File_GetLength(path.c_str())),
+		data(std::make_unique<char[]>(align(length, 32)))
+	{
+		auto _length = length;
+		File_Read(path.c_str(), data.get(), &_length);
+	}
 };
