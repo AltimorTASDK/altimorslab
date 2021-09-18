@@ -10,11 +10,9 @@
 
 template<typename base>
 class vec_impl : public base {
-public:
-	using base::elems;
-
 private:
 	using elem_tuple = decltype(std::declval<const base>().elems());
+	using elem_type = std::tuple_element_t<0, elem_tuple>;
 	static constexpr auto elem_count = sizeof_tuple<elem_tuple>;
 	static constexpr auto elem_indices = std::make_index_sequence<elem_count>();
 
@@ -31,9 +29,21 @@ private:
 	}
 
 public:
+	using base::elems;
+
+	template<typename other_base>
+	friend class vec_impl;
+
+	static constexpr vec_impl zero = vec_impl(fill_tuple<elem_count>(elem_type{}));
+
 	constexpr vec_impl()
 	{
 		foreach(bind_back(operators::eq, 0));
+	}
+
+	constexpr vec_impl(const vec_impl &other)
+	{
+		*this = other;
 	}
 
 	template<typename ...T, typename = std::enable_if_t<sizeof...(T) == elem_count>>
@@ -47,9 +57,17 @@ public:
 		elems() = tuple;
 	}
 
-	constexpr vec_impl(const vec_impl &other)
+	template<typename other_base>
+	explicit constexpr vec_impl(const vec_impl<other_base> &other)
 	{
-		*this = other;
+		if constexpr (elem_count > other.elem_count) {
+			constexpr auto pad = elem_count - other.elem_count;
+			elems() = std::tuple_cat(other.elems(), fill_tuple<pad>(elem_type{}));
+		} else if constexpr (elem_count < other.elem_count) {
+			elems() = slice_tuple<0, elem_count>(other.elems());
+		} else {
+			elems() = other.elems();
+		}
 	}
 
 	template<size_t N>
@@ -58,7 +76,6 @@ public:
 	template<size_t N>
 	constexpr auto get() const { return std::get<N>(elems()); }
 
-	template<typename... T>
 	constexpr vec_impl &operator=(const vec_impl &other)
 	{
 		elems() = other.elems();
@@ -121,6 +138,12 @@ public:
 	constexpr bool operator==(const vec_impl &other) const
 	{
 		return elems() == other.elems();
+	}
+
+	template<typename... T>
+	constexpr vec_impl operator-() const
+	{
+		return vec_impl(foreach(operators::neg));
 	}
 
 	constexpr auto length_sqr() const
@@ -188,3 +211,12 @@ struct color_rgba_base {
 
 using color_rgba = vec_impl<color_rgba_base<u8>>;
 using color_rgba_f32 = vec_impl<color_rgba_base<float>>;
+
+template<typename T>
+constexpr auto is_vector_type = false;
+
+template<typename T>
+constexpr auto is_vector_type<vec_impl<T>> = true;
+
+template<typename T>
+concept vector_type = is_vector_type<T>;

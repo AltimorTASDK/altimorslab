@@ -13,7 +13,7 @@ public:
 
 	dvd_file(const std::string &path) :
 		length(File_GetLength(path.c_str())),
-		data(std::make_unique<char[]>(align(length, 32)))
+		data(std::make_unique<char[]>(align_up(length, 32)))
 	{
 		auto _length = length;
 		File_Read(path.c_str(), data.get(), &_length);

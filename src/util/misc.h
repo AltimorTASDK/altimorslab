@@ -13,7 +13,7 @@ constexpr auto is_void = std::is_same_v<T, void>;
 template<typename T>
 constexpr auto sizeof_tuple = std::tuple_size_v<std::remove_reference_t<T>>;
 
-constexpr auto align(auto value, auto alignment)
+constexpr auto align_up(auto value, auto alignment)
 {
 	// Powers of 2 only
 	return (value + alignment - 1) & ~(alignment - 1);
@@ -31,6 +31,15 @@ constexpr auto tuple_or_void(auto &&tuple)
 {
 	if constexpr (sizeof_tuple<decltype(tuple)> != 0)
 		return std::move(tuple);
+}
+
+// Make a tuple with a given value repeated N times.
+template<size_t N>
+constexpr auto fill_tuple(auto &&value)
+{
+	return [&]<size_t ...I>(std::index_sequence<I...>) {
+		return std::make_tuple((I, value)...);
+	}(std::make_index_sequence<N>());
 }
 
 // Like std::bind_front

@@ -6,9 +6,10 @@ CC  := powerpc-eabi-gcc
 CXX := powerpc-eabi-g++
 LD  := powerpc-eabi-ld
 
-SOURCES := src sections
-OBJDIR  := obj
-DEPDIR  := dep
+SOURCES  := src sections
+OBJDIR   := obj
+DEPDIR   := dep
+TOOLS    := tools
 
 CFILES   := $(foreach dir, $(SOURCES), $(shell find $(dir) -type f -name '*.c'))
 CXXFILES := $(foreach dir, $(SOURCES), $(shell find $(dir) -type f -name '*.cpp'))
@@ -24,19 +25,18 @@ DEPFILES := $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $(OBJFILES))
 LIBOGC := $(DEVKITPATH)/libogc
 
 LINKSCRIPT := -Tmelee.ld
-LIBRARIES  := -L$(LIBOGC)/lib/cube -logc
-LDFLAGS    := -Wl,-Map=output.map -nostdlib $(LIBRARIES)
+LDFLAGS    := -Wl,-Map=output.map -nostdlib
 
-CFLAGS   := -DGEKKO -mogc -mcpu=750 -meabi -mhard-float -O3 -Wall -Wno-register
+CFLAGS   := -DGEKKO -mogc -mcpu=750 -meabi -mhard-float -O3 -Wall -Wno-register -Wno-unused-value
 CXXFLAGS := $(CFLAGS) -std=c++2b -fconcepts -fno-rtti -fno-exceptions
 INCLUDE  := -Isrc -I$(LIBOGC)/include
 
-bin/sys/main.dol: $(OBJFILES) GALE01.ld melee.ld patch_dol.py | clean_unused
+bin/sys/main.dol: $(OBJFILES) GALE01.ld melee.ld $(TOOLS)/patch_dol.py | clean_unused
 	$(CC) $(LDFLAGS) $(LINKSCRIPT) $(OBJFILES) -o $@
-	python patch_dol.py
+	python $(TOOLS)/patch_dol.py
 
-GALE01.ld: GALE01.map map_to_linker_script.py
-	python map_to_linker_script.py
+GALE01.ld: GALE01.map $(TOOLS)/map_to_linker_script.py
+	python $(TOOLS)/map_to_linker_script.py
 
 $(OBJDIR)/%.o: %.c
 	@[ -d $(@D) ] || mkdir -p $(@D)
