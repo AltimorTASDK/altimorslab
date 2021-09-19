@@ -15,10 +15,3 @@ public:
 	void write(f32 value) { as_f32 = value; }
 	void write(auto ...values) { (write(values), ...); }
 } *gx_fifo = (decltype(gx_fifo))0xCC008000;
-
-extern "C" {
-
-void GXBegin(u32 prim_type, u32 vertex_format, u16 vertex_count);
-void GXSetLineWidth(u8 width, u8 texture_offset);
-
-}

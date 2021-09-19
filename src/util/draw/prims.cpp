@@ -7,7 +7,7 @@
 #include <concepts>
 #include <vector>
 
-static void write_vector(const auto &vector)
+static void write_vector(const vector_type auto &vector)
 {
 	std::apply([](auto ...values) { gx_fifo->write(values...); }, vector.elems());
 }
@@ -68,16 +68,27 @@ static vec3 alignment_offset(const vec2 &size, align alignment)
 	PANIC("Invalid align constant");
 }
 
-template<vector_type T>
-static auto vector_min_max(const T &a, const T &b)
+void draw_rect(const vec3 &origin, const vec2 &size, const color_rgba &color, align alignment)
 {
-	const auto min = vec3(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
-	const auto max = vec3(std::min(a.x, b.x), std::min(a.y, b.y), std::min(a.z, b.z));
-	return std::make_tuple(min, max);
+	const auto aligned = origin + alignment_offset(size, alignment);
+	
+	draw_quads<vertex_pos_clr>({
+		{ aligned,                           color },
+		{ aligned + vec3(size.x, 0,      0), color },
+		{ aligned + vec3(size.x, size.y, 0), color },
+		{ aligned + vec3(0,      size.y, 0), color }
+	});
 }
 
-template<vertex_format T>
-void draw_rect(const T &a, const T &b, align alignment)
+void draw_rect(const vec3 &origin, const vec2 &size, const uv_coord &uv1, const uv_coord &uv2,
+               align alignment)
 {
-	const auto [min, max] = vector_min_max(a.position, b.position);
+	const auto aligned = origin + alignment_offset(size, alignment);
+	
+	draw_quads<vertex_pos_uv>({
+		{ aligned,                           uv1                    },
+		{ aligned + vec3(size.x, 0,      0), uv_coord(uv2.u, uv1.v) },
+		{ aligned + vec3(size.x, size.y, 0), uv2                    },
+		{ aligned + vec3(0,      size.y, 0), uv_coord(uv1.u, uv2.v) }
+	});
 }

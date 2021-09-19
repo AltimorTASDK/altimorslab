@@ -158,7 +158,31 @@ public:
 
 	static constexpr auto dot(const vec_impl &a, const vec_impl &b)
 	{
-		return sum_tuple(zip_apply(operators::mul, a.elems(), b.elems()));
+		return sum_tuple(a.foreach(operators::mul, b.elems()));
+	}
+	
+	// Component-wise min of two vectors
+	static constexpr auto min(const vec_impl &a, const vec_impl &b)
+	{
+		return vec_impl(a.foreach(operators::min, b.elems()));
+	}
+	
+	// Component-wise max of two vectors
+	static constexpr auto max(const vec_impl &a, const vec_impl &b)
+	{
+		return vec_impl(a.foreach(operators::max, b.elems()));
+	}
+
+	// Component-wise min and max of two vectors
+	static constexpr auto min_max(const vec_impl &a, const vec_impl &b)
+	{
+		return std::make_tuple(min(a, b), max(a, b));
+	}
+
+	// Component-wise lerp of two vectors
+	static constexpr auto lerp(const vec_impl &a, const vec_impl &b, auto t)
+	{
+		return vec_impl(a.foreach(bind_back(std::lerp, t), b.elems()));
 	}
 };
 
@@ -211,6 +235,14 @@ struct color_rgba_base {
 
 using color_rgba = vec_impl<color_rgba_base<u8>>;
 using color_rgba_f32 = vec_impl<color_rgba_base<float>>;
+
+struct uv_coord_base {
+	float u, v;
+	constexpr auto elems() { return std::tie(u, v); }
+	constexpr auto elems() const { return std::make_tuple(u, v); }
+};
+
+using uv_coord = vec_impl<uv_coord_base>;
 
 template<typename T>
 constexpr auto is_vector_type = false;

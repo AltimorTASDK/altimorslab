@@ -52,11 +52,11 @@ constexpr auto bind_back(auto &&callable, auto &&...args)
 	};
 }
 
-template<typename ...T, size_t start, size_t end = sizeof...(T)>
-constexpr auto slice_tuple(const std::tuple<T...> &tuple)
+template<size_t start, size_t end>
+constexpr auto slice_tuple(auto &&tuple)
 {
 	// Python style indices
-	constexpr auto size = sizeof...(T);
+	constexpr auto size = sizeof_tuple<decltype(tuple)>;
 
 	constexpr auto real_start = start >= 0
 		? std::min(start, size - 1)
@@ -71,10 +71,10 @@ constexpr auto slice_tuple(const std::tuple<T...> &tuple)
 	}(std::make_index_sequence<real_end - real_start>());
 }
 
-template<typename ...T, size_t start, size_t end = sizeof...(T)>
-constexpr auto slice(T &&...args)
+template<size_t start, size_t end>
+constexpr auto slice(auto &&...args)
 {
-	return slice_tuple<T..., start, end>(std::forward_as_tuple(args...));
+	return slice_tuple<start, end>(std::forward_as_tuple(args...));
 }
 
 // Create a tuple of the Nth elements of the given tuples. If a tuple has no Nth
