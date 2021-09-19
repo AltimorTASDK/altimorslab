@@ -7,25 +7,43 @@ import sys
 IN_DIR = "resources"
 OUT_DIR = "bin/files/lab"
 
-GX_RGB8 = 1
-GX_RGBA8 = 5
+GX_TF_RGBA8 = 6
 
 def encode_png(in_path, out_path):
     with open(in_path, "rb") as in_file:
         reader = png.Reader(file=open(in_path, "rb"))
-        _, _, _, info = reader.asDirect()
+        width, height, [*data], info = reader.asRGBA8()
 
-        reader = png.Reader(file=open(in_path, "rb"))
-        if info['alpha']:
-            fmt = GX_RGBA8
-            width, height, [*data], info = reader.asRGBA8()
-        else:
-            fmt = GX_RGB8
-            width, height, [*data], info = reader.asRGB8()
+    #data = b"".join(data)
+    #print(" ".join(f"{b:02X}" for b in data))
         
     with open(out_path, "wb") as out_file:
-        out_file.write(struct.pack("<HHB", width, height, fmt))
-        out_file.write(b"".join(data))
+        # Write header with 32 byte aligned size
+        header = struct.pack(">HHB", width, height, GX_TF_RGBA8)
+        header_size = (len(header) + 31) & ~31;
+        header += b"\x00" * (header_size - len(header))
+        out_file.write(header)
+        
+        # Write in 4x4 pixel blocks of format:
+        # ARARARARARARARAR
+        # ARARARARARARARAR
+        # GBGBGBGBGBGBGBGB
+        # GBGBGBGBGBGBGBGB
+        for block_y in range(0, height, 4):
+            for block_x in range(0, width, 4):
+                for offset_y in range(0, 4):
+                    for offset_x in range(0, 4):
+                        x = block_x + offset_x
+                        y = block_y + offset_y
+                        out_file.write(bytes([data[y][x * 4 + 3]])) # alpha
+                        out_file.write(bytes([data[y][x * 4]]))     # red
+
+                for offset_y in range(0, 4):
+                    for offset_x in range(0, 4):
+                        x = block_x + offset_x
+                        y = block_y + offset_y
+                        out_file.write(bytes([data[y][x * 4 + 1]])) # green
+                        out_file.write(bytes([data[y][x * 4 + 2]])) # blue
 
 def main():
     if len(sys.argv) < 3:

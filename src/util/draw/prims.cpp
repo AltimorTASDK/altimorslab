@@ -24,6 +24,13 @@ void vertex_pos_uv::write() const
 	write_vector(uv);
 }
 
+void vertex_pos_clr_uv::write() const
+{
+	write_vector(position);
+	write_vector(color);
+	write_vector(uv);
+}
+
 void vertex_pos_clr::set_format()
 {
 	GX_ClearVtxDesc();
@@ -31,6 +38,17 @@ void vertex_pos_clr::set_format()
 	GX_SetVtxDesc(GX_VA_POS, GX_DIRECT);
 	GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
 	GX_SetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+}
+
+void vertex_pos_clr_uv::set_format()
+{
+	GX_ClearVtxDesc();
+	GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+	GX_SetVtxDesc(GX_VA_POS, GX_DIRECT);
+	GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+	GX_SetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+	GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+	GX_SetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 }
 
 void vertex_pos_uv::set_format()
@@ -90,5 +108,18 @@ void draw_rect(const vec3 &origin, const vec2 &size, const uv_coord &uv1, const 
 		{ aligned + vec3(size.x, 0,      0), uv_coord(uv2.u, uv1.v) },
 		{ aligned + vec3(size.x, size.y, 0), uv2                    },
 		{ aligned + vec3(0,      size.y, 0), uv_coord(uv1.u, uv2.v) }
+	});
+}
+
+void draw_rect(const vec3 &origin, const vec2 &size, const color_rgba &color,
+               const uv_coord &uv1, const uv_coord &uv2, align alignment)
+{
+	const auto aligned = origin + alignment_offset(size, alignment);
+	
+	draw_quads<vertex_pos_clr_uv>({
+		{ aligned,                           color, uv1                    },
+		{ aligned + vec3(size.x, 0,      0), color, uv_coord(uv2.u, uv1.v) },
+		{ aligned + vec3(size.x, size.y, 0), color, uv2                    },
+		{ aligned + vec3(0,      size.y, 0), color, uv_coord(uv1.u, uv2.v) }
 	});
 }

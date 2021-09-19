@@ -26,7 +26,8 @@ def get_dol_end(data):
         return address + size
     
     bss_end = word(data, BSS_START) + word(data, BSS_SIZE)
-    return max(bss_end, *(get_section_end(i) for i in range(SECTION_COUNT)))
+    dol_end = max(bss_end, *(get_section_end(i) for i in range(SECTION_COUNT)))
+    return (dol_end + 31) & ~31;
 
 def address_to_offset(data, value):
     for i in range(0, SECTION_COUNT):

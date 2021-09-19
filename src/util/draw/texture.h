@@ -9,11 +9,14 @@ class texture {
 		u16 width;
 		u16 height;
 		u8 format;
+	private:
+		u8 align[32 - 5];
+	public:
 		char data[];
 	};
 
 	GXTexObj tex_obj;
-	const dvd_file file;
+	const asset_file file;
 
 public:
 	texture(const std::string &path,
@@ -22,17 +25,17 @@ public:
 	        u8 mipmap = GX_TRUE
 	) : file(path)
 	{
-		GX_InitTexObj(&tex_obj, tex()->data, tex()->width, tex()->height,
-		              tex()->format, wrap_s, wrap_t, mipmap);
+		GX_InitTexObj(&tex_obj, (void*)info()->data, info()->width, info()->height,
+		              GX_TF_RGBA8, wrap_s, wrap_t, mipmap);
 	}
 	
-	const tex_file *tex() const
+	const tex_file *info() const
 	{
 		return (tex_file*)file.data.get();
 	}
 
 	void apply()
 	{
-		GX_LoadTexObj(&tex_obj, 0);
+		GX_LoadTexObj(&tex_obj, GX_TEXMAP0);
 	}
 };

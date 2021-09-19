@@ -19,3 +19,10 @@ public:
 		File_Read(path.c_str(), data.get(), &_length);
 	}
 };
+
+constexpr char lab_root[] = "lab/";
+
+class asset_file : public dvd_file {
+public:
+	asset_file(const std::string &path) : dvd_file(lab_root + path) {}
+};

@@ -15,3 +15,4 @@
 
 add_hook HSD_ResetScene
 add_hook StartMelee
+add_hook DevelopText_DrawAll

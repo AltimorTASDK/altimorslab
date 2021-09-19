@@ -40,6 +40,18 @@ struct vertex_pos_uv : vertex {
 	void write() const;
 };
 
+struct vertex_pos_clr_uv : vertex {
+	vec3 position;
+	color_rgba color;
+	uv_coord uv;
+	
+	vertex_pos_clr_uv(vec3 position, color_rgba color, uv_coord uv) :
+		position(position), color(color), uv(uv) {}
+	
+	static void set_format();
+	void write() const;
+};
+
 template<typename T>
 concept vertex_format = std::is_base_of_v<vertex, T>;
 
@@ -59,6 +71,9 @@ void draw_quads(const std::vector<T> &vertices)
 
 void draw_rect(const vec3 &origin, const vec2 &size, const color_rgba &color,
                align alignment = align::top_left);
+
+void draw_rect(const vec3 &origin, const vec2 &size, const color_rgba &color,
+               const uv_coord &uv1, const uv_coord &uv2, align alignment = align::top_left);
 
 void draw_rect(const vec3 &origin, const vec2 &size, const uv_coord &uv1, const uv_coord &uv2,
                align alignment = align::top_left);
