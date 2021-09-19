@@ -109,10 +109,23 @@ public:
 	}
 
 	template<typename... T>
+	constexpr vec_impl operator*=(const vec_impl &other) const
+	{
+		foreach(operators::mul_eq, other.elems());
+		return *this;
+	}
+
+	template<typename... T>
 	constexpr vec_impl &operator*=(auto value)
 	{
 		foreach(bind_back(operators::mul_eq, value));
 		return *this;
+	}
+
+	template<typename... T>
+	constexpr vec_impl operator*(const vec_impl &other) const
+	{
+		return vec_impl(foreach(operators::mul, other.elems()));
 	}
 
 	template<typename... T>
@@ -122,10 +135,23 @@ public:
 	}
 
 	template<typename... T>
+	constexpr vec_impl operator/=(const vec_impl &other) const
+	{
+		foreach(operators::div_eq, other.elems());
+		return *this;
+	}
+
+	template<typename... T>
 	constexpr vec_impl &operator/=(auto value)
 	{
 		foreach(bind_back(operators::div_eq, value));
 		return *this;
+	}
+
+	template<typename... T>
+	constexpr vec_impl operator/(const vec_impl &other) const
+	{
+		return vec_impl(foreach(operators::div, other.elems()));
 	}
 
 	template<typename... T>

@@ -3,6 +3,7 @@
 #include "util/hash.h"
 #include "util/vector.h"
 #include "util/gc/file.h"
+#include "util/draw/font.h"
 #include "util/draw/prims.h"
 #include "util/draw/texture.h"
 #include <ogc/gx.h>
@@ -43,10 +44,12 @@ extern "C" void hook_HSD_ResetScene()
 	}
 }
 		
-//texture font_small("fonts/font_small.tex");
+font font_small("fonts/font_small.tex", { 16, 32 }, { 9, 14 });
 texture test("test.tex");
 
 extern "C" void HSD_StateInitDirect(u32 format, u32 render_mode);
+extern "C" void C_MTXOrtho(float, float, float, float, float, float, Mtx44);
+extern "C" void GX_SetProjectionv(Mtx44, int);
 
 extern "C" void orig_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass);
 extern "C" void hook_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass)
@@ -76,8 +79,6 @@ extern "C" void hook_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass)
 		{ 255, 255, 255, 255 },
 		align::top_left);*/
 	
-	test.apply();
-	
 	/*GX_SetNumTexGens(1);
 	GX_SetTexCoordGen2(0, 1, 4, 0x3C, 0, 0x7D);
 	GX_SetNumTevStages(1);
@@ -86,6 +87,8 @@ extern "C" void hook_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass)
 	GX_SetZTexture(2, 0x11, 0);
 	GX_SetNumChans(1);*/
 	
+	GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
+	
 	GX_SetTevOp(GX_TEVSTAGE0, GX_MODULATE);
 	GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 	
@@ -93,21 +96,26 @@ extern "C" void hook_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass)
 	GX_SetNumTexGens(1);
 	GX_SetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_DTTIDENTITY);
 	
-	/*GXTexObj tex_obj;
-	GX_InitTexObj(&tex_obj, (void*)
-	"\xFF\x00\x00\xFF" "\x00\x00\xFF\xFF" "\x00\xFF\x00\xFF" "\xFF\x00\x00\x80"
-	"\xFF\x00\x00\xFF" "\x00\x00\xFF\xFF" "\x00\xFF\x00\xFF" "\xFF\x00\x00\x80"
-	"\xFF\x00\x00\xFF" "\x00\x00\xFF\xFF" "\x00\xFF\x00\xFF" "\xFF\x00\x00\x80"
-	"\xFF\x00\x00\xFF" "\x00\x00\xFF\xFF" "\x00\xFF\x00\xFF" "\xFF\x00\x00\x80"
-	, 4, 4, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_TRUE);
-	GX_LoadTexObj(&tex_obj, GX_TEXMAP0);*/
-		
+	/*GX_SetViewport(0, 0, 640, 480, 0, 1);
+	GX_SetScissor(0, 0, 640, 480);
+	
+	Mtx44 proj;
+	GX_SetCurrentMtx(0);
+	C_MTXOrtho(0, 480, 0, 640, 0, 2, proj);
+	GX_SetProjectionv(proj, 0);*/
+
+	vertex_pos_clr_uv::set_format();
+	test.apply();
+	draw_rect(vec3(-20, -20, 0), vec2(680, 520), color_rgba(255, 255, 255, 128), uv_coord(0, 0), uv_coord(1, 1));
+	//draw_rect(vec3(0, 0, 0), vec2(660, 528), color_rgba(255, 255, 255, 64), uv_coord(0, 0), uv_coord(1, 1));
+	
 	vertex_pos_uv::set_format();
-	draw_rect(
-		{ 0, 0, 0 },
-		{ 100, 100 },
-		{ 0.f, 0.f }, { 2.f, 2.f },
-		align::top_left);
+	//font font_big("fonts/font_big.tex", { 32, 64 }, { 18, 28 });
+	//font_big.draw("GAY PRIDE", { 640/2, 100, 0 }, align::center);
+	font_small.draw("\x03 \x0B \x03 \x0B \x03 GAY PRIDE WORLDWIDE \x03 \x0C \x03 \x0C \x03", { 640/2, 100, 0 }, align::center);
+
+	font_small.draw("Custom font rendering w/ texture atlas", { 640/2, 480/2 - 9, 0 }, align::center);
+	font_small.draw("Big pp mode engaged", { 640/2, 480/2 + 9, 0 }, align::center);
 		
 	/*draw_primitive<vertex_pos_clr>(GX_LINES, {
 		{

@@ -60,7 +60,7 @@ void vertex_pos_uv::set_format()
 	GX_SetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 }
 
-static vec3 alignment_offset(const vec2 &size, align alignment)
+vec3 alignment_offset(const vec2 &size, align alignment)
 {
 	switch (alignment) {
 	case align::top_left:

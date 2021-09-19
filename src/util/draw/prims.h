@@ -69,6 +69,8 @@ void draw_quads(const std::vector<T> &vertices)
 	draw_primitive(GX_QUADS, vertices);
 }
 
+vec3 alignment_offset(const vec2 &size, align alignment);
+
 void draw_rect(const vec3 &origin, const vec2 &size, const color_rgba &color,
                align alignment = align::top_left);
 
