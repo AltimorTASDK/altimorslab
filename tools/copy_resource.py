@@ -13,9 +13,6 @@ def encode_png(in_path, out_path):
     with open(in_path, "rb") as in_file:
         reader = png.Reader(file=open(in_path, "rb"))
         width, height, [*data], info = reader.asRGBA8()
-
-    #data = b"".join(data)
-    #print(" ".join(f"{b:02X}" for b in data))
         
     with open(out_path, "wb") as out_file:
         # Write header with 32 byte aligned size
