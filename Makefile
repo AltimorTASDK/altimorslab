@@ -57,22 +57,35 @@ RESOURCE_DIR_IN  := resources
 RESOURCE_DIR_OUT := bin/files/lab
 RESOURCES        := $(foreach dir, $(RESOURCE_DIR_IN), $(shell find $(dir) -type f))
 RESOURCES        := $(filter-out %.psd, $(RESOURCES))
+TEXTURES         := $(filter     %.png, $(RESOURCES))
+RESOURCES        := $(filter-out %.png, $(RESOURCES))
 
 define get_resource_out
-$(patsubst %.png, %.tex, $(subst $(RESOURCE_DIR_IN), $(RESOURCE_DIR_OUT), $1))
+$(subst $(RESOURCE_DIR_IN), $(RESOURCE_DIR_OUT), $1)
+endef
+
+define get_texture_out
+$(shell echo $(subst $(RESOURCE_DIR_IN), $(RESOURCE_DIR_OUT), $1) | sed -r "s/([^.]*)\\.?.*\\.png/\\1.tex/")
 endef
 
 define make_resource_rule
-$(call get_resource_out, $1): $1 $(TOOLS)/copy_resource.py
-	python $(TOOLS)/copy_resource.py $$< $$@
+$(call get_resource_out, $1): $1
+	cp $$< $$@
+endef
+
+define make_texture_rule
+$(call get_texture_out, $1): $1 $(TOOLS)/encode_texture.py
+	python $(TOOLS)/encode_texture.py $$< $$@
 endef
 
 RESOURCES_OUT := $(foreach resource, $(RESOURCES), $(call get_resource_out, $(resource)))
+TEXTURES_OUT := $(foreach texture, $(TEXTURES), $(call get_texture_out, $(texture)))
 
 .PHONY: resources
-resources: $(RESOURCES_OUT)
+resources: $(RESOURCES_OUT) $(TEXTURES_OUT)
 
 $(foreach resource, $(RESOURCES), $(eval $(call make_resource_rule, $(resource))))
+$(foreach texture, $(TEXTURES), $(eval $(call make_texture_rule, $(texture))))
 
 .PHONY: clean
 clean:
@@ -83,6 +96,6 @@ clean:
 clean_unused:
 	$(foreach file, $(shell find $(OBJDIR) -type f), $(if $(filter $(file), $(OBJFILES)),, $(shell rm $(file))))
 	$(foreach file, $(shell find $(DEPDIR) -type f), $(if $(filter $(file), $(DEPFILES)),, $(shell rm $(file))))
-	$(foreach file, $(shell find $(RESOURCE_DIR_OUT) -type f), $(if $(filter $(file), $(RESOURCES_OUT)),, $(shell rm $(file))))
+	$(foreach file, $(shell find $(RESOURCE_DIR_OUT) -type f), $(if $(filter $(file), $(RESOURCES_OUT) $(TEXTURES_OUT)),, $(shell rm $(file))))
 
 -include $(DEPFILES)

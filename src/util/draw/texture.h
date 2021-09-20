@@ -36,7 +36,7 @@ public:
 	) : file(path)
 	{
 		GX_InitTexObj(&tex_obj, (void*)tex()->data, tex()->width, tex()->height,
-		              GX_TF_RGBA8, wrap_s, wrap_t, mipmap);
+		              tex()->format, wrap_s, wrap_t, mipmap);
 	}
 
 	void apply() const

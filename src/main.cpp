@@ -45,6 +45,7 @@ extern "C" void hook_HSD_ResetScene()
 }
 		
 font font_small("fonts/font_small.tex", { 16, 32 }, { 9, 14 });
+font font_big("fonts/font_big.tex", { 32, 64 }, { 18, 28 });
 texture test("test.tex");
 
 extern "C" void HSD_StateInitDirect(u32 format, u32 render_mode);
@@ -110,9 +111,7 @@ extern "C" void hook_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass)
 	//draw_rect(vec3(0, 0, 0), vec2(660, 528), color_rgba(255, 255, 255, 64), uv_coord(0, 0), uv_coord(1, 1));
 	
 	vertex_pos_uv::set_format();
-	//font font_big("fonts/font_big.tex", { 32, 64 }, { 18, 28 });
-	//font_big.draw("GAY PRIDE", { 640/2, 100, 0 }, align::center);
-	font_small.draw("\x03 \x0B \x03 \x0B \x03 GAY PRIDE WORLDWIDE \x03 \x0C \x03 \x0C \x03", { 640/2, 100, 0 }, align::center);
+	font_big.draw("\x03\x0B\x03\x0B\x03GAY PRIDE WORLDWIDE\x03\x0C\x03\x0C\x03", { 640/2, 100, 0 }, align::center);
 
 	font_small.draw("Custom font rendering w/ texture atlas", { 640/2, 480/2 - 9, 0 }, align::center);
 	font_small.draw("Big pp mode engaged", { 640/2, 480/2 + 9, 0 }, align::center);

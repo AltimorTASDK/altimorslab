@@ -16,7 +16,6 @@ public:
 		data(std::make_unique<char[]>(align_up(length, 32)))
 	{
 		auto _length = length;
-		OSReport("file len %d\n", _length);
 		File_Read(path.c_str(), data.get(), &_length);
 	}
 };
