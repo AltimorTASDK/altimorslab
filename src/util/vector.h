@@ -10,11 +10,13 @@
 
 template<typename base>
 class vec_impl : public base {
-private:
+	template<typename other_base>
+	friend class vec_impl;
+
 	using elem_tuple = decltype(std::declval<const base>().elems());
 	using elem_type = std::tuple_element_t<0, elem_tuple>;
+
 	static constexpr auto elem_count = sizeof_tuple<elem_tuple>;
-	static constexpr auto elem_indices = std::make_index_sequence<elem_count>();
 
 	constexpr auto foreach(auto &&callable, auto &&...tuples)
 	{
@@ -30,9 +32,6 @@ private:
 
 public:
 	using base::elems;
-
-	template<typename other_base>
-	friend class vec_impl;
 
 	static constexpr vec_impl zero = vec_impl(fill_tuple<elem_count>(elem_type{}));
 	static constexpr vec_impl one = vec_impl(fill_tuple<elem_count>(1));
