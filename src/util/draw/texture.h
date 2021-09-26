@@ -2,6 +2,7 @@
 
 #include "util/gc/file.h"
 #include "util/misc.h"
+#include "util/draw/render.h"
 #include <ogc/gx.h>
 
 class texture {
@@ -41,7 +42,7 @@ public:
 
 	void apply() const
 	{
-		GX_LoadTexObj(&tex_obj, GX_TEXMAP0);
+		render_state::get().load_tex_obj(&tex_obj);
 	}
 	
 	u16 width() const

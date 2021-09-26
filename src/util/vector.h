@@ -244,6 +244,15 @@ using vec3d = vec_impl<vec3_base<double>>;
 
 template<typename T>
 struct color_rgb_base {
+	static constexpr vec_impl<color_rgb_base> white = []() {
+		constexpr auto max =
+			std::is_same_v<T, float>  ? 1.f :
+			std::is_same_v<T, double> ? 1.0 :
+			                            255;
+
+		return vec_impl<color_rgb_base>(max, max, max);
+	}();
+
 	T r, g, b;
 	constexpr auto elems() { return std::tie(r, g, b); }
 	constexpr auto elems() const { return std::make_tuple(r, g, b); }
@@ -254,6 +263,15 @@ using color_rgb_f32 = vec_impl<color_rgb_base<float>>;
 
 template<typename T>
 struct color_rgba_base {
+	static constexpr vec_impl<color_rgba_base> white = []() {
+		constexpr auto max =
+			std::is_same_v<T, float>  ? 1.f :
+			std::is_same_v<T, double> ? 1.0 :
+			                            255;
+
+		return vec_impl<color_rgba_base>(max, max, max, max);
+	}();
+
 	T r, g, b, a;
 	constexpr auto elems() { return std::tie(r, g, b, a); }
 	constexpr auto elems() const { return std::make_tuple(r, g, b, a); }

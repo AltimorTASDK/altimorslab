@@ -13,6 +13,10 @@ constexpr auto is_void = std::is_same_v<T, void>;
 template<typename T>
 constexpr auto sizeof_tuple = std::tuple_size_v<std::remove_reference_t<T>>;
 
+// Extract values from a tuple of std::integral_constants
+template<size_t N, typename T>
+constexpr auto tuple_constant = std::tuple_element_t<N, T>::value;
+
 constexpr auto align_up(auto value, auto alignment)
 {
 	// Powers of 2 only
@@ -25,6 +29,85 @@ constexpr auto sum_tuple(auto &&tuple)
 		return (std::get<I>(tuple) + ...);
 	}(std::make_index_sequence<sizeof_tuple<decltype(tuple)>>());
 }
+
+// Cartesian product of two tuples
+constexpr auto tuple_product(auto &&a, auto &&b)
+{
+	return for_range<sizeof_tuple<decltype(a)>>([&]<size_t ...I>() {
+		return std::tuple_cat(([&]<size_t n>() {
+			return for_range<sizeof_tuple<decltype(b)>>([&]<size_t ...J>() {
+				return std::make_tuple(
+					std::make_tuple(std::get<n>(a), std::get<J>(b))...);
+			});
+		}.template operator()<I>())...);
+	});
+}
+
+// std::make_tuple(0...N)
+template<size_t N>
+constexpr auto range()
+{
+	return [&]<size_t ...I>(std::index_sequence<I...>) {
+		return std::make_tuple(I...);
+	}(std::make_index_sequence<N>());
+}
+
+// std::make_tuple(start...end)
+template<size_t start, size_t end>
+constexpr auto range()
+{
+	return [&]<size_t ...I>(std::index_sequence<I...>) {
+		return std::make_tuple((I + start)...);
+	}(std::make_index_sequence<end - start>());
+}
+
+// std::make_tuple(std::integral_constant<size_t, 0...N>())
+template<size_t N>
+constexpr auto constant_range()
+{
+	return [&]<size_t ...I>(std::index_sequence<I...>) {
+		return std::make_tuple(std::integral_constant<size_t, I>()...);
+	}(std::make_index_sequence<N>());
+}
+
+// std::make_tuple(std::integral_constant<size_t, start...end>())
+template<size_t start, size_t end>
+constexpr auto constant_range()
+{
+	return [&]<size_t ...I>(std::index_sequence<I...>) {
+		return std::make_tuple(std::integral_constant<size_t, I + start>()...);
+	}(std::make_index_sequence<end - start>());
+}
+
+template<size_t N>
+constexpr auto for_range(auto &&callable, auto &&...args)
+{
+	return [&]<size_t ...I>(std::index_sequence<I...>) {
+		return callable.template operator()<I...>(
+			std::forward<decltype(args)>(args)...);
+	}(std::make_index_sequence<N>());
+}
+
+template<size_t start, size_t end>
+constexpr auto for_range(auto &&callable, auto &&...args)
+{
+	return [&]<size_t ...I>(std::index_sequence<I...>) {
+		return callable.template operator()<(I + start)...>(
+			std::forward<decltype(args)>(args)...);
+	}(std::make_index_sequence<end - start>());
+}
+
+// Invoke callable with a template argument list containing the type list of the
+// cartesian product tuple of constant_range<N>()...
+template<size_t ...N>
+constexpr auto for_range_product(auto &&callable, auto &&...args)
+{
+	return std::apply([&]<typename... pairs>(pairs &&...) {
+		return callable.template operator()<pairs...>(
+			std::forward<decltype(args)>(args)...);
+	}, tuple_product(constant_range<N>()...));
+}
+
 
 // Replaces empty tuples with void.
 constexpr auto tuple_or_void(auto &&tuple)
@@ -66,9 +149,9 @@ constexpr auto slice_tuple(auto &&tuple)
 		? std::min(end, size)
 		: std::max((size_t)0, size + end);
 
-	return [&]<size_t ...I>(std::index_sequence<I...>) {
-		return std::forward_as_tuple(std::get<real_start + I>(tuple)...);
-	}(std::make_index_sequence<real_end - real_start>());
+	return for_range<real_start, real_end>([&]<size_t ...I>() {
+		return std::forward_as_tuple(std::get<I>(tuple)...);
+	});
 }
 
 template<size_t start, size_t end>
@@ -96,16 +179,16 @@ constexpr auto zip(auto &&...tuples)
 	if constexpr (sizeof...(tuples) > 1) {
 		constexpr auto longest = std::max(sizeof_tuple<decltype(tuples)>...);
 
-		return [&]<size_t ...I>(std::index_sequence<I...>) {
+		return for_range<longest>([&]<size_t ...I>() {
 			return std::make_tuple(zip_at_index<I>(tuples...)...);
-		}(std::make_index_sequence<longest>());
+		});
 	} else {
 		// If only one tuple, wrap each element in a tuple
 		constexpr auto size = sizeof_tuple<decltype(tuples)...>;
 
-		return [&]<size_t ...I>(std::index_sequence<I...>) {
+		return for_range<size>([&]<size_t ...I>() {
 			return std::make_tuple(std::forward_as_tuple(std::get<I>(tuples...))...);
-		}(std::make_index_sequence<size>());
+		});
 	}
 }
 

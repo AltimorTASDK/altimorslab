@@ -1,5 +1,5 @@
 #include "util/vector.h"
-#include "util/draw/prims.h"
+#include "util/draw/render.h"
 #include "util/draw/texture.h"
 #include <cmath>
 
@@ -41,13 +41,12 @@ public:
 	void draw(const std::string &text, const vec3 &origin,
 	          align alignment = align::top_left) const
 	{
+		auto &rs = render_state::get();
 		auto pos = origin - cell_padding + alignment_offset(vec2(measure(text)), alignment);
-		
-		tex.apply();
 		
 		for (auto c : text) {
 			const auto [uv1, uv2] = get_char_uv(c);
-			draw_rect(pos, vec2(cell_size), uv1, uv2);
+			rs.fill_rect(pos, vec2(cell_size), tex, uv1, uv2);
 			pos.x += char_size.x;
 		}
 	}

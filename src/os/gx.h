@@ -2,7 +2,7 @@
 
 #include "os/os.h"
 #include "util/types.h"
-#include <concepts>
+#include <ogc/gx.h>
 
 inline union {
 private:

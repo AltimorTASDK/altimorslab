@@ -1,10 +1,11 @@
 #include "os/os.h"
 #include "hsd/cobj.h"
 #include "util/hash.h"
+#include "util/matrix.h"
 #include "util/vector.h"
 #include "util/gc/file.h"
 #include "util/draw/font.h"
-#include "util/draw/prims.h"
+#include "util/draw/render.h"
 #include "util/draw/texture.h"
 #include <ogc/gx.h>
 #include <vector>
@@ -50,7 +51,6 @@ texture test("test.tex");
 
 extern "C" void HSD_StateInitDirect(u32 format, u32 render_mode);
 extern "C" void C_MTXOrtho(float, float, float, float, float, float, Mtx44);
-extern "C" void GX_SetProjectionv(Mtx44, int);
 
 extern "C" void orig_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass);
 extern "C" void hook_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass)
@@ -67,12 +67,8 @@ extern "C" void hook_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass)
 		{ 100, 100 },
 		{ 0.f, 0.f }, { 1.f, 1.f },
 		align::top_left);*/
-	HSD_StateInitDirect(GX_VTXFMT0, 2);
-	Mtx mtx;
-	auto *cobj = HSD_CObjGetCurrent();
-	HSD_CObjGetViewingMtx(cobj, &mtx);
-	GX_LoadPosMtxImm(mtx, GX_PNMTX0);
-	GX_SetCullMode(GX_CULL_NONE);
+
+	//HSD_StateInitDirect(GX_VTXFMT0, 2);
 
 	/*draw_rect(
 		{ 0, 0, 0 },
@@ -88,29 +84,35 @@ extern "C" void hook_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass)
 	GX_SetZTexture(2, 0x11, 0);
 	GX_SetNumChans(1);*/
 	
-	GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
+	/*GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
 	
+	GX_SetNumTevStages(1);
 	GX_SetTevOp(GX_TEVSTAGE0, GX_MODULATE);
 	GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
 	
 	GX_SetNumChans(1);
-	GX_SetNumTexGens(1);
-	GX_SetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE, GX_DTTIDENTITY);
-	
-	/*GX_SetViewport(0, 0, 640, 480, 0, 1);
-	GX_SetScissor(0, 0, 640, 480);
-	
-	Mtx44 proj;
-	GX_SetCurrentMtx(0);
-	C_MTXOrtho(0, 480, 0, 640, 0, 2, proj);
-	GX_SetProjectionv(proj, 0);*/
+	GX_SetChanCtrl(GX_COLOR0A0, GX_DISABLE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHTNULL, GX_DF_NONE,
+	               GX_AF_NONE);
 
-	vertex_pos_clr_uv::set_format();
-	test.apply();
-	draw_rect(vec3(-20, -20, 0), vec2(680, 520), color_rgba(255, 255, 255, 128), uv_coord(0, 0), uv_coord(1, 1));
-	//draw_rect(vec3(0, 0, 0), vec2(660, 528), color_rgba(255, 255, 255, 64), uv_coord(0, 0), uv_coord(1, 1));
+	GX_SetNumTexGens(1);
+	GX_SetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, GX_FALSE,
+	                   GX_DTTIDENTITY);
+
+	GX_SetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
 	
-	vertex_pos_uv::set_format();
+	constexpr auto proj = ortho_projection(0, 480, 0, 640, 0, 2);
+	GX_SetCurrentMtx(0);
+	GX_LoadProjectionMtx(proj.as_multidimensional(), GX_ORTHOGRAPHIC);*/
+
+	/*GX_ClearVtxDesc();
+	vertex_pos_clr_uv::set_format();
+	vertex_pos_uv::set_format();*/
+	auto &rs = render_state::get();
+	rs.reset();
+
+	rs.fill_rect(vec3(0, 0, 0), vec2(640, 480), color_rgba(255, 255, 255, 128), test,
+	             uv_coord(0, 0), uv_coord(1, 1));
+	
 	font_big.draw("\x03\x0B\x03\x0B\x03GAY PRIDE WORLDWIDE\x03\x0C\x03\x0C\x03", { 640/2, 100, 0 }, align::center);
 
 	font_small.draw("Custom font rendering w/ texture atlas", { 640/2, 480/2 - 9, 0 }, align::center);
@@ -128,31 +130,16 @@ extern "C" void hook_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass)
 	});*/
 }
 
-/*struct asdf {
+struct asdf {
 	asdf()
 	{
-		vec3 test1;
-		OSReport("y: %f\n", test1.y);
-		OSReport("&y: %p\n", &test1.y);
+		const auto proj = ortho_projection(0, 480, 0, 640, 0, 2);
 
-		vec3 test2(0, 1, 2);
-		OSReport("y: %f\n", test2.y);
-		OSReport("&y: %p\n", &test2.y);
+		for (auto i = 0; i < 4; i++) {
+			for (auto j = 0; j < 4; j++) 
+				OSReport("%.4f ", proj.get(i, j));
 
-		test2 = test1;
-		test2.elems();
-
-		test2 += test1;
-
-		static_assert(vec3::dot(vec3(1, 1, 0), vec3(.5f, .5f, 0)) == 1.f);
-		static_assert(vec3::cross(vec3(1, 0, 0), vec3(0, 0, 1)) == vec3(0, -1, 0));
-		static_assert(vec3i(1, 0, 0).x == 1);
-
-		asset_file file("fonts/font_small.tex");
-		OSReport("first word: %02X %02X %02X %02X\n",
-			file.data[0],
-			file.data[1],
-			file.data[2],
-			file.data[3]);
+			OSReport("\n");
+		}
 	}
-} asdf;*/
+} asdf;
