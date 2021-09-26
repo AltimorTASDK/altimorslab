@@ -1,3 +1,4 @@
+import math
 import os
 import png
 import shutil
@@ -23,8 +24,12 @@ FORMAT_DICT = {
 
 def block_range(x, y, step=1):
     if isinstance(step, tuple):
+        x = math.ceil(x / step[0]) * step[0]
+        y = math.ceil(y / step[1]) * step[1]
         ranges = (range(0, y, step[1]), range(0, x, step[0]))
     else:
+        x = math.ceil(x / step) * step
+        y = math.ceil(y / step) * step
         ranges = (range(0, y, step), range(0, x, step))
 
     return ((x, y) for y, x in product(*ranges))
