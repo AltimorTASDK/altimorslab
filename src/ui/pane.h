@@ -37,9 +37,6 @@ public:
 	{
 		auto &rs = render_state::get();
 		rs.fill_tiled_rect(get_position(), size, tex);
-		OSReport("pos %f %f\n", get_position().x, get_position().y);
-		OSReport("size %f %f\n", size.x, size.y);
-		
 		container::draw();
 	}
 };
