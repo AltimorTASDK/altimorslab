@@ -30,11 +30,9 @@ class texture {
 	}
 
 public:
-	texture(const std::string &path,
-	        u8 wrap_s = GX_REPEAT,
-	        u8 wrap_t = GX_REPEAT,
-	        u8 mipmap = GX_FALSE
-	) : file(path)
+	texture(const std::string &path, u8 wrap_s = GX_REPEAT, u8 wrap_t = GX_REPEAT,
+	        u8 mipmap = GX_FALSE) :
+		file(path)
 	{
 		GX_InitTexObj(&tex_obj, (void*)tex()->data, tex()->width, tex()->height,
 		              tex()->format, wrap_s, wrap_t, mipmap);

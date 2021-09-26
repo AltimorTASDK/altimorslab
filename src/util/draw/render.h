@@ -3,6 +3,7 @@
 #include "util/vector.h"
 #include "os/gx.h"
 #include <ogc/gx.h>
+#include <stack>
 
 class texture;
 
@@ -66,10 +67,14 @@ concept vertex_format = std::is_base_of_v<vertex, T>;
 vec3 alignment_offset(const vec2 &size, align alignment);
 
 class render_state {
-	int current_vertex_fmt = -1;
-	GXTexObj *current_tex_obj = nullptr;
+	static constexpr auto resolution = vec2(640, 480);
 	
 	static render_state instance;
+
+	int current_vertex_fmt = -1;
+	GXTexObj *current_tex_obj = nullptr;
+	std::array<u32, 4> current_scissor;
+	std::stack<std::array<u32, 4>> scissor_stack;
 	
 public:
 	static render_state &get()
@@ -78,6 +83,24 @@ public:
 	}
 
 	void reset();
+	
+	void set_scissor(u32 x, u32 y, u32 w, u32 h);
+	void push_scissor();
+	void pop_scissor();
+
+	void set_scissor(vec2i origin, vec2i size)
+	{
+		set_scissor(origin.x, origin.y, size.x, size.y);
+	}
+
+	// Like set_scissor, but restricts the new scissor to the bounds of the
+	// old scissor
+	void restrict_scissor(u32 x, u32 y, u32 w, u32 h);
+
+	void restrict_scissor(vec2i origin, vec2i size)
+	{
+		restrict_scissor(origin.x, origin.y, size.x, size.y);
+	}
 	
 	void load_tex_obj(GXTexObj *obj)
 	{
@@ -117,6 +140,9 @@ public:
 
 	void fill_rect(const vec3 &origin, const vec2 &size, const texture &tex,
 	        const uv_coord &uv1, const uv_coord &uv2, align alignment = align::top_left);
+
+	void fill_tiled_rect(const vec3 &origin, const vec2 &size, const texture &tex,
+	                     align alignment = align::top_left);
 
 	void fill_tiled_rect(const vec3 &origin, const vec2 &size, const color_rgba &color,
 		             const texture &tex, align alignment = align::top_left);

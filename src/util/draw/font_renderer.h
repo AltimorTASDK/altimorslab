@@ -1,9 +1,11 @@
+#pragma once
+
 #include "util/vector.h"
 #include "util/draw/render.h"
 #include "util/draw/texture.h"
 #include <cmath>
 
-class font {
+class font_renderer {
 	const texture tex;
 
 	const vec2i cell_size;
@@ -24,7 +26,7 @@ class font {
 	}
 
 public:
-	font(const std::string &path, vec2i cell_size, vec2i char_size) :
+	font_renderer(const std::string &path, vec2i cell_size, vec2i char_size) :
 		tex(path),
 		cell_size(cell_size),
 		cell_count((float)tex.width() / cell_size.x, (float)tex.height() / cell_size.y),
@@ -47,6 +49,19 @@ public:
 		for (auto c : text) {
 			const auto [uv1, uv2] = get_char_uv(c);
 			rs.fill_rect(pos, vec2(cell_size), tex, uv1, uv2);
+			pos.x += char_size.x;
+		}
+	}
+
+	void draw(const std::string &text, const vec3 &origin, const color_rgba &color,
+	          align alignment = align::top_left) const
+	{
+		auto &rs = render_state::get();
+		auto pos = origin - cell_padding + alignment_offset(vec2(measure(text)), alignment);
+		
+		for (auto c : text) {
+			const auto [uv1, uv2] = get_char_uv(c);
+			rs.fill_rect(pos, vec2(cell_size), color, tex, uv1, uv2);
 			pos.x += char_size.x;
 		}
 	}

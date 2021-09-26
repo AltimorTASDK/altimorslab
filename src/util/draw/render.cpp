@@ -113,10 +113,44 @@ void render_state::reset()
 	
 	GX_SetCullMode(GX_NONE);
 
-	constexpr auto proj = ortho_projection(0, 480, 0, 640, 0, 2);
+	constexpr auto proj = ortho_projection(0, resolution.y, 0, resolution.x, -1000, 1000);
 	GX_SetCurrentMtx(0);
 	GX_LoadProjectionMtx(proj.as_multidimensional(), GX_ORTHOGRAPHIC);
 	GX_LoadPosMtxImm(matrix3x4::identity.as_multidimensional(), GX_PNMTX0);
+	
+	set_scissor(0, 0, resolution.x, resolution.y);
+}
+
+void render_state::set_scissor(u32 x, u32 y, u32 w, u32 h)
+{
+	GX_SetScissor(x, y, w, h);
+	current_scissor = { x, y, w, h };
+}
+
+void render_state::push_scissor()
+{
+	scissor_stack.push(current_scissor);
+}
+
+void render_state::pop_scissor()
+{
+	const auto &scissor = scissor_stack.top();
+	set_scissor(scissor[0], scissor[1], scissor[2], scissor[3]);
+	scissor_stack.pop();
+}
+
+void render_state::restrict_scissor(u32 x, u32 y, u32 w, u32 h)
+{
+	// Get scissor corners
+	const auto old_min = vec2i(current_scissor[0], current_scissor[1]);
+	const auto old_max = old_min + vec2i(current_scissor[2], current_scissor[3]);
+	const auto new_min = vec2i(x, y);
+	const auto new_max = vec2i(x + w, y + h);
+	
+	const auto min = vec2i::max(old_min, new_min);
+	const auto max = vec2i::min(old_max, new_max);
+	const auto size = max - min;
+	set_scissor(min.x, min.y, size.x, size.y);
 }
 
 void render_state::fill_rect(const vec3 &origin, const vec2 &size, const color_rgba &color,
@@ -163,13 +197,8 @@ void render_state::fill_rect(const vec3 &origin, const vec2 &size, const color_r
 	});
 }
 
-void render_state::fill_tiled_rect(const vec3 &origin, const vec2 &size, const color_rgba &color,
-		                   const texture &tex, align alignment)
+static void iterate_tiled_rect_corners(auto &&callable, const vec2 &size, const texture &tex)
 {
-	const auto aligned = origin + alignment_offset(size, alignment);
-	
-	tex.apply();
-	
 	const auto tile_size = vec2(
 		std::min(size.x, (float)tex.width()) / 3,
 		std::min(size.y, (float)tex.height()) / 3);
@@ -187,14 +216,38 @@ void render_state::fill_tiled_rect(const vec3 &origin, const vec2 &size, const c
 		uv_coord::one - uv_coord(tile_size / vec2(tex.size())),
 		uv_coord::one
 	};
-		
+
 	for (auto i = 0; i < 3; i++) {
 		for (auto j = 0; j < 3; j++) {
 			const auto offset1 = vec2(offset_table[i].x, offset_table[j].y);
 			const auto offset2 = vec2(offset_table[i + 1].x, offset_table[j + 1].y);
 			const auto uv1 = uv_coord(uv_table[i].u, uv_table[j].v);
 			const auto uv2 = uv_coord(uv_table[i + 1].u, uv_table[j + 1].v);
-			fill_rect(aligned + vec3(offset1), offset2 - offset1, color, tex, uv1, uv2);
+			callable(offset1, offset2, uv1, uv2);
 		}
 	}
+}
+
+void render_state::fill_tiled_rect(const vec3 &origin, const vec2 &size, const texture &tex,
+                                   align alignment)
+{
+	const auto aligned = origin + alignment_offset(size, alignment);
+	
+	tex.apply();
+	
+	iterate_tiled_rect_corners([&](auto offset1, auto offset2, auto uv1, auto uv2) {
+		fill_rect(aligned + vec3(offset1), offset2 - offset1, tex, uv1, uv2);
+	}, size, tex);
+}
+
+void render_state::fill_tiled_rect(const vec3 &origin, const vec2 &size, const color_rgba &color,
+		                   const texture &tex, align alignment)
+{
+	const auto aligned = origin + alignment_offset(size, alignment);
+	
+	tex.apply();
+	
+	iterate_tiled_rect_corners([&](auto offset1, auto offset2, auto uv1, auto uv2) {
+		fill_rect(aligned + vec3(offset1), offset2 - offset1, color, tex, uv1, uv2);
+	}, size, tex);
 }
