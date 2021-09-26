@@ -102,12 +102,11 @@ constexpr auto for_range(auto &&callable, auto &&...args)
 template<size_t ...N>
 constexpr auto for_range_product(auto &&callable, auto &&...args)
 {
-	return std::apply([&]<typename... pairs>(pairs &&...) {
-		return callable.template operator()<pairs...>(
+	return std::apply([&]<typename... tuples>(tuples &&...) {
+		return callable.template operator()<tuples...>(
 			std::forward<decltype(args)>(args)...);
 	}, tuple_product(constant_range<N>()...));
 }
-
 
 // Replaces empty tuples with void.
 constexpr auto tuple_or_void(auto &&tuple)
