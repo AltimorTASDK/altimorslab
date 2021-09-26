@@ -6,33 +6,72 @@ import struct
 import sys
 from itertools import product
 
-IN_DIR = "resources"
+IN_DIR  = "resources"
 OUT_DIR = "bin/files/lab"
 
-GX_TF_IA4 = 2
-GX_TF_RGBA8 = 6
+GX_TF_IA4    = 2
+GX_TF_RGB5A3 = 5
+GX_TF_RGBA8  = 6
 
-RED = 0
+RED   = 0
 GREEN = 1
-BLUE = 2
+BLUE  = 2
 ALPHA = 3
 
 FORMAT_DICT = {
     'ia4': GX_TF_IA4,
+    'rgb5a3': GX_TF_RGB5A3,
     'rgba8': GX_TF_RGBA8
 }
 
-def block_range(x, y, step=1):
-    if isinstance(step, tuple):
-        x = math.ceil(x / step[0]) * step[0]
-        y = math.ceil(y / step[1]) * step[1]
-        ranges = (range(0, y, step[1]), range(0, x, step[0]))
-    else:
-        x = math.ceil(x / step) * step
-        y = math.ceil(y / step) * step
-        ranges = (range(0, y, step), range(0, x, step))
-
+def block_range(x, y, step=(1, 1)):
+    x = math.ceil(x / step[0]) * step[0]
+    y = math.ceil(y / step[1]) * step[1]
+    ranges = (range(0, y, step[1]), range(0, x, step[0]))
     return ((x, y) for y, x in product(*ranges))
+
+def encode_ia4(out_file, get_pixel, width, height):
+    """
+    Write 8x4 pixel blocks with lower nibble as intensity, upper nibble as alpha
+    Use red channel as intensity
+    """
+    BLOCK_SIZE = (8, 4)
+
+    for block_x , block_y in block_range(width, height, BLOCK_SIZE):
+        for offset_x, offset_y in block_range(*BLOCK_SIZE):
+            x = block_x + offset_x
+            y = block_y + offset_y
+            red   = get_pixel(x, y, RED)   >> 4
+            alpha = get_pixel(x, y, ALPHA) >> 4
+            out_file.write(bytes([(alpha << 4) | red]))
+
+def encode_rgb5a3(out_file, get_pixel, width, height):
+    """
+    Write 4x4 pixel blocks with pixels encoded differently if they're opaque:
+    0AAARRRRGGGGBBBB Translucent
+    1RRRRRGGGGGBBBBB Opaque
+    """
+    BLOCK_SIZE = (4, 4)
+
+    for block_x, block_y in block_range(width, height, BLOCK_SIZE):
+        for offset_x, offset_y in block_range(*BLOCK_SIZE):
+            x = block_x + offset_x
+            y = block_y + offset_y
+            alpha = get_pixel(x, y, ALPHA) >> 5
+            if alpha == 7:
+                # Opaque
+                red   = get_pixel(x, y, RED)   >> 3
+                green = get_pixel(x, y, GREEN) >> 3
+                blue  = get_pixel(x, y, BLUE)  >> 3
+                value = (1 << 15) | (red << 10) | (green << 5) | blue
+            else:
+                # Translucent
+                red   = get_pixel(x, y, RED)   >> 4
+                green = get_pixel(x, y, GREEN) >> 4
+                blue  = get_pixel(x, y, BLUE)  >> 4
+                value = (alpha << 12) | (red << 8) | (green << 4) | blue
+
+            out_file.write(bytes([value >> 8, value & 0xFF]))
     
 def encode_rgba8(out_file, get_pixel, width, height):
     """
@@ -42,31 +81,20 @@ def encode_rgba8(out_file, get_pixel, width, height):
     GBGBGBGBGBGBGBGB
     GBGBGBGBGBGBGBGB
     """
-    for block_x, block_y in block_range(width, height, 4):
-        for offset_x, offset_y in block_range(4, 4):
+    BLOCK_SIZE = (4, 4)
+
+    for block_x, block_y in block_range(width, height, BLOCK_SIZE):
+        for offset_x, offset_y in block_range(*BLOCK_SIZE):
             x = block_x + offset_x
             y = block_y + offset_y
             out_file.write(bytes([get_pixel(x, y, ALPHA)]))
             out_file.write(bytes([get_pixel(x, y, RED)]))
 
-        for offset_x, offset_y in block_range(4, 4):
+        for offset_x, offset_y in block_range(*BLOCK_SIZE):
             x = block_x + offset_x
             y = block_y + offset_y
             out_file.write(bytes([get_pixel(x, y, GREEN)]))
             out_file.write(bytes([get_pixel(x, y, BLUE)]))
-
-def encode_ia4(out_file, get_pixel, width, height):
-    """
-    Write 8x4 pixel blocks with lower nibble as intensity, upper nibble as alpha
-    Use red channel as intensity
-    """
-    for block_x , block_y in block_range(width, height, (8, 4)):
-        for offset_x, offset_y in block_range(8, 4):
-            x = block_x + offset_x
-            y = block_y + offset_y
-            red   = get_pixel(x, y, RED)   >> 4
-            alpha = get_pixel(x, y, ALPHA) >> 4
-            out_file.write(bytes([(alpha << 4) | red]))
 
 def encode_png(in_path, out_path, fmt):
     with open(in_path, "rb") as in_file:
@@ -86,8 +114,9 @@ def encode_png(in_path, out_path, fmt):
             return data[y][x * 4 + channel]
         
         { # Call corresponding encoding function
-            GX_TF_RGBA8: encode_rgba8,
-            GX_TF_IA4:   encode_ia4
+            GX_TF_IA4:    encode_ia4,
+            GX_TF_RGB5A3: encode_rgb5a3,
+            GX_TF_RGBA8:  encode_rgba8
         }[fmt](out_file, get_pixel, width, height)
         
 
