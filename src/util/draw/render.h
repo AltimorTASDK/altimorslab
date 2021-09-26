@@ -117,4 +117,7 @@ public:
 
 	void fill_rect(const vec3 &origin, const vec2 &size, const texture &tex,
 	        const uv_coord &uv1, const uv_coord &uv2, align alignment = align::top_left);
+
+	void fill_tiled_rect(const vec3 &origin, const vec2 &size, const color_rgba &color,
+		             const texture &tex, align alignment = align::top_left);
 };

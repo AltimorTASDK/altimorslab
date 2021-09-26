@@ -54,4 +54,9 @@ public:
 	{
 		return tex()->height;
 	}
+
+	vec2i size() const
+	{
+		return vec2i(width(), height());
+	}
 };

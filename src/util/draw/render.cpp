@@ -124,7 +124,7 @@ void render_state::fill_rect(const vec3 &origin, const vec2 &size, const color_r
 {
 	const auto aligned = origin + alignment_offset(size, alignment);
 	
-	render_state::draw_quads<vertex_pos_clr>({
+	draw_quads<vertex_pos_clr>({
 		{ aligned,                           color },
 		{ aligned + vec3(size.x, 0,      0), color },
 		{ aligned + vec3(size.x, size.y, 0), color },
@@ -139,7 +139,7 @@ void render_state::fill_rect(const vec3 &origin, const vec2 &size, const texture
 	
 	tex.apply();
 	
-	render_state::draw_quads<vertex_pos_uv>({
+	draw_quads<vertex_pos_uv>({
 		{ aligned,                           uv1                    },
 		{ aligned + vec3(size.x, 0,      0), uv_coord(uv2.u, uv1.v) },
 		{ aligned + vec3(size.x, size.y, 0), uv2                    },
@@ -155,10 +155,46 @@ void render_state::fill_rect(const vec3 &origin, const vec2 &size, const color_r
 	
 	tex.apply();
 	
-	render_state::draw_quads<vertex_pos_clr_uv>({
+	draw_quads<vertex_pos_clr_uv>({
 		{ aligned,                           color, uv1                    },
 		{ aligned + vec3(size.x, 0,      0), color, uv_coord(uv2.u, uv1.v) },
 		{ aligned + vec3(size.x, size.y, 0), color, uv2                    },
 		{ aligned + vec3(0,      size.y, 0), color, uv_coord(uv1.u, uv2.v) }
 	});
+}
+
+void render_state::fill_tiled_rect(const vec3 &origin, const vec2 &size, const color_rgba &color,
+		                   const texture &tex, align alignment)
+{
+	const auto aligned = origin + alignment_offset(size, alignment);
+	
+	tex.apply();
+	
+	const auto tile_size = vec2(
+		std::min(size.x, (float)tex.width()) / 3,
+		std::min(size.y, (float)tex.height()) / 3);
+		
+	vec2 offset_table[] = {
+		vec2::zero,
+		vec2(tile_size),
+		vec2(size - tile_size),
+		size
+	};
+
+	uv_coord uv_table[] = {
+		uv_coord::zero,
+		uv_coord(tile_size / vec2(tex.size())),
+		uv_coord::one - uv_coord(tile_size / vec2(tex.size())),
+		uv_coord::one
+	};
+		
+	for (auto i = 0; i < 3; i++) {
+		for (auto j = 0; j < 3; j++) {
+			const auto offset1 = vec2(offset_table[i].x, offset_table[j].y);
+			const auto offset2 = vec2(offset_table[i + 1].x, offset_table[j + 1].y);
+			const auto uv1 = uv_coord(uv_table[i].u, uv_table[j].v);
+			const auto uv2 = uv_coord(uv_table[i + 1].u, uv_table[j + 1].v);
+			fill_rect(aligned + vec3(offset1), offset2 - offset1, color, tex, uv1, uv2);
+		}
+	}
 }
