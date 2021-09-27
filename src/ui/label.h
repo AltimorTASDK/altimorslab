@@ -10,7 +10,7 @@ namespace ui {
 class label : public element {
 	using base_class = element;
 
-	const font_renderer *font = nullptr;
+	const font_renderer &font = fonts::small;
 	std::string text;
 	color_rgba color = color_rgba::white;
 
@@ -25,7 +25,7 @@ public:
 	public:
 		builder_type &set_font(const font_renderer &font)
 		{
-			instance->font = &font;
+			instance->font = font;
 			return builder_ref();
 		}
 
@@ -46,12 +46,12 @@ public:
 	
 	vec2 get_fit_size() const override
 	{
-		return vec2(font->measure(text));
+		return vec2(font.measure(text));
 	}
 
 	void draw() const override
 	{
-		font->draw(text, get_position(), color);
+		font.draw(text, get_position(), color);
 	}
 };
 

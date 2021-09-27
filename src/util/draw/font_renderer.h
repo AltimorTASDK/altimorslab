@@ -66,3 +66,8 @@ public:
 		}
 	}
 };
+
+namespace fonts {
+inline const auto small = font_renderer("fonts/font_small.tex", { 16, 32 }, { 9, 14 });
+inline const auto big = font_renderer("fonts/font_big.tex", { 32, 64 }, { 18, 28 });
+}

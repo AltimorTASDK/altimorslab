@@ -47,9 +47,6 @@ extern "C" void hook_HSD_ResetScene()
 	}
 }
 		
-const auto font_small = font_renderer("fonts/font_small.tex", { 16, 32 }, { 9, 14 });
-const auto font_big = font_renderer("fonts/font_big.tex", { 32, 64 }, { 18, 28 });
-	
 /*const auto menu =
 	ui::pane(vec3(100, 100, 0), vec2(100, 100),
 		ui::label(font_small, "hello"),
@@ -70,11 +67,7 @@ const auto menu =
 	.set_size(400_px, 400_px)
 	.set_padding(8, 8)
 	.set_spacing(8)
-	.add_child(
-		ui::label::builder()
-		.set_font(font_small)
-		.set_text("ayy lmao")
-		.build())
+	.add_child(ui::label::builder().set_text("ayy lmao") .build())
 	.add_child(
 		ui::pane::builder()
 		.set_size(ui::fill, 200_px)
@@ -83,56 +76,43 @@ const auto menu =
 			ui::container::builder()
 			.set_size(ui::fill, ui::fit)
 			.set_stacking(ui::stack::horizontal)
-			.add_child(ui::label::builder().set_font(font_small).set_text("top left") .build())
+			.add_child(ui::label::builder().set_text("top left").build())
 			.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
-			.add_child(ui::label::builder().set_font(font_small).set_text("top") .build())
-			.add_child(ui::element::builder().set_size(ui::fill, ui::fill) .build())
-			.add_child(ui::label::builder().set_font(font_small).set_text("top right").build())
+			.add_child(ui::label::builder().set_text("top").build())
+			.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
+			.add_child(ui::label::builder().set_text("top right").build())
 			.build())
 		.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
 		.add_child(
 			ui::container::builder()
 			.set_size(ui::fill, ui::fit)
 			.set_stacking(ui::stack::horizontal)
-			.add_child(ui::label::builder().set_font(font_small).set_text("left") .build())
+			.add_child(ui::label::builder().set_text("left").build())
 			.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
-			.add_child(ui::label::builder().set_font(font_small).set_text("center") .build())
-			.add_child(ui::element::builder().set_size(ui::fill, ui::fill) .build())
-			.add_child(ui::label::builder().set_font(font_small).set_text("right").build())
+			.add_child(ui::label::builder().set_text("center").build())
+			.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
+			.add_child(ui::label::builder().set_text("right").build())
 			.build())
 		.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
 		.add_child(
 			ui::container::builder()
 			.set_size(ui::fill, ui::fit)
 			.set_stacking(ui::stack::horizontal)
-			.add_child(ui::label::builder().set_font(font_small).set_text("bottom left") .build())
+			.add_child(ui::label::builder().set_text("bottom left").build())
 			.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
-			.add_child(ui::label::builder().set_font(font_small).set_text("bottom") .build())
-			.add_child(ui::element::builder().set_size(ui::fill, ui::fill) .build())
-			.add_child(ui::label::builder().set_font(font_small).set_text("bottom right").build())
+			.add_child(ui::label::builder().set_text("bottom").build())
+			.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
+			.add_child(ui::label::builder().set_text("bottom right").build())
 			.build())
 		.build())
-	.add_child(
-		ui::element::builder()
-		.set_size(ui::fill, ui::fill)
-		.build())
+	.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
 	.add_child(
 		ui::container::builder()
 		.set_size(ui::fill, ui::fit)
 		.set_stacking(ui::stack::horizontal)
-		.add_child(
-			ui::element::builder()
-			.set_size(ui::fill, ui::fill)
-			.build())
-		.add_child(
-			ui::label::builder()
-			.set_font(font_small)
-			.set_text("BOTTOM TEXT")
-			.build())
-		.add_child(
-			ui::element::builder()
-			.set_size(ui::fill, ui::fill)
-			.build())
+		.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
+		.add_child(ui::label::builder().set_text("BOTTOM TEXT").build())
+		.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
 		.build())
 	.build();
 
