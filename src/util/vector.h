@@ -34,7 +34,7 @@ public:
 	using base::elems;
 
 	static constexpr vec_impl zero = vec_impl(fill_tuple<elem_count>(elem_type{}));
-	static constexpr vec_impl one = vec_impl(fill_tuple<elem_count>(1));
+	static constexpr vec_impl one = vec_impl(fill_tuple<elem_count>(elem_type{1}));
 
 	constexpr vec_impl()
 	{

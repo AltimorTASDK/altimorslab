@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ui/element.h"
+#include "ui/measurement.h"
 #include "util/vector.h"
 #include "util/draw/render.h"
 #include "util/draw/texture.h"
@@ -16,31 +17,33 @@ enum class stack {
 };
 
 class container : public element {
+	using base_class = element;
+
 	std::vector<std::unique_ptr<element>> children;
 
 protected:
 	vec2 padding;
-	vec2 size;
+	float spacing;
 	stack stacking;
 
 public:
 	template<typename elem_type>
-	class builder_impl : public element::builder_impl<elem_type> {
+	class builder_impl : public base_class::builder_impl<elem_type> {
 	protected:
-		using builder_type = element::builder_impl<elem_type>::builder_type;
-		using element::builder_impl<elem_type>::instance;
-		using element::builder_impl<elem_type>::builder_ref;
+		using builder_type = base_class::builder_impl<elem_type>::builder_type;
+		using base_class::builder_impl<elem_type>::instance;
+		using base_class::builder_impl<elem_type>::builder_ref;
 
 	public:
-		builder_type &set_size(const vec2 &size)
+		builder_type &set_padding(float x, float y)
 		{
-			instance->size = size;
+			instance->padding = vec2(x, y);
 			return builder_ref();
 		}
 
-		builder_type &set_padding(const vec2 &padding)
+		builder_type &set_spacing(float spacing)
 		{
-			instance->padding = padding;
+			instance->spacing = spacing;
 			return builder_ref();
 		}
 
@@ -67,87 +70,178 @@ public:
 		children.push_back(std::move(child));
 	}
 
-	vec2 get_size() const override
+private:
+	float calc_offset(const measurement &offset) const
 	{
-		return size;
+		switch (offset.units) {
+		case unit::percent: return get_size().x * offset.value;
+		case unit::pixels:  return offset.value;
+		default:            PANIC("Invalid measurement unit for offset");
+		}
 	}
-
+	
+	vec2 get_inner_size() const
+	{
+		return get_size() - padding * 2;
+	}
+	
 	void update_child_offsets_vertical() const
 	{
-		auto min = padding;
-		auto max = size - padding;
+		auto offset = padding;
 
 		for (const auto &child : children) {
-			if (child->placement != place::normal)
-				continue;
-
-			child->offset = vec3(min);
-			min.y += child->get_size().y + padding.y;
-		}
-
-		for (const auto &child : children) {
-			if (child->placement != place::reverse)
-				continue;
-
-			max.y -= child->get_size().y;
-			if (max.y < min.y)
-				max.y = min.y;
-			
-			child->offset = vec3(min.x, max.y, 0);
-			max.y -= padding.y;
+			child->offset.x.cached_value = offset.x + calc_offset(child->offset.x);
+			child->offset.y.cached_value = offset.y + calc_offset(child->offset.y);
+			offset.y += child->get_size().y + spacing;
 		}
 	}
 
 	void update_child_offsets_horizontal() const
 	{
-		auto min = padding;
-		auto max = size - padding;
+		auto offset = padding;
 
 		for (const auto &child : children) {
-			if (child->placement != place::normal)
-				continue;
-
-			child->offset = vec3(min);
-			min.x += child->get_size().x + padding.x;
-		}
-
-		for (const auto &child : children) {
-			if (child->placement != place::reverse)
-				continue;
-
-			max.x -= child->get_size().x;
-			if (max.x < min.x)
-				max.x = min.x;
-			
-			child->offset = vec3(max.x, min.y, 0);
-			max.x -= padding.x;
+			child->offset.x.cached_value = offset.x + calc_offset(child->offset.x);
+			child->offset.y.cached_value = offset.y + calc_offset(child->offset.y);
+			offset.x += child->get_size().x + spacing;
 		}
 	}
 	
 	void update_child_offsets() const
 	{
 		switch (stacking) {
-		case stack::vertical:
-			update_child_offsets_vertical();
-			break;
-		case stack::horizontal:
-			update_child_offsets_horizontal();
-			break;
+		case stack::vertical:   return update_child_offsets_vertical();
+		case stack::horizontal: return update_child_offsets_horizontal();
+		default:                PANIC("Invalid stack constant");
 		}
+	}
+
+	void update_child_sizes_vertical() const
+	{
+		auto fill_count = 0;
+
+		for (const auto &child : children) {
+			if (child->size.y.units == unit::fill)
+				fill_count++;
+		}
+		
+		if (fill_count == 0)
+			return;
+		
+		const auto total_child_size = get_total_child_size();
+		const auto remaining_space = get_inner_size().y - total_child_size.y;
+		const auto fill_size = std::max(0.f, remaining_space / fill_count);
+		
+		for (const auto &child : children) {
+			if (child->size.x.units == unit::fill)
+				child->size.x.cached_value = get_inner_size().x;
+			if (child->size.y.units == unit::fill)
+				child->size.y.cached_value = fill_size;
+		}
+	}
+	
+	void update_child_sizes_horizontal() const
+	{
+		auto fill_count = 0;
+
+		for (const auto &child : children) {
+			if (child->size.x.units == unit::fill)
+				fill_count++;
+		}
+		
+		if (fill_count == 0)
+			return;
+		
+		const auto total_child_size = get_total_child_size();
+		const auto remaining_space = get_inner_size().x - total_child_size.x;
+		const auto fill_size = std::max(0.f, remaining_space / fill_count);
+		
+		for (const auto &child : children) {
+			if (child->size.x.units == unit::fill)
+				child->size.x.cached_value = fill_size;
+			if (child->size.y.units == unit::fill)
+				child->size.y.cached_value = get_inner_size().y;
+		}
+	}
+	
+	void update_child_sizes() const
+	{
+		for (const auto &child : children) {
+			if (child->size.x.units == unit::percent)
+				child->size.x.cached_value = get_size().x * child->size.x.value;
+			if (child->size.y.units == unit::percent)
+				child->size.y.cached_value = get_size().y * child->size.y.value;
+		}
+
+		switch (stacking) {
+		case stack::vertical:   return update_child_sizes_vertical();
+		case stack::horizontal: return update_child_sizes_horizontal();
+		default:                PANIC("Invalid stack constant");
+		}
+	}
+
+	vec2 get_total_child_size_vertical() const
+	{
+		vec2 result;
+		for (const auto &child : children) {
+			if (child->size.x.units != unit::fill)
+				result.x = std::max(result.x, child->get_size().x);
+
+			if (child->size.y.units != unit::fill)
+				result.y += child->get_size().y;
+		}
+		
+		if (children.size() != 0)
+			result.y += (children.size() - 1) * spacing;
+
+		return result;
+	}
+
+	vec2 get_total_child_size_horizontal() const
+	{
+		vec2 result;
+		for (const auto &child : children) {
+			if (child->size.x.units != unit::fill)
+				result.x += child->get_size().x;
+
+			if (child->size.y.units != unit::fill)
+				result.y = std::max(result.y, child->get_size().y);
+		}
+		
+		if (children.size() != 0)
+			result.x += (children.size() - 1) * spacing;
+
+		return result;
+	}
+	
+	vec2 get_total_child_size() const
+	{
+		switch (stacking) {
+		case stack::vertical:   return get_total_child_size_vertical();
+		case stack::horizontal: return get_total_child_size_horizontal();
+		default:                PANIC("Invalid stack constant");
+		}
+	}
+	
+public:
+	vec2 get_fit_size() const override
+	{
+		return get_total_child_size() + padding * 2;
+	}
+
+	void update() const override
+	{
+		update_child_sizes();
+		update_child_offsets();
+
+		for (const auto &child : children)
+			child->update();
 	}
 
 	void draw() const override
 	{
-		update_child_offsets();
-		
-		auto &rs = render_state::get();
-		rs.push_scissor();
-		rs.restrict_scissor(vec2i(get_position()), vec2i(size));
-		
 		for (const auto &child : children)
 			child->draw();
-			
-		rs.pop_scissor();
 	}
 };
 

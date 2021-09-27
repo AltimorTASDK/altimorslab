@@ -1,16 +1,16 @@
 #pragma once
 
+#include "ui/measurement.h"
 #include "util/vector.h"
 
 namespace ui {
 	
-enum class place {
-	normal, // Place at beginning of available container space
-	reverse // Place at end of available container space
-};
-
 class element {
-protected:
+public:
+	measurement2 offset;
+	measurement2 size = measurement2(fit, fit);
+	element *parent = nullptr;
+
 	template<typename elem_type>
 	class builder_impl {
 	protected:
@@ -28,34 +28,59 @@ protected:
 			return std::move(instance);
 		}
 
-		auto &set_offset(vec3 offset)
+		auto &set_offset(const measurement &x, const measurement &y)
 		{
-			instance->offset = offset;
+			instance->offset = measurement2(x, y);
 			return builder_ref();
 		}
 
-		auto &set_placement(place placement)
+		builder_type &set_size(const measurement &x, const measurement &y)
 		{
-			instance->placement = placement;
+			instance->size = measurement2(x, y);
 			return builder_ref();
 		}
 	};
-
-public:
-	vec3 offset;
-	place placement = place::normal;
-	element *parent = nullptr;
+	
+	using builder = builder_impl<element>;
 
 	vec3 get_position() const
 	{
+		const auto cached = vec2(offset.x.get_cached_value(), offset.y.get_cached_value());
 		if (parent != nullptr)
-			return parent->get_position() + offset;
+			return parent->get_position() + vec3(cached);
 		else
-			return offset;
+			return vec3(cached);
 	}
 
-	virtual vec2 get_size() const;
-	virtual void draw() const;
+	vec2 get_size() const
+	{
+		auto result = vec2(size.x.get_cached_value(), size.y.get_cached_value());
+
+		if (size.x.units == unit::fit || size.y.units == unit::fit) {
+			const auto fit_size = get_fit_size();
+			if (size.x.units == unit::fit)
+				result.x = fit_size.x;
+			if (size.y.units == unit::fit)
+				result.y = fit_size.y;
+		}
+		
+		return result;
+	}
+
+	// Calculate the size used by unit::fit
+	virtual vec2 get_fit_size() const
+	{
+		return vec2::zero;
+	}
+
+	// Update positions and sizes
+	virtual void update() const
+	{
+	}
+
+	virtual void draw() const
+	{
+	}
 };
 
 }

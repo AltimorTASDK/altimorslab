@@ -61,38 +61,78 @@ const auto font_big = font_renderer("fonts/font_big.tex", { 32, 64 }, { 18, 28 }
 		ui::label(font_small, "hello"),
 		ui::label(font_small, "hello")
 	);*/
+
+using namespace ui::literals;
 	
 const auto menu =
 	ui::pane::builder()
-	.set_offset(vec3(100, 100, 0))
-	.set_size(vec2(300, 150))
-	.set_padding(vec2(8, 8))
+	.set_offset(50_px, 50_px)
+	.set_size(400_px, 400_px)
+	.set_padding(8, 8)
+	.set_spacing(8)
 	.add_child(
 		ui::label::builder()
 		.set_font(font_small)
 		.set_text("ayy lmao")
 		.build())
 	.add_child(
-		ui::container::builder()
-		.set_size(vec2(300 - 16, 14))
-		.set_stacking(ui::stack::horizontal)
+		ui::pane::builder()
+		.set_size(ui::fill, 200_px)
+		.set_padding(8, 8)
 		.add_child(
-			ui::label::builder()
-			.set_font(font_small)
-			.set_text("horizontal")
+			ui::container::builder()
+			.set_size(ui::fill, ui::fit)
+			.set_stacking(ui::stack::horizontal)
+			.add_child(ui::label::builder().set_font(font_small).set_text("top left") .build())
+			.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
+			.add_child(ui::label::builder().set_font(font_small).set_text("top") .build())
+			.add_child(ui::element::builder().set_size(ui::fill, ui::fill) .build())
+			.add_child(ui::label::builder().set_font(font_small).set_text("top right").build())
 			.build())
+		.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
 		.add_child(
-			ui::label::builder()
-			.set_font(font_small)
-			.set_placement(ui::place::reverse)
-			.set_text("container")
+			ui::container::builder()
+			.set_size(ui::fill, ui::fit)
+			.set_stacking(ui::stack::horizontal)
+			.add_child(ui::label::builder().set_font(font_small).set_text("left") .build())
+			.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
+			.add_child(ui::label::builder().set_font(font_small).set_text("center") .build())
+			.add_child(ui::element::builder().set_size(ui::fill, ui::fill) .build())
+			.add_child(ui::label::builder().set_font(font_small).set_text("right").build())
+			.build())
+		.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
+		.add_child(
+			ui::container::builder()
+			.set_size(ui::fill, ui::fit)
+			.set_stacking(ui::stack::horizontal)
+			.add_child(ui::label::builder().set_font(font_small).set_text("bottom left") .build())
+			.add_child(ui::element::builder().set_size(ui::fill, ui::fill).build())
+			.add_child(ui::label::builder().set_font(font_small).set_text("bottom") .build())
+			.add_child(ui::element::builder().set_size(ui::fill, ui::fill) .build())
+			.add_child(ui::label::builder().set_font(font_small).set_text("bottom right").build())
 			.build())
 		.build())
 	.add_child(
-		ui::label::builder()
-		.set_font(font_small)
-		.set_placement(ui::place::reverse)
-		.set_text("reverse placement")
+		ui::element::builder()
+		.set_size(ui::fill, ui::fill)
+		.build())
+	.add_child(
+		ui::container::builder()
+		.set_size(ui::fill, ui::fit)
+		.set_stacking(ui::stack::horizontal)
+		.add_child(
+			ui::element::builder()
+			.set_size(ui::fill, ui::fill)
+			.build())
+		.add_child(
+			ui::label::builder()
+			.set_font(font_small)
+			.set_text("BOTTOM TEXT")
+			.build())
+		.add_child(
+			ui::element::builder()
+			.set_size(ui::fill, ui::fill)
+			.build())
 		.build())
 	.build();
 
@@ -110,6 +150,7 @@ extern "C" void hook_DevelopText_DrawAll(struct HSD_GObj *gobj, u32 pass)
 	auto &rs = render_state::get();
 	rs.reset();
 	
+	menu->update();
 	menu->draw();
 
 	/*rs.fill_tiled_rect(vec3(100, 100, 0), vec2(100, 50), color_rgba(255, 255, 255, 255), pane);

@@ -12,16 +12,18 @@
 namespace ui {
 
 class pane : public container {
+	using base_class = container;
+	
 	inline static const auto default_tex = texture("ui/pane.tex");
 	const texture &tex = default_tex;
 	
 public:
 	template<typename elem_type>
-	class builder_impl : public container::builder_impl<elem_type> {
+	class builder_impl : public base_class::builder_impl<elem_type> {
 	protected:
-		using builder_type = container::builder_impl<elem_type>::builder_type;
-		using container::builder_impl<elem_type>::instance;
-		using container::builder_impl<elem_type>::builder_ref;
+		using builder_type = base_class::builder_impl<elem_type>::builder_type;
+		using base_class::builder_impl<elem_type>::instance;
+		using base_class::builder_impl<elem_type>::builder_ref;
 
 	public:
 		builder_type &set_texture(const texture &tex)
@@ -36,8 +38,14 @@ public:
 	void draw() const override
 	{
 		auto &rs = render_state::get();
-		rs.fill_tiled_rect(get_position(), size, tex);
+		rs.fill_tiled_rect(get_position(), get_size(), tex);
+
+		rs.push_scissor();
+		rs.restrict_scissor(vec2i(get_position()), vec2i(get_size()));
+
 		container::draw();
+
+		rs.pop_scissor();
 	}
 };
 

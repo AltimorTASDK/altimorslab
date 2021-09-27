@@ -8,17 +8,19 @@
 namespace ui {
 
 class label : public element {
+	using base_class = element;
+
 	const font_renderer *font = nullptr;
 	std::string text;
 	color_rgba color = color_rgba::white;
 
 public:
 	template<typename elem_type>
-	class builder_impl : public element::builder_impl<elem_type> {
+	class builder_impl : public base_class::builder_impl<elem_type> {
 	protected:
-		using builder_type = element::builder_impl<elem_type>::builder_type;
-		using element::builder_impl<elem_type>::instance;
-		using element::builder_impl<elem_type>::builder_ref;
+		using builder_type = base_class::builder_impl<elem_type>::builder_type;
+		using base_class::builder_impl<elem_type>::instance;
+		using base_class::builder_impl<elem_type>::builder_ref;
 
 	public:
 		builder_type &set_font(const font_renderer &font)
@@ -42,7 +44,7 @@ public:
 
 	using builder = builder_impl<label>;
 	
-	vec2 get_size() const override
+	vec2 get_fit_size() const override
 	{
 		return vec2(font->measure(text));
 	}
