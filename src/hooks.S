@@ -7,10 +7,10 @@
 .section .hooks
 
 .macro add_hook name
-	.global orig_\name
-	orig_\name:
-	.int \name
-	.int hook_\name
+        .global orig_\name
+        orig_\name:
+        .int \name
+        .int hook_\name
 .endm
 
 add_hook HSD_ResetScene
