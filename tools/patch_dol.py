@@ -9,8 +9,6 @@ TEXT_SECTION_COUNT = 7
 DATA_SECTION_COUNT = 11
 SECTION_COUNT = TEXT_SECTION_COUNT + DATA_SECTION_COUNT
 
-PATCH_SECTION = 3
-
 ORIGINAL_DOL_END = 0x804DEC00
 
 def word(data, offset):
@@ -36,6 +34,8 @@ def address_to_offset(data, value):
         if address <= value < address + size:
             offset = word(data, SECTION_OFFSET_START + i * 4)
             return value - address + offset
+            
+    raise Exception(f"Failed to convert address {value:08X} to offset")
 
 def patch_load_imm32(data, address, reg, imm):
     lis = 0x3C000000 | (reg << 21) | (imm >> 16)
@@ -65,23 +65,37 @@ def patch_stack_and_heap(data):
     delta = get_dol_end(data) - ORIGINAL_DOL_END
     print(f"DOL virtual size delta: 0x{delta:X} bytes")
 
+    # Initial stack pointer
+    patch_load_imm32(data, 0x80005340, 1, 0x804EEC00 + delta)
+
+    # ArenaHi/ArenaLo
     patch_load_imm32(data, 0x80343094, 3, 0x804F0C00 + delta)
     patch_load_imm32(data, 0x803430CC, 3, 0x804EEC00 + delta)
 
+    # Thread init
     patch_load_imm32(data, 0x8034AC78, 0, 0x804EEC00 + delta)
     patch_load_imm32_split(data, 0x8034AC80, 0x8034AC88, 0, 0x804DEC00 + delta)
 
+    # CPU stats
     patch_load_imm32_split(data, 0x802256D0, 0x802256D8, 3, 0x804DEC00 + delta)
     patch_load_imm32_split(data, 0x8022570C, 0x80225714, 4, 0x804EEC00 + delta)
     patch_load_imm32_split(data, 0x80225718, 0x80225720, 5, 0x804DEC00 + delta)
-
-    # Stack
-    patch_load_imm32(data, 0x80005340, 1, 0x804EEC00 + delta)
+    
+def get_hooks_section():
+    with open("output.map") as file:
+        for line in file:
+            if not line.startswith(".hooks "):
+                continue
+            words = line.split()
+            address = int(words[1], 16)
+            size = int(words[2], 16)
+            return (address, size)
+            
+    raise Exception(".hooks section not found in output.map")
 
 def apply_hooks(data):
-    hooks_offset = word(data, SECTION_OFFSET_START + PATCH_SECTION * 4)
-    hooks_address = word(data, SECTION_ADDRESS_START + PATCH_SECTION * 4)
-    hooks_size = word(data, SECTION_SIZE_START + PATCH_SECTION * 4)
+    hooks_address, hooks_size = get_hooks_section()
+    hooks_offset = address_to_offset(data, hooks_address)
 
     for i in range(hooks_size // 8):
         offset = hooks_offset + i * 8
