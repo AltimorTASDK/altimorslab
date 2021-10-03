@@ -27,7 +27,8 @@ LIBOGC := $(DEVKITPATH)/libogc
 LINKSCRIPT := -Tmelee.ld
 LDFLAGS    := -Wl,-Map=output.map -nostdlib
 
-CFLAGS   := -DGEKKO -mogc -mcpu=750 -meabi -mhard-float -O3 -Wall -Wno-register -Wno-unused-value
+CFLAGS   := -DGEKKO -mogc -mcpu=750 -meabi -mhard-float -O3 -Wall \
+			-Wno-register -Wno-unused-value -ffunction-sections -fdata-sections
 CXXFLAGS := $(CFLAGS) -std=c++2b -fconcepts -fno-rtti -fno-exceptions
 INCLUDE  := -Isrc -I$(LIBOGC)/include
 
